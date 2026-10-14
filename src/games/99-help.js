@@ -48,7 +48,7 @@ const HELP = {
   }),
   chess: () => ({
     'But du jeu': 'Mettre le roi adverse échec et mat : il est attaqué et ne peut plus s\'échapper.',
-    'Comment jouer': ['Touche une pièce : ses cases possibles s\'affichent (points et cercles roses pour les prises)', 'Touche la case où tu veux aller', 'Bouton « Robot / 2 joueurs » pour jouer contre l\'ordinateur ou à deux', 'Bouton « Annuler » pour reprendre ton dernier coup'],
+    'Comment jouer': ['Touche une pièce : ses cases possibles s\'affichent (points et cercles roses pour les prises)', 'Touche la case où tu veux aller', 'Bouton « Robot / 2 joueurs » pour jouer contre l\'ordinateur ou à deux, et « Facile / Moyen / Fort » pour sa force', 'Bouton « Annuler » pour reprendre ton dernier coup, « Indice » pour voir un bon coup', 'Un pion qui arrive au bout devient la pièce de ton choix'],
     'Les pièces': ['Pion : avance d\'une case (deux au premier coup), prend en diagonale', 'Tour : lignes droites · Fou : diagonales · Dame : les deux', 'Cavalier : en L, il saute par-dessus les autres', 'Roi : une case dans tous les sens'],
     'Astuce': 'Sors tes cavaliers et tes fous au début, protège ton roi, et regarde ce que le Robot attaque avant de jouer.'
   }),

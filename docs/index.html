@@ -213,18 +213,24 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .hole.hit svg{bottom:-80%;transition:bottom .08s}
 
 /* Échecs */
-.chess-wrap{gap:10px;justify-content:center}
-.chess-bar{display:flex;align-items:center;gap:10px;width:100%;max-width:560px}
-.chess-status{flex:1;text-align:center;font-family:var(--font-display);font-size:17px;color:var(--sun);min-width:0}
-.chess{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:100%}
-.sq{position:relative;display:grid;place-items:center;font-size:min(9vmin,52px);line-height:1;font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Apple Symbols","DejaVu Sans",sans-serif}
+.chess-wrap{gap:8px;justify-content:center}
+.chess-bar{display:flex;align-items:center;gap:8px;width:100%;max-width:560px}
+.chess-status{flex:1;text-align:center;font-family:var(--font-display);font-size:16px;color:var(--sun);min-width:0}
+.chess-cap{flex:1;display:flex;flex-wrap:wrap;gap:0;min-height:22px;align-items:center}.chess-wrap>.chess-cap{flex:none;width:100%;max-width:560px;justify-content:flex-end}.chess-cap img{width:22px;height:22px;margin-right:-6px}
+.chess{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:100%;border:4px solid #4b3a2a;background:#4b3a2a}
+.sq{position:relative;display:grid;place-items:center;padding:0}
+.sq img{width:88%;height:88%;pointer-events:none;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.sq img.moved{animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
 .sq.light{background:#f3ead8}.sq.dark{background:#8a7bd6}
-.sq.w{color:#fff;text-shadow:0 0 2px #000,0 0 2px #000,0 2px 0 #333}.sq.b{color:#1b1540;text-shadow:0 0 2px #fff}
 .sq.last{box-shadow:inset 0 0 0 100px rgba(255,210,63,.35)}
 .sq.sel{box-shadow:inset 0 0 0 100px rgba(157,255,92,.55)}
+.sq.hintmv{box-shadow:inset 0 0 0 4px var(--aqua),inset 0 0 0 100px rgba(56,224,214,.3)}
 .sq.hint::after{content:"";width:28%;height:28%;border-radius:50%;background:rgba(27,21,64,.35);position:absolute}
 .sq.cap::after{content:"";position:absolute;inset:6%;border-radius:50%;border:4px solid rgba(255,79,154,.8)}
 .sq.check{box-shadow:inset 0 0 0 100px rgba(255,79,79,.6)}
+.sq.mate{box-shadow:inset 0 0 0 100px rgba(255,79,79,.75);animation:shake .5s}
+.chess-promo{display:flex;align-items:center;gap:8px;background:var(--panel);border-radius:16px;padding:8px 12px;font-weight:700}
+.chess-promo button{width:48px;height:48px;border-radius:12px;background:#f3ead8;display:grid;place-items:center}.chess-promo button img{width:84%;height:84%}
 
 /* Paysage sur téléphone : barre compacte, manette par-dessus le jeu */
 @media (max-height:480px) and (orientation:landscape){
@@ -862,6 +868,23 @@ function Particles() {
   };
 }
 const GAMES = [];
+
+/* ===== bibliothèque tierce : chess-pieces.js ===== */
+/* Pièces d'échecs « rhosgfx » (RhosGFX), licence CC0 1.0 — issues du dépôt Lichess (public/piece/rhosgfx). */
+const CHESS_PIECES = {
+  wK: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6I2Y0YzM4ZX08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0iTTU1Ljk2IDI2Ljk2Yy0yLjE3LTEuMDItNC42Ny0xLjg1LTcuNDMtMi40Ny43MS0uOTkgMS4xMy0yLjIgMS4xMy0zLjV2LTQuMTNjMC0zLjE3LTIuNDgtNS43OC01LjYtNS45OXYtLjM3YzAtMy4zMS0yLjY5LTYtNi02aC00LjEzYy0zLjMxIDAtNiAyLjY5LTYgNnYuMzdjLTMuMTIuMjEtNS42IDIuODEtNS42IDUuOTl2NC4xM2MwIDEuMzEuNDIgMi41MiAxLjEzIDMuNS0yLjc2LjYyLTUuMjYgMS40NS03LjQzIDIuNDctMyAxLjQxLTQuNTggNC43OC0zLjc2IDhsNC43MiAxOC40Mi0xLjU4IDEuNTJjLS4xNi4xNS0uMy4zMS0uNDQuNDhhNi4zMSA2LjMxIDAgMCAwLTEuNTEgNC4xdjIuODVjMCAyLjg1IDIuMzIgNS4xNyA1LjE3IDUuMTdoMzQuNzJjMi44NSAwIDUuMTctMi4zMiA1LjE3LTUuMTd2LTIuODVjMC0xLjQ5LS41NC0yLjk0LTEuNTEtNC4xLS4xNC0uMTgtLjI5LS4zNS0uNDQtLjQ4bC0xLjU4LTEuNTIgNC43Mi0xOC40MmMuODMtMy4yMi0uNzUtNi41OC0zLjc1LTcuOTlaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTMzLjkzIDguNWg0LjEzYzEuMSAwIDIgLjkgMiAydjE3LjMyaC04LjEzVjEwLjVjMC0xLjEuOS0yIDItMiIgY2xhc3M9ImNscy0yIi8+PHJlY3Qgd2lkdGg9IjguMTMiIGhlaWdodD0iMTkuMzIiIHg9IjMxLjkzIiB5PSI5LjI2IiBjbGFzcz0iY2xzLTIiIHJ4PSIyIiByeT0iMiIgdHJhbnNmb3JtPSJyb3RhdGUoOTAgMzYgMTguOTMpIi8+PHBhdGggZD0iTTU0LjI2IDMwLjU4Yy00LjQ1LTIuMS0xMC45OC0zLjQyLTE4LjI2LTMuNDJzLTEzLjggMS4zMi0xOC4yNiAzLjQyYy0xLjI3LjYtMS45MyAyLjAyLTEuNTggMy4zOGw1LjMgMjAuNjgtMy4yNyAzLjE0Yy0uMDUuMDUtLjA5LjExLS4xMy4xNi0uMzcuNDMtLjU5Ljk3LS41OSAxLjU0djIuODVjMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMzQuNzFjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjg1YzAtLjU3LS4yMi0xLjExLS41OS0xLjU0LS4wNS0uMDUtLjA4LS4xMS0uMTMtLjE2bC0zLjI3LTMuMTQgNS4zLTIwLjY4Yy4zNS0xLjM2LS4zMS0yLjc4LTEuNTgtMy4zOFoiIHN0eWxlPSJmaWxsOiNmZmYyZDQiLz48cGF0aCBkPSJNMzYgNDkuMzVjLTYuMTYgMC0xMS45NC0xLjUzLTE2Ljk3LTQuMjFsMi40NCA5LjUxaDI5LjA3bDIuNDQtOS41MWMtNS4wMyAyLjY4LTEwLjgxIDQuMjEtMTYuOTcgNC4yMVoiIHN0eWxlPSJmaWxsOiNmZmRmYjUiLz48cGF0aCBkPSJNMTcuNDcgNjIuMzNjMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMzQuNzFjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjg1YzAtLjU3LS4yMi0xLjExLS41OS0xLjU0SDE4LjA2Yy0uMzcuNDMtLjU5Ljk3LS41OSAxLjU0eiIgY2xhc3M9ImNscy0yIi8+PC9nPjwvc3ZnPg==',
+  wQ: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6I2Y0YzM4ZX0uY2xzLTN7ZmlsbDojZmZmMmQ0fTwvc3R5bGU+PC9kZWZzPjxnIGlkPSJMaWNoZXNzIj48cGF0aCBkPSJNMjAuNjUgNjcuNWMtMi44NSAwLTUuMTctMi4zMi01LjE3LTUuMTd2LTIuODVjMC0xLjUuNTQtMi45NSAxLjUyLTQuMS4xMy0uMTYuMjctLjMyLjQxLS40NmwuNTQtLjUyYTE2LjI2IDE2LjI2IDAgMCAxLTMuNS01LjU1TDguMjggMzIuNDNjLS45Ny0yLjU5LS4zNC01LjUgMS42LTcuNDEgMi44My0yLjc5IDYuNDYtNC4zMiAxMC4yMi00LjMyLjI1IDAgLjUgMCAuNzUuMDIgMS4yNC0yLjA0IDMuMDYtMy42NyA1LjM3LTQuODMtLjA4LS40OS0uMTItMS0uMTItMS41IDAtNS40NSA0LjQzLTkuODkgOS44OS05Ljg5czkuODkgNC40MyA5Ljg5IDkuODlxMCAuNzY1LS4xMiAxLjVjMi4zMiAxLjE2IDQuMTQgMi43OSA1LjM3IDQuODMuMjUtLjAxLjUtLjAyLjc1LS4wMiAzLjc2IDAgNy4zOSAxLjUzIDEwLjIyIDQuMzJhNi45NDEgNi45NDEgMCAwIDEgMS42IDcuNDFsLTYuMTcgMTYuNDJjLS43OSAyLjA5LTEuOTggMy45Ny0zLjUgNS41NGwuNTMuNWMuMTcuMTYuMzEuMzMuNDUuNDkuMDMuMDMuMDUuMDYuMDcuMDhxLjQ4LjU4NS44MSAxLjI5Yy4wNi4xMi4xMi4yNS4xNy4zNy4wMS4wNC4xLjI3LjEyLjM1LjIxLjU4LjMzIDEuMjYuMzMgMS45M3YyLjljMCAyLjg1LTIuMzIgNS4xNy01LjE3IDUuMTdIMjAuNjVaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTQ5LjA0IDI3LjljMCA3LjItNS44NCAxMy4wNC0xMy4wNCAxMy4wNFMyMi45NiAzNS4xIDIyLjk2IDI3LjkgMjguOCAxNy44NSAzNiAxNy44NSA0OS4wNCAyMC43IDQ5LjA0IDI3LjkiIGNsYXNzPSJjbHMtMiIvPjxwYXRoIGQ9Ik01OS4zMSAyNy44N2MtMi45Ny0yLjkzLTExLjAzLTcuODUtMjMuMzEgNy4xNS0xMi4yOC0xNC45OS0yMC4zMy0xMC4wNy0yMy4zMS03LjE1LS44My44Mi0xLjA4IDIuMDYtLjY3IDMuMTVsNi4xNyAxNi40MmExMi4yNCAxMi4yNCAwIDAgMCAxMS40NiA3LjkzaDEyLjdjNS4xIDAgOS42Ni0zLjE2IDExLjQ2LTcuOTNsNi4xNy0xNi40MmMuNDEtMS4wOS4xNi0yLjM0LS42Ny0zLjE1IiBjbGFzcz0iY2xzLTMiLz48Y2lyY2xlIGN4PSIzNiIgY3k9IjE0LjM5IiByPSI1Ljg5IiBjbGFzcz0iY2xzLTMiLz48cGF0aCBkPSJNMzYgNDkuOTdjLTYuODkgMC0xMy4zMi0xLjg3LTE4Ljc3LTUuMTFsLjk3IDIuNThhMTIuMjQgMTIuMjQgMCAwIDAgMTEuNDYgNy45M2gxMi43YzUuMSAwIDkuNjYtMy4xNiAxMS40Ni03LjkzbC45Ny0yLjU4Yy01LjQ2IDMuMjQtMTEuODkgNS4xMS0xOC43NyA1LjExWiIgc3R5bGU9ImZpbGw6I2ZmZGZiNSIvPjxwYXRoIGQ9Ik01MS45MiA1Ny45M3MtLjA4LS4xLS4xMi0uMTRsLTEuODItMS43NGE1LjAwNyA1LjAwNyAwIDAgMC0zLjQ2LTEuMzlIMjUuNDhjLTEuMjkgMC0yLjUzLjUtMy40NiAxLjM5bC0xLjgyIDEuNzRjLS4wNS4wNS0uMDkuMTEtLjEzLjE2LS4zNy40My0uNTkuOTctLjU5IDEuNTR2Mi44NWMwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzMC43Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi45YzAtLjU2LS4yNC0xLjA3LS42LTEuNVoiIGNsYXNzPSJjbHMtMyIvPjxwYXRoIGQ9Ik0xOS40OCA2Mi4zM2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzMC43Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS41Ny0uMjItMS4xMS0uNTktMS41NEgyMC4wNmMtLjM3LjQzLS41OS45Ny0uNTkgMS41NHYyLjg1WiIgY2xhc3M9ImNscy0yIi8+PC9nPjwvc3ZnPg==',
+  wR: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgZGF0YS1uYW1lPSJMYXllciAyIiB2aWV3Qm94PSIwIDAgNzIgNzIiPjxwYXRoIGQ9Ik01Mi41MyAxMS41NmgtNC42NWE2IDYgMCAwIDAtNC43OCAyLjM3IDYgNiAwIDAgMC00Ljc4LTIuMzdoLTQuNjVhNiA2IDAgMCAwLTQuNzggMi4zNyA2IDYgMCAwIDAtNC43OC0yLjM3aC00LjY1Yy0zLjMxIDAtNiAyLjY5LTYgNnYxMC4zNWMwIDEuNDMuNDkgMi44MyAxLjM4IDMuOTZsMi42MSAzLjI3djE3LjY0bC0yLjAzIDEuOTVhNi4xIDYuMSAwIDAgMC0uOC45NCA2LjMwNyA2LjMwNyAwIDAgMC0xLjE2IDMuNjV2Mi44NWMwIDIuODUgMi4zMiA1LjE3IDUuMTcgNS4xN2gzNC43MmMyLjg1IDAgNS4xNy0yLjMyIDUuMTctNS4xN3YtMi44NWMwLTEuMzEtLjQtMi41OC0xLjE2LTMuNjUtLjI1LS4zNS0uNTItLjY3LS43OS0uOTNsLTIuMDQtMS45NlYzNS4xNGwyLjYtMy4yN2E2LjQwNyA2LjQwNyAwIDAgMCAxLjM5LTMuOTZWMTcuNTZjMC0zLjMxLTIuNjktNi02LTZaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTIxLjQ2IDI3LjkyaDI5LjA3djMwLjA1SDIxLjQ2eiIgc3R5bGU9ImZpbGw6I2ZmZGZiNSIvPjxwYXRoIGQ9Ik01NC4xIDU3Ljk3Yy0uMDktLjEyLS4xOC0uMjQtLjI5LS4zNGwtMy4yNy0zLjE0SDIxLjQ2bC0zLjI3IDMuMTRjLS4xMS4xMS0uMjEuMjItLjI5LjM0LS4yOC4zOS0uNDMuODYtLjQzIDEuMzV2Mi44NWMwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNDktLjE1LS45Ni0uNDMtMS4zNVptLTEuNTctNDIuNDFoLTQuNjVjLTEuMSAwLTIgLjktMiAydjMuMjJoLTUuNTV2LTMuMjJjMC0xLjEtLjktMi0yLTJoLTQuNjVjLTEuMSAwLTIgLjktMiAydjMuMjJoLTUuNTV2LTMuMjJjMC0xLjEtLjktMi0yLTJoLTQuNjVjLTEuMSAwLTIgLjktMiAydjEwLjM1cTAgLjE5NS4wMy4zOWMuMDQuMjYuMTMuNTEuMjYuNzQuMDYuMTIuMTQuMjMuMjIuMzNsMy40OCA0LjM2aDI5LjA3bDMuNDgtNC4zNmMuMzMtLjQyLjUxLS45My41MS0xLjQ2VjE3LjU2YzAtMS4xLS45LTItMi0yIiBzdHlsZT0iZmlsbDojZmZmMmQ0Ii8+PHBhdGggZD0iTTE3LjQ3IDYyLjE3YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjcxYy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS40OS0uMTUtLjk2LS40My0xLjM1SDE3LjljLS4yOC4zOS0uNDMuODYtLjQzIDEuMzV6IiBzdHlsZT0iZmlsbDojZjRjMzhlIi8+PHBhdGggZD0iTTU0LjUzIDI3LjkySDE3LjQ3YzAgLjUzLjE4IDEuMDUuNTEgMS40NmwzLjQ4IDQuMzZoMjkuMDdsMy40OC00LjM2Yy4zMy0uNDIuNTEtLjkzLjUxLTEuNDZaIiBzdHlsZT0iZmlsbDojZWJhOTY5Ii8+PC9zdmc+',
+  wB: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy00e2ZpbGw6I2ZmZjJkNH08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0ibTU2LjU3IDU0LjktMS45MS0xLjgzYy0uNDItLjQtLjg3LS43Ni0xLjM1LTEuMDYgMS45NC0zLjE2IDMuMDEtNi44MiAzLjAxLTEwLjYgMC01LjI2LTMuODYtMTIuODctMTEuNDctMjIuNjJhOS44NzMgOS44NzMgMCAwIDAgMS4wMy00LjM5YzAtNS40NS00LjQzLTkuODktOS44OC05Ljg5cy05Ljg5IDQuNDMtOS44OSA5Ljg5YzAgMS41NC4zNiAzLjA0IDEuMDMgNC4zOS03LjYxIDkuNzYtMTEuNDcgMTcuMzYtMTEuNDcgMjIuNjIgMCAzLjc4IDEuMDcgNy40NSAzLjAxIDEwLjYtLjQ4LjMxLS45My42Ni0xLjM1IDEuMDdsLTEuODggMS44MWMtLjMuMjgtLjU3LjYtLjgyLjk1YTYuMzA3IDYuMzA3IDAgMCAwLTEuMTYgMy42NXYyLjg1YzAgMi44NSAyLjMyIDUuMTcgNS4xNyA1LjE3aDM0LjcxYzIuODUgMCA1LjE3LTIuMzIgNS4xNy01LjE3di0yLjg1YzAtMS4zMS0uNC0yLjU3LTEuMTctMy42Ny0uMjQtLjM0LS41LS42NC0uNzgtLjkxWiIgc3R5bGU9ImZpbGw6IzFhMWExYSIvPjxwYXRoIGQ9Ik0zOS44MSAxOC44N2E1Ljg1MSA1Ljg1MSAwIDAgMCAyLjA3LTQuNDhjMC0zLjI1LTIuNjMtNS44OS01Ljg5LTUuODlzLTUuODkgMi42My01Ljg5IDUuODljMCAxLjguODEgMy40IDIuMDcgNC40OC00LjgyIDUuOTMtMTIuNTEgMTYuMzUtMTIuNTEgMjIuNTMgMCA5LjAxIDcuMzEgMTYuMzIgMTYuMzIgMTYuMzJTNTIuMyA1MC40MSA1Mi4zIDQxLjRjMC02LjE5LTcuNjktMTYuNjEtMTIuNTEtMjIuNTNaIiBjbGFzcz0iY2xzLTQiLz48cGF0aCBkPSJNNTEuODEgMzguMjdDNTAuMzQgNDUuMjEgNDMuODIgNTAuNDQgMzYgNTAuNDRzLTE0LjM0LTUuMjMtMTUuODEtMTIuMTdjLS4zMyAxLjEyLS41MiAyLjE4LS41MiAzLjEzIDAgOS4wMSA3LjMxIDE2LjMyIDE2LjMyIDE2LjMyczE2LjMyLTcuMzEgMTYuMzItMTYuMzJjMC0uOTUtLjE5LTIuMDEtLjUyLTMuMTNaIiBzdHlsZT0iZmlsbDojZmZkZmI1Ii8+PHBhdGggZD0iTTU0LjEgNTguMTNjLS4wOS0uMTItLjE4LS4yNC0uMjktLjM0bC0xLjkxLTEuODNhNC42ODYgNC42ODYgMCAwIDAtMy4yNS0xLjMxaC0yNS4zYy0xLjIxIDAtMi4zOC40Ny0zLjI1IDEuMzFsLTEuOTEgMS44M2MtLjExLjExLS4yMS4yMi0uMjkuMzQtLjI4LjM5LS40My44Ni0uNDMgMS4zNXYyLjg1YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjcxYy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS40OS0uMTUtLjk2LS40My0xLjM1WiIgY2xhc3M9ImNscy00Ii8+PHBhdGggZD0iTTM2IDM0Ljk0YzMuODggMCA3LjQ4IDEuMzIgMTAuNDkgMy42LjkuNjggMi4xMS0uMzQgMS42MS0xLjM1LTIuOTctNi4wMy03LjI5LTkuODMtMTIuMS05Ljgzcy05LjEzIDMuOC0xMi4xIDkuODNjLS41IDEuMDEuNzEgMi4wMyAxLjYxIDEuMzUgMy4wMS0yLjI3IDYuNjEtMy42IDEwLjQ5LTMuNiIgc3R5bGU9ImZpbGw6I2ViYTk2OSIvPjxwYXRoIGQ9Ik0xNy40NyA2Mi4zM2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNDktLjE1LS45Ni0uNDMtMS4zNUgxNy45Yy0uMjguMzktLjQzLjg2LS40MyAxLjM1eiIgc3R5bGU9ImZpbGw6I2Y0YzM4ZSIvPjwvZz48L3N2Zz4=',
+  wN: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgZGF0YS1uYW1lPSJMYXllciAyIiB2aWV3Qm94PSIwIDAgNzIgNzIiPjxwYXRoIGQ9Im01OCA1NC43NC0xLjU1LTEuNDljNS43Ni0yMi4yMi0uNjEtMzMuNDEtNy4xMy0zOC45MS0zLjAzLTIuNTYtNi44OC0zLjk4LTExLjE4LTQuMTVsLTIuMjgtMy4yYTUuNTc4IDUuNTc4IDAgMCAwLTQuNTMtMi4zM2MtMS41NyAwLTMuMDcuNjctNC4xMiAxLjgzLTIuMDMgMi4yNC0zLjAyIDUuMDEtMi45IDcuODktMyAyLjQ0LTMuOTggNS42My00LjIzIDYuNjRsLTEuMjggNC4xNWMtLjE0LjQ1LS4zOC44Ni0uNzEgMS4xOWwtMy44NCAzLjkzYy0xLjY1IDEuNjktMi40MyA0LTIuMTQgNi4zNGE3LjY3OSA3LjY3OSAwIDAgMCAzLjc5IDUuNzNsLjc3LjQyYzEuMzMuNzMgMi44NCAxLjEyIDQuMzcgMS4xMi45OSAwIDEuOTctLjE2IDIuOS0uNDgtMy4zNiAzLjM0LTQuNDggNi45OC00Ljg1IDkuMTVsLTIuMjMgMi4xNGMtLjE2LjE1LS4zLjMxLS40NC40OGE2LjMxIDYuMzEgMCAwIDAtMS41MSA0LjF2Mi44NWMwIDIuODUgMi4zMiA1LjE3IDUuMTcgNS4xN2gzNC43YzIuODUgMCA1LjE3LTIuMzIgNS4xNy01LjE3di0yLjg1YzAtMS40OS0uNTQtMi45NC0xLjUxLTQuMDktLjE0LS4xNy0uMjgtLjMzLS40NC0uNDhaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTU1LjM3IDU3Ljc4Yy0uMDUtLjA1LS4wOC0uMTEtLjEzLS4xNmwtMy4yNy0zLjE0YzYuMS0yMS4xOSAxLjA1LTMxLjgtNS4yMy0zNy4wOS0yLjk5LTIuNTMtNi44Ny0zLjQzLTEwLjY0LTMuMThsLTMuNDktNC45Yy0uNTgtLjgxLTEuNzYtLjg5LTIuNDMtLjE0LTEuMjEgMS4zNC0yLjU4IDMuNzQtMS40OSA3LjEzLS40LjIxLS43OC40My0xLjE1LjY3LTIuOTcgMS45My0zLjU5IDUuMDktMy41OSA1LjA5bC0xLjMyIDQuMjljLS4zMyAxLjA2LS45IDIuMDItMS42NyAyLjgxbC0zLjg1IDMuOTNhMy43MiAzLjcyIDAgMCAwIC43MSA1Ljc3bC43OC40MmMxLjU2Ljg2IDMuNDYuODMgNS0uMDYuODEtLjU1IDEuODItLjY3IDIuNzYtLjM5IDUuMjcgMS41NiA5LjUyLTIuNjcgOS41Mi0yLjY3LS40NSA0Ljc2LTIuOTQgNi4wNS00LjgzIDcuMDQtOC4yOSA0LjMyLTguMTUgMTEuMjktOC4xNSAxMS4yOWwtMy4yNyAzLjE0LS4xMy4xNmMtLjM3LjQzLS41OS45Ny0uNTkgMS41NHYyLjg1YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjdjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjg1YzAtLjU3LS4yMi0xLjExLS41OS0xLjU0WiIgc3R5bGU9ImZpbGw6I2ZmZjJkNCIvPjxwYXRoIGQ9Ik0zMy43NCAyMy45OGMtLjA0LS41My0uNDctLjk2LTEtMS0xLjA0LS4wOS0yLjE1LjI5LTIuOTkgMS4xM3MtMS4yMiAxLjk0LTEuMTMgMi45OWMuMDQuNTMuNDcuOTYgMSAxIDEuMDQuMDkgMi4xNS0uMjkgMi45OS0xLjEzczEuMjItMS45NCAxLjEzLTIuOTkiIHN0eWxlPSJmaWxsOiNlYmE5NjkiLz48cGF0aCBkPSJNMzcuNDMgNTAuODFjLTQuMzcgMC04LjQ2LTEuMTEtMTEuOTctMy4wNC0yLjYzIDMuNDUtMi41NyA2LjcyLTIuNTcgNi43MmgyOS4wN2MxLjA3LTMuNzIgMS43OS03LjEyIDIuMjMtMTAuMjEtNC4yNyA0LjAzLTEwLjIgNi41NC0xNi43NyA2LjU0WiIgc3R5bGU9ImZpbGw6I2ZmZGZiNSIvPjxwYXRoIGQ9Ik0xOC45IDYyLjE3YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjcxYy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS41Ny0uMjItMS4xMS0uNTktMS41NEgxOS40OWMtLjM3LjQzLS41OS45Ny0uNTkgMS41NHoiIHN0eWxlPSJmaWxsOiNmNGMzOGUiLz48L3N2Zz4=',
+  wP: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ze2ZpbGw6I2ZmZjJkNH08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0iTTU0LjM4IDU5LjE3Yy0uMDgtLjk3LS4zMS0xLjkyLS43LTIuODItLjE5LS40My0uMzgtLjgxLS42MS0xLjE3bC00LjgzLTcuNjJjLjUyLS44OS44MS0xLjkyLjgxLTMuMDJ2LTIuMDVjMC0uOTktLjI0LTEuOTItLjY2LTIuNzQgMS4zMy0yLjIxIDIuMDUtNC43NiAyLjA1LTcuNDIgMC03Ljk2LTYuNDgtMTQuNDQtMTQuNDQtMTQuNDRzLTE0LjQ0IDYuNDgtMTQuNDQgMTQuNDRjMCAyLjY2LjcyIDUuMjEgMi4wNSA3LjQyYTUuOTkgNS45OSAwIDAgMC0uNjYgMi43NHYyLjA1YzAgMS4xLjMgMi4xMy44MiAzLjAybC00LjgzIDcuNjNjLS4yMi4zNS0uNDIuNzMtLjYgMS4xNS0uMzkuOS0uNjMgMS44NS0uNzEgMi44Ni0uMDIuMjEtLjAzLjQyLS4wMy42NHYyLjQ5YzAgMi44NSAyLjMyIDUuMTcgNS4xNyA1LjE3aDI2LjQ4YzIuODUgMCA1LjE3LTIuMzIgNS4xNy01LjE3di0yLjQ5YzAtLjIxLS4wMS0uNDEtLjA0LS42NyIgc3R5bGU9ImZpbGw6IzFhMWExYSIvPjxwYXRoIGQ9Ik01MC4zOSA1OS40OGMtLjA0LS41My0uMTctMS4wNS0uMzgtMS41NC0uMDktLjIxLS4xOS0uNDItLjMyLS42MWwtOS4xMy0xNC40MmgtOS4xMWwtOS4xMyAxNC40MmMtLjEyLjItLjIzLjQtLjMyLjYxLS4yMS40OS0uMzQgMS4wMS0uMzggMS41NCAwIC4xMi0uMDMuMjQtLjAzLjM2djIuNDljMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMjYuNDhjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjQ5YzAtLjEyLS4wMi0uMjQtLjAzLS4zNloiIGNsYXNzPSJjbHMtMyIvPjxjaXJjbGUgY3g9IjM2IiBjeT0iMzIuMzQiIHI9IjEwLjQ0IiBjbGFzcz0iY2xzLTMiLz48cmVjdCB3aWR0aD0iMTguMTEiIGhlaWdodD0iNi4wNSIgeD0iMjYuOTUiIHk9IjQwLjUiIHJ4PSIyIiByeT0iMiIgc3R5bGU9ImZpbGw6I2ZmZGZiNSIvPjxwYXRoIGQ9Ik0yMS41OCA1OS44NHYyLjQ5YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDI2LjQ4Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi40OWMwLS4xMi0uMDItLjI0LS4wMy0uMzYtLjA0LS41My0uMTctMS4wNS0uMzgtMS41NGgtMjhjLS4yMS40OS0uMzQgMS4wMS0uMzggMS41NCAwIC4xMi0uMDMuMjQtLjAzLjM2IiBzdHlsZT0iZmlsbDojZjRjMzhlIi8+PC9nPjwvc3ZnPg==',
+  bK: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6I2JiNTkzOH08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0iTTU1Ljk2IDI2Ljk2Yy0yLjE3LTEuMDItNC42Ny0xLjg1LTcuNDMtMi40Ny43MS0uOTkgMS4xMy0yLjIgMS4xMy0zLjV2LTQuMTNjMC0zLjE3LTIuNDgtNS43OC01LjYtNS45OXYtLjM3YzAtMy4zMS0yLjY5LTYtNi02aC00LjEzYy0zLjMxIDAtNiAyLjY5LTYgNnYuMzdjLTMuMTIuMjEtNS42IDIuODEtNS42IDUuOTl2NC4xM2MwIDEuMzEuNDIgMi41MiAxLjEzIDMuNS0yLjc2LjYyLTUuMjYgMS40NS03LjQzIDIuNDctMyAxLjQxLTQuNTggNC43OC0zLjc2IDhsNC43MiAxOC40Mi0xLjU4IDEuNTJjLS4xNi4xNS0uMy4zMS0uNDQuNDhhNi4zMSA2LjMxIDAgMCAwLTEuNTEgNC4xdjIuODVjMCAyLjg1IDIuMzIgNS4xNyA1LjE3IDUuMTdoMzQuNzJjMi44NSAwIDUuMTctMi4zMiA1LjE3LTUuMTd2LTIuODVjMC0xLjQ5LS41NC0yLjk0LTEuNTEtNC4xLS4xNC0uMTgtLjI5LS4zNS0uNDQtLjQ4bC0xLjU4LTEuNTIgNC43Mi0xOC40MmMuODMtMy4yMi0uNzUtNi41OC0zLjc1LTcuOTlaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTMzLjkzIDguNWg0LjEzYzEuMSAwIDIgLjkgMiAydjE3LjMyaC04LjEzVjEwLjVjMC0xLjEuOS0yIDItMiIgY2xhc3M9ImNscy0yIi8+PHJlY3Qgd2lkdGg9IjguMTMiIGhlaWdodD0iMTkuMzIiIHg9IjMxLjkzIiB5PSI5LjI2IiBjbGFzcz0iY2xzLTIiIHJ4PSIyIiByeT0iMiIgdHJhbnNmb3JtPSJyb3RhdGUoOTAgMzYgMTguOTMpIi8+PHBhdGggZD0iTTU0LjI2IDMwLjU4Yy00LjQ1LTIuMS0xMC45OC0zLjQyLTE4LjI2LTMuNDJzLTEzLjggMS4zMi0xOC4yNiAzLjQyYy0xLjI3LjYtMS45MyAyLjAyLTEuNTggMy4zOGw1LjMgMjAuNjgtMy4yNyAzLjE0Yy0uMDUuMDUtLjA5LjExLS4xMy4xNi0uMzcuNDMtLjU5Ljk3LS41OSAxLjU0djIuODVjMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMzQuNzFjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjg1YzAtLjU3LS4yMi0xLjExLS41OS0xLjU0LS4wNS0uMDUtLjA4LS4xMS0uMTMtLjE2bC0zLjI3LTMuMTQgNS4zLTIwLjY4Yy4zNS0xLjM2LS4zMS0yLjc4LTEuNTgtMy4zOFoiIHN0eWxlPSJmaWxsOiNkMTc3NGIiLz48cGF0aCBkPSJNMzYgNDkuMzVjLTYuMTYgMC0xMS45NC0xLjUzLTE2Ljk3LTQuMjFsMi40NCA5LjUxaDI5LjA3bDIuNDQtOS41MWMtNS4wMyAyLjY4LTEwLjgxIDQuMjEtMTYuOTcgNC4yMVoiIGNsYXNzPSJjbHMtMiIvPjxwYXRoIGQ9Ik0xNy40NyA2Mi4zM2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNTctLjIyLTEuMTEtLjU5LTEuNTRIMTguMDZjLS4zNy40My0uNTkuOTctLjU5IDEuNTR6IiBzdHlsZT0iZmlsbDojOWMzZDI5Ii8+PC9nPjwvc3ZnPg==',
+  bQ: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzljM2QyOX0uY2xzLTN7ZmlsbDojZDE3NzRifTwvc3R5bGU+PC9kZWZzPjxnIGlkPSJMaWNoZXNzIj48cGF0aCBkPSJNMjAuNjUgNjcuNWMtMi44NSAwLTUuMTctMi4zMi01LjE3LTUuMTd2LTIuODVjMC0xLjUuNTQtMi45NSAxLjUyLTQuMS4xMy0uMTYuMjctLjMyLjQxLS40NmwuNTQtLjUyYTE2LjI2IDE2LjI2IDAgMCAxLTMuNS01LjU1TDguMjggMzIuNDNjLS45Ny0yLjU5LS4zNC01LjUgMS42LTcuNDEgMi44My0yLjc5IDYuNDYtNC4zMiAxMC4yMi00LjMyLjI1IDAgLjUgMCAuNzUuMDIgMS4yNC0yLjA0IDMuMDYtMy42NyA1LjM3LTQuODMtLjA4LS40OS0uMTItMS0uMTItMS41IDAtNS40NSA0LjQzLTkuODkgOS44OS05Ljg5czkuODkgNC40MyA5Ljg5IDkuODlxMCAuNzY1LS4xMiAxLjVjMi4zMiAxLjE2IDQuMTQgMi43OSA1LjM3IDQuODMuMjUtLjAxLjUtLjAyLjc1LS4wMiAzLjc2IDAgNy4zOSAxLjUzIDEwLjIyIDQuMzJhNi45NDEgNi45NDEgMCAwIDEgMS42IDcuNDFsLTYuMTcgMTYuNDJjLS43OSAyLjA5LTEuOTggMy45Ny0zLjUgNS41NGwuNTMuNWMuMTcuMTYuMzEuMzMuNDUuNDkuMDMuMDMuMDUuMDYuMDcuMDhxLjQ4LjU4NS44MSAxLjI5Yy4wNi4xMi4xMi4yNS4xNy4zNy4wMS4wNC4xLjI3LjEyLjM1LjIxLjU4LjMzIDEuMjYuMzMgMS45M3YyLjljMCAyLjg1LTIuMzIgNS4xNy01LjE3IDUuMTdIMjAuNjVaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTQ5LjA0IDI3LjljMCA3LjItNS44NCAxMy4wNC0xMy4wNCAxMy4wNFMyMi45NiAzNS4xIDIyLjk2IDI3LjkgMjguOCAxNy44NSAzNiAxNy44NSA0OS4wNCAyMC43IDQ5LjA0IDI3LjkiIGNsYXNzPSJjbHMtMSIvPjxwYXRoIGQ9Ik01OS4zMSAyNy44N2MtMi45Ny0yLjkzLTExLjAzLTcuODUtMjMuMzEgNy4xNS0xMi4yOC0xNC45OS0yMC4zMy0xMC4wNy0yMy4zMS03LjE1LS44My44Mi0xLjA4IDIuMDYtLjY3IDMuMTVsNi4xNyAxNi40MmExMi4yNCAxMi4yNCAwIDAgMCAxMS40NiA3LjkzaDEyLjdjNS4xIDAgOS42Ni0zLjE2IDExLjQ2LTcuOTNsNi4xNy0xNi40MmMuNDEtMS4wOS4xNi0yLjM0LS42Ny0zLjE1IiBjbGFzcz0iY2xzLTMiLz48Y2lyY2xlIGN4PSIzNiIgY3k9IjE0LjM5IiByPSI1Ljg5IiBjbGFzcz0iY2xzLTMiLz48cGF0aCBkPSJNMzYgNDkuOTdjLTYuODkgMC0xMy4zMi0xLjg3LTE4Ljc3LTUuMTFsLjk3IDIuNThhMTIuMjQgMTIuMjQgMCAwIDAgMTEuNDYgNy45M2gxMi43YzUuMSAwIDkuNjYtMy4xNiAxMS40Ni03LjkzbC45Ny0yLjU4Yy01LjQ2IDMuMjQtMTEuODkgNS4xMS0xOC43NyA1LjExWiIgc3R5bGU9ImZpbGw6I2JiNTkzOCIvPjxwYXRoIGQ9Ik01MS45MiA1Ny45M3MtLjA4LS4xLS4xMi0uMTRsLTEuODItMS43NGE1LjAwNyA1LjAwNyAwIDAgMC0zLjQ2LTEuMzlIMjUuNDhjLTEuMjkgMC0yLjUzLjUtMy40NiAxLjM5bC0xLjgyIDEuNzRjLS4wNS4wNS0uMDkuMTEtLjEzLjE2LS4zNy40My0uNTkuOTctLjU5IDEuNTR2Mi44NWMwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzMC43Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi45YzAtLjU2LS4yNC0xLjA3LS42LTEuNVoiIGNsYXNzPSJjbHMtMyIvPjxwYXRoIGQ9Ik0xOS40OCA2Mi4zM2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzMC43Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS41Ny0uMjItMS4xMS0uNTktMS41NEgyMC4wNmMtLjM3LjQzLS41OS45Ny0uNTkgMS41NHYyLjg1WiIgY2xhc3M9ImNscy0xIi8+PC9nPjwvc3ZnPg==',
+  bR: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgZGF0YS1uYW1lPSJMYXllciAyIiB2aWV3Qm94PSIwIDAgNzIgNzIiPjxwYXRoIGQ9Ik01Mi41MyAxMS41NmgtNC42NWE2IDYgMCAwIDAtNC43OCAyLjM3IDYgNiAwIDAgMC00Ljc4LTIuMzdoLTQuNjVhNiA2IDAgMCAwLTQuNzggMi4zNyA2IDYgMCAwIDAtNC43OC0yLjM3aC00LjY1Yy0zLjMxIDAtNiAyLjY5LTYgNnYxMC4zNWMwIDEuNDMuNDkgMi44MyAxLjM4IDMuOTZsMi42MSAzLjI3djE3LjY0bC0yLjAzIDEuOTVhNi4xIDYuMSAwIDAgMC0uOC45NCA2LjMwNyA2LjMwNyAwIDAgMC0xLjE2IDMuNjV2Mi44NWMwIDIuODUgMi4zMiA1LjE3IDUuMTcgNS4xN2gzNC43MmMyLjg1IDAgNS4xNy0yLjMyIDUuMTctNS4xN3YtMi44NWMwLTEuMzEtLjQtMi41OC0xLjE2LTMuNjUtLjI1LS4zNS0uNTItLjY3LS43OS0uOTNsLTIuMDQtMS45NlYzNS4xNGwyLjYtMy4yN2E2LjQwNyA2LjQwNyAwIDAgMCAxLjM5LTMuOTZWMTcuNTZjMC0zLjMxLTIuNjktNi02LTZaIiBzdHlsZT0iZmlsbDojMWExYTFhIi8+PHBhdGggZD0iTTIxLjQ2IDI3LjkyaDI5LjA3djMwLjA1SDIxLjQ2eiIgc3R5bGU9ImZpbGw6I2JiNTkzOCIvPjxwYXRoIGQ9Ik01NC4xIDU3Ljk3Yy0uMDktLjEyLS4xOC0uMjQtLjI5LS4zNGwtMy4yNy0zLjE0SDIxLjQ2bC0zLjI3IDMuMTRjLS4xMS4xMS0uMjEuMjItLjI5LjM0LS4yOC4zOS0uNDMuODYtLjQzIDEuMzV2Mi44NWMwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNDktLjE1LS45Ni0uNDMtMS4zNVptLTEuNTctNDIuNDFoLTQuNjVjLTEuMSAwLTIgLjktMiAydjMuMjJoLTUuNTV2LTMuMjJjMC0xLjEtLjktMi0yLTJoLTQuNjVjLTEuMSAwLTIgLjktMiAydjMuMjJoLTUuNTV2LTMuMjJjMC0xLjEtLjktMi0yLTJoLTQuNjVjLTEuMSAwLTIgLjktMiAydjEwLjM1cTAgLjE5NS4wMy4zOWMuMDQuMjYuMTMuNTEuMjYuNzQuMDYuMTIuMTQuMjMuMjIuMzNsMy40OCA0LjM2aDI5LjA3bDMuNDgtNC4zNmMuMzMtLjQyLjUxLS45My41MS0xLjQ2VjE3LjU2YzAtMS4xLS45LTItMi0yIiBzdHlsZT0iZmlsbDojZDE3NzRiIi8+PHBhdGggZD0iTTE3LjQ3IDYyLjE3YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjcxYy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS40OS0uMTUtLjk2LS40My0xLjM1SDE3LjljLS4yOC4zOS0uNDMuODYtLjQzIDEuMzV6bTM3LjA2LTM0LjI1SDE3LjQ3YzAgLjUzLjE4IDEuMDUuNTEgMS40NmwzLjQ4IDQuMzZoMjkuMDdsMy40OC00LjM2Yy4zMy0uNDIuNTEtLjkzLjUxLTEuNDZaIiBzdHlsZT0iZmlsbDojOWMzZDI5Ii8+PC9zdmc+',
+  bB: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ze2ZpbGw6I2QxNzc0Yn08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0ibTU2LjU3IDU0LjktMS45MS0xLjgzYy0uNDItLjQtLjg3LS43Ni0xLjM1LTEuMDYgMS45NC0zLjE2IDMuMDEtNi44MiAzLjAxLTEwLjYgMC01LjI2LTMuODYtMTIuODctMTEuNDctMjIuNjJhOS44NzMgOS44NzMgMCAwIDAgMS4wMy00LjM5YzAtNS40NS00LjQzLTkuODktOS44OC05Ljg5cy05Ljg5IDQuNDMtOS44OSA5Ljg5YzAgMS41NC4zNiAzLjA0IDEuMDMgNC4zOS03LjYxIDkuNzYtMTEuNDcgMTcuMzYtMTEuNDcgMjIuNjIgMCAzLjc4IDEuMDcgNy40NSAzLjAxIDEwLjYtLjQ4LjMxLS45My42Ni0xLjM1IDEuMDdsLTEuODggMS44MWMtLjMuMjgtLjU3LjYtLjgyLjk1YTYuMzA3IDYuMzA3IDAgMCAwLTEuMTYgMy42NXYyLjg1YzAgMi44NSAyLjMyIDUuMTcgNS4xNyA1LjE3aDM0LjcxYzIuODUgMCA1LjE3LTIuMzIgNS4xNy01LjE3di0yLjg1YzAtMS4zMS0uNC0yLjU3LTEuMTctMy42Ny0uMjQtLjM0LS41LS42NC0uNzgtLjkxWiIgc3R5bGU9ImZpbGw6IzFhMWExYSIvPjxwYXRoIGQ9Ik0zOS44MSAxOC44N2E1Ljg1MSA1Ljg1MSAwIDAgMCAyLjA3LTQuNDhjMC0zLjI1LTIuNjMtNS44OS01Ljg5LTUuODlzLTUuODkgMi42My01Ljg5IDUuODljMCAxLjguODEgMy40IDIuMDcgNC40OC00LjgyIDUuOTMtMTIuNTEgMTYuMzUtMTIuNTEgMjIuNTMgMCA5LjAxIDcuMzEgMTYuMzIgMTYuMzIgMTYuMzJTNTIuMyA1MC40MSA1Mi4zIDQxLjRjMC02LjE5LTcuNjktMTYuNjEtMTIuNTEtMjIuNTNaIiBjbGFzcz0iY2xzLTMiLz48cGF0aCBkPSJNNTEuODEgMzguMjdDNTAuMzQgNDUuMjEgNDMuODIgNTAuNDQgMzYgNTAuNDRzLTE0LjM0LTUuMjMtMTUuODEtMTIuMTdjLS4zMyAxLjEyLS41MiAyLjE4LS41MiAzLjEzIDAgOS4wMSA3LjMxIDE2LjMyIDE2LjMyIDE2LjMyczE2LjMyLTcuMzEgMTYuMzItMTYuMzJjMC0uOTUtLjE5LTIuMDEtLjUyLTMuMTNaIiBzdHlsZT0iZmlsbDojYmI1OTM4Ii8+PHBhdGggZD0iTTU0LjEgNTguMTNjLS4wOS0uMTItLjE4LS4yNC0uMjktLjM0bC0xLjkxLTEuODNhNC42ODYgNC42ODYgMCAwIDAtMy4yNS0xLjMxaC0yNS4zYy0xLjIxIDAtMi4zOC40Ny0zLjI1IDEuMzFsLTEuOTEgMS44M2MtLjExLjExLS4yMS4yMi0uMjkuMzQtLjI4LjM5LS40My44Ni0uNDMgMS4zNXYyLjg1YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDM0LjcxYy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi44NWMwLS40OS0uMTUtLjk2LS40My0xLjM1WiIgY2xhc3M9ImNscy0zIi8+PHBhdGggZD0iTTM2IDM0Ljk0YzMuODggMCA3LjQ4IDEuMzIgMTAuNDkgMy42LjkuNjggMi4xMS0uMzQgMS42MS0xLjM1LTIuOTctNi4wMy03LjI5LTkuODMtMTIuMS05Ljgzcy05LjEzIDMuOC0xMi4xIDkuODNjLS41IDEuMDEuNzEgMi4wMyAxLjYxIDEuMzUgMy4wMS0yLjI3IDYuNjEtMy42IDEwLjQ5LTMuNk0xNy40NyA2Mi4zM2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNDktLjE1LS45Ni0uNDMtMS4zNUgxNy45Yy0uMjguMzktLjQzLjg2LS40MyAxLjM1eiIgc3R5bGU9ImZpbGw6IzljM2QyOSIvPjwvZz48L3N2Zz4=',
+  bN: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzljM2QyOX08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0ibTU4IDU0Ljc0LTEuNTUtMS40OWM1Ljc2LTIyLjIyLS42MS0zMy40MS03LjEzLTM4LjkxLTMuMDMtMi41Ni02Ljg4LTMuOTgtMTEuMTgtNC4xNWwtMi4yOC0zLjJhNS41NzggNS41NzggMCAwIDAtNC41My0yLjMzYy0xLjU3IDAtMy4wNy42Ny00LjEyIDEuODMtMi4wMyAyLjI0LTMuMDIgNS4wMS0yLjkgNy44OS0zIDIuNDQtMy45OCA1LjYzLTQuMjMgNi42NGwtMS4yOCA0LjE1Yy0uMTQuNDUtLjM4Ljg2LS43MSAxLjE5bC0zLjg0IDMuOTNjLTEuNjUgMS42OS0yLjQzIDQtMi4xNCA2LjM0YTcuNjc5IDcuNjc5IDAgMCAwIDMuNzkgNS43M2wuNzcuNDJjMS4zMy43MyAyLjg0IDEuMTIgNC4zNyAxLjEyLjk5IDAgMS45Ny0uMTYgMi45LS40OC0zLjM2IDMuMzQtNC40OCA2Ljk4LTQuODUgOS4xNWwtMi4yMyAyLjE0Yy0uMTYuMTUtLjMuMzEtLjQ0LjQ4YTYuMzEgNi4zMSAwIDAgMC0xLjUxIDQuMXYyLjg1YzAgMi44NSAyLjMyIDUuMTcgNS4xNyA1LjE3aDM0LjdjMi44NSAwIDUuMTctMi4zMiA1LjE3LTUuMTd2LTIuODVjMC0xLjQ5LS41NC0yLjk0LTEuNTEtNC4wOS0uMTQtLjE3LS4yOC0uMzMtLjQ0LS40OFoiIHN0eWxlPSJmaWxsOiMxYTFhMWEiLz48cGF0aCBkPSJNNTUuMzcgNTcuNzhjLS4wNS0uMDUtLjA4LS4xMS0uMTMtLjE2bC0zLjI3LTMuMTRjNi4xLTIxLjE5IDEuMDUtMzEuOC01LjIzLTM3LjA5LTIuOTktMi41My02Ljg3LTMuNDMtMTAuNjQtMy4xOGwtMy40OS00LjljLS41OC0uODEtMS43Ni0uODktMi40My0uMTQtMS4yMSAxLjM0LTIuNTggMy43NC0xLjQ5IDcuMTMtLjQuMjEtLjc4LjQzLTEuMTUuNjctMi45NyAxLjkzLTMuNTkgNS4wOS0zLjU5IDUuMDlsLTEuMzIgNC4yOWMtLjMzIDEuMDYtLjkgMi4wMi0xLjY3IDIuODFsLTMuODUgMy45M2EzLjcyIDMuNzIgMCAwIDAgLjcxIDUuNzdsLjc4LjQyYzEuNTYuODYgMy40Ni44MyA1LS4wNi44MS0uNTUgMS44Mi0uNjcgMi43Ni0uMzkgNS4yNyAxLjU2IDkuNTItMi42NyA5LjUyLTIuNjctLjQ1IDQuNzYtMi45NCA2LjA1LTQuODMgNy4wNC04LjI5IDQuMzItOC4xNSAxMS4yOS04LjE1IDExLjI5bC0zLjI3IDMuMTQtLjEzLjE2Yy0uMzcuNDMtLjU5Ljk3LS41OSAxLjU0djIuODVjMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMzQuN2MuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNTctLjIyLTEuMTEtLjU5LTEuNTRaIiBzdHlsZT0iZmlsbDojZDE3NzRiIi8+PHBhdGggZD0iTTMzLjc0IDIzLjk4Yy0uMDQtLjUzLS40Ny0uOTYtMS0xLTEuMDQtLjA5LTIuMTUuMjktMi45OSAxLjEzcy0xLjIyIDEuOTQtMS4xMyAyLjk5Yy4wNC41My40Ny45NiAxIDEgMS4wNC4wOSAyLjE1LS4yOSAyLjk5LTEuMTNzMS4yMi0xLjk0IDEuMTMtMi45OSIgY2xhc3M9ImNscy0xIi8+PHBhdGggZD0iTTM3LjQzIDUwLjgxYy00LjM3IDAtOC40Ni0xLjExLTExLjk3LTMuMDQtMi42MyAzLjQ1LTIuNTcgNi43Mi0yLjU3IDYuNzJoMjkuMDdjMS4wNy0zLjcyIDEuNzktNy4xMiAyLjIzLTEwLjIxLTQuMjcgNC4wMy0xMC4yIDYuNTQtMTYuNzcgNi41NFoiIHN0eWxlPSJmaWxsOiNiYjU5MzgiLz48cGF0aCBkPSJNMTguOSA2Mi4xN2MwIC42NS41MyAxLjE3IDEuMTcgMS4xN2gzNC43MWMuNjUgMCAxLjE3LS41MyAxLjE3LTEuMTd2LTIuODVjMC0uNTctLjIyLTEuMTEtLjU5LTEuNTRIMTkuNDljLS4zNy40My0uNTkuOTctLjU5IDEuNTR6IiBjbGFzcz0iY2xzLTEiLz48L2c+PC9zdmc+',
+  bP: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJjb2xvci1zY2hlbWU6bGlnaHQgb25seSIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIgdmlld0JveD0iMCAwIDcyIDcyIj48ZGVmcz48c3R5bGU+LmNscy0ze2ZpbGw6I2QxNzc0Yn08L3N0eWxlPjwvZGVmcz48ZyBpZD0iTGljaGVzcyI+PHBhdGggZD0iTTU0LjM4IDU5LjE3Yy0uMDgtLjk3LS4zMS0xLjkyLS43LTIuODItLjE5LS40My0uMzgtLjgxLS42MS0xLjE3bC00LjgzLTcuNjJjLjUyLS44OS44MS0xLjkyLjgxLTMuMDJ2LTIuMDVjMC0uOTktLjI0LTEuOTItLjY2LTIuNzQgMS4zMy0yLjIxIDIuMDUtNC43NiAyLjA1LTcuNDIgMC03Ljk2LTYuNDgtMTQuNDQtMTQuNDQtMTQuNDRzLTE0LjQ0IDYuNDgtMTQuNDQgMTQuNDRjMCAyLjY2LjcyIDUuMjEgMi4wNSA3LjQyYTUuOTkgNS45OSAwIDAgMC0uNjYgMi43NHYyLjA1YzAgMS4xLjMgMi4xMy44MiAzLjAybC00LjgzIDcuNjNjLS4yMi4zNS0uNDIuNzMtLjYgMS4xNS0uMzkuOS0uNjMgMS44NS0uNzEgMi44Ni0uMDIuMjEtLjAzLjQyLS4wMy42NHYyLjQ5YzAgMi44NSAyLjMyIDUuMTcgNS4xNyA1LjE3aDI2LjQ4YzIuODUgMCA1LjE3LTIuMzIgNS4xNy01LjE3di0yLjQ5YzAtLjIxLS4wMS0uNDEtLjA0LS42NyIgc3R5bGU9ImZpbGw6IzFhMWExYSIvPjxwYXRoIGQ9Ik01MC4zOSA1OS40OGMtLjA0LS41My0uMTctMS4wNS0uMzgtMS41NC0uMDktLjIxLS4xOS0uNDItLjMyLS42MWwtOS4xMy0xNC40MmgtOS4xMWwtOS4xMyAxNC40MmMtLjEyLjItLjIzLjQtLjMyLjYxLS4yMS40OS0uMzQgMS4wMS0uMzggMS41NCAwIC4xMi0uMDMuMjQtLjAzLjM2djIuNDljMCAuNjUuNTMgMS4xNyAxLjE3IDEuMTdoMjYuNDhjLjY1IDAgMS4xNy0uNTMgMS4xNy0xLjE3di0yLjQ5YzAtLjEyLS4wMi0uMjQtLjAzLS4zNloiIGNsYXNzPSJjbHMtMyIvPjxjaXJjbGUgY3g9IjM2IiBjeT0iMzIuMzQiIHI9IjEwLjQ0IiBjbGFzcz0iY2xzLTMiLz48cmVjdCB3aWR0aD0iMTguMTEiIGhlaWdodD0iNi4wNSIgeD0iMjYuOTUiIHk9IjQwLjUiIHJ4PSIyIiByeT0iMiIgc3R5bGU9ImZpbGw6I2JiNTkzOCIvPjxwYXRoIGQ9Ik0yMS41OCA1OS44NHYyLjQ5YzAgLjY1LjUzIDEuMTcgMS4xNyAxLjE3aDI2LjQ4Yy42NSAwIDEuMTctLjUzIDEuMTctMS4xN3YtMi40OWMwLS4xMi0uMDItLjI0LS4wMy0uMzYtLjA0LS41My0uMTctMS4wNS0uMzgtMS41NGgtMjhjLS4yMS40OS0uMzQgMS4wMS0uMzggMS41NCAwIC4xMi0uMDMuMjQtLjAzLjM2IiBzdHlsZT0iZmlsbDojOWMzZDI5Ii8+PC9nPjwvc3ZnPg==',
+};
 
 /* ===== bibliothèque tierce : chess.js ===== */
 /*
@@ -3494,68 +3517,97 @@ GAMES.push({
   }
 });
 
-/* ===== Échecs (dès 8 ans) — règles : chess.js (BSD, J. Hlywa) · IA minimax maison ===== */
+/* ===== Échecs (dès 8 ans) — règles : chess.js (BSD, J. Hlywa) · pièces rhosgfx (CC0) · IA minimax maison ===== */
 GAMES.push({
   id: 'chess', title: 'Échecs', tagline: 'Contre le Robot ou à deux', minAge: 8, color: '#c9c9d6', dom: true,
   icon: '<svg viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="48" rx="6" fill="#f3ead8"/><g fill="#8a7bd6"><rect x="8" y="8" width="12" height="12" rx="3"/><rect x="32" y="8" width="12" height="12"/><rect x="20" y="20" width="12" height="12"/><rect x="44" y="20" width="12" height="12"/><rect x="8" y="32" width="12" height="12"/><rect x="32" y="32" width="12" height="12"/><rect x="20" y="44" width="12" height="12"/><rect x="44" y="44" width="12" height="12" rx="3"/></g><path d="M38 50h14v-4l-3-3V32l3-5-3-7h-8l-3 7 3 5v11l-3 3z" fill="#1b1540"/><circle cx="45" cy="18" r="3" fill="#1b1540"/></svg>',
-  howto: ['', 'Touche une pièce, puis la case où tu veux aller. Mets le roi du Robot échec et mat !', 'Le Robot calcule 3 coups à l\'avance. Mode 2 joueurs sur la même tablette possible.'],
+  howto: ['', 'Touche une pièce, puis la case où tu veux aller. Mets le roi du Robot échec et mat ! Le bouton Indice te montre un bon coup.', 'Choisis la force du Robot (Facile, Moyen, Fort). Mode 2 joueurs sur la même tablette possible.'],
   pad: null,
   stars: s => s >= 1000 ? 3 : s >= 400 ? 1 : 0,
   create(env, saved) {
     const { dom, sfx } = env; const tier = env.tier;
-    const game = new Chess(); let mode = 'robot', sel = null, last = null, thinking = false, over = false, human = 'w';
-    if (saved && saved.fen) { try { game.load(saved.fen); mode = saved.mode || 'robot'; } catch (e) { game.reset(); } }
+    const game = new Chess(); let mode = 'robot', lvl = tier >= 2 ? 2 : 1, sel = null, last = null, thinking = false, over = false, human = 'w', hintMv = null, hintT = null, pending = null;
+    if (saved && saved.fen) { try { game.load(saved.fen); mode = saved.mode || 'robot'; if (saved.lvl != null) lvl = saved.lvl; } catch (e) { game.reset(); } }
     const VAL = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
-    const GLYPH = { p: '♟', n: '♞', b: '♝', r: '♜', q: '♛', k: '♚' };
+    const LVL = [{ n: 'Facile', d: 1, noise: 90 }, { n: 'Moyen', d: 2, noise: 30 }, { n: 'Fort', d: 3, noise: 6 }];
     const FILES = 'abcdefgh';
+    const img = (color, type) => { const i = new Image(); i.src = CHESS_PIECES[color + type.toUpperCase()]; i.alt = ''; i.draggable = false; return i; };
     // --- interface
     const wrap = el('div', { class: 'dg chess-wrap' });
     const bar = el('div', { class: 'chess-bar' });
     const status = el('div', { class: 'chess-status' });
-    const modeBtn = el('button', { class: 'btn sm', onclick: () => { if (thinking) return; mode = mode === 'robot' ? 'duo' : 'robot'; render(); persist(); } });
+    const modeBtn = el('button', { class: 'btn sm', onclick: () => { if (thinking || pending) return; mode = mode === 'robot' ? 'duo' : 'robot'; render(); persist(); } });
+    const lvlBtn = el('button', { class: 'btn sm', onclick: () => { if (thinking) return; lvl = (lvl + 1) % 3; sfx.tap(); render(); persist(); } });
+    bar.append(modeBtn, lvlBtn, status);
+    const bar2 = el('div', { class: 'chess-bar' });
     const undoBtn = el('button', { class: 'btn sm', onclick: undo }, 'Annuler');
-    bar.append(modeBtn, status, undoBtn);
+    const hintBtn = el('button', { class: 'btn sm', onclick: hint }, 'Indice');
+    const capB = el('div', { class: 'chess-cap' }), capW = el('div', { class: 'chess-cap' });
+    bar2.append(undoBtn, capB, hintBtn);
     const board = el('div', { class: 'chess', role: 'grid', 'aria-label': 'Échiquier' });
     const cells = {};
     for (let r = 8; r >= 1; r--) for (let f = 0; f < 8; f++) {
       const sq = FILES[f] + r; const c = el('button', { class: 'sq ' + ((f + r) % 2 ? 'light' : 'dark'), 'data-sq': sq, 'aria-label': sq });
       c.addEventListener('click', () => tap(sq)); cells[sq] = c; board.append(c);
     }
-    wrap.append(bar, board); dom.append(wrap);
-    function fit() { const s = Math.floor(Math.min(env.W - 24, env.H - 90) / 8) * 8; board.style.width = s + 'px'; board.style.height = s + 'px'; }
-    function persist() { env.save({ fen: game.fen(), mode }, (mode === 'robot' ? 'Contre le Robot' : 'À deux') + ' · coup ' + Math.ceil(game.history().length / 2 + .5)); }
+    const promo = el('div', { class: 'chess-promo', hidden: '' });
+    wrap.append(bar, board, capW, bar2, promo); dom.append(wrap);
+    function fit() { const s = Math.floor(Math.min(env.W - 24, env.H - 150) / 8) * 8; board.style.width = s + 'px'; board.style.height = s + 'px'; }
+    function persist() { env.save({ fen: game.fen(), mode, lvl }, (mode === 'robot' ? 'Contre le Robot (' + LVL[lvl].n + ')' : 'À deux') + ' · coup ' + Math.ceil(game.history().length / 2 + .5)); }
+    function captured() {
+      const start = { p: 8, n: 2, b: 2, r: 2, q: 1 }, left = { w: { p: 0, n: 0, b: 0, r: 0, q: 0 }, b: { p: 0, n: 0, b: 0, r: 0, q: 0 } };
+      game.board().forEach(row => row.forEach(p => { if (p && p.type !== 'k') left[p.color][p.type]++; }));
+      capW.textContent = ''; capB.textContent = '';
+      for (const t of ['q', 'r', 'b', 'n', 'p']) { for (let i = 0; i < start[t] - left.b[t]; i++) capW.append(img('b', t)); for (let i = 0; i < start[t] - left.w[t]; i++) capB.append(img('w', t)); }
+    }
     function render() {
-      modeBtn.textContent = mode === 'robot' ? 'Robot' : '2 joueurs';
+      modeBtn.textContent = mode === 'robot' ? 'Robot' : '2 joueurs'; lvlBtn.textContent = LVL[lvl].n; lvlBtn.hidden = mode !== 'robot';
       const turn = game.turn(); const inCheck = game.in_check();
       for (const sq in cells) {
-        const c = cells[sq], p = game.get(sq); c.textContent = p ? GLYPH[p.type] : ''; c.className = 'sq ' + ((FILES.indexOf(sq[0]) + +sq[1]) % 2 ? 'light' : 'dark') + (p ? ' ' + (p.color === 'w' ? 'w' : 'b') : '');
+        const c = cells[sq], p = game.get(sq); c.textContent = ''; if (p) { const i = img(p.color, p.type); if (last && sq === last.to) i.classList.add('moved'); c.append(i); }
+        c.className = 'sq ' + ((FILES.indexOf(sq[0]) + +sq[1]) % 2 ? 'light' : 'dark');
         if (last && (sq === last.from || sq === last.to)) c.classList.add('last');
         if (sel === sq) c.classList.add('sel');
+        if (hintMv && (sq === hintMv.from || sq === hintMv.to)) c.classList.add('hintmv');
         if (p && p.type === 'k' && p.color === turn && inCheck) c.classList.add('check');
       }
       if (sel) game.moves({ square: sel, verbose: true }).forEach(m => cells[m.to].classList.add(game.get(m.to) ? 'cap' : 'hint'));
+      captured();
       if (over) return;
       if (thinking) status.textContent = 'Le Robot réfléchit…';
       else status.textContent = (inCheck ? 'Échec ! ' : '') + (mode === 'robot' ? 'À toi de jouer' : (turn === 'w' ? 'Aux Blancs' : 'Aux Noirs'));
       env.hud('Coup ' + Math.ceil(game.history().length / 2 + .5));
     }
     function tap(sq) {
-      if (over || thinking) return; if (mode === 'robot' && game.turn() !== human) return;
+      if (over || thinking || pending) return; if (mode === 'robot' && game.turn() !== human) return;
       const p = game.get(sq);
-      if (sel && sel !== sq) { const mv = game.move({ from: sel, to: sq, promotion: 'q' }); if (mv) { sel = null; after(mv); return; } }
+      if (sel && sel !== sq) {
+        const mvs = game.moves({ square: sel, verbose: true }).filter(m => m.to === sq);
+        if (mvs.length) { if (mvs[0].promotion) { askPromotion(sel, sq); return; } const mv = game.move({ from: sel, to: sq }); sel = null; after(mv); return; }
+      }
       if (p && p.color === game.turn()) { sel = sel === sq ? null : sq; sfx.tap(); } else sel = null;
       render();
     }
+    function askPromotion(from, to) {
+      pending = { from, to }; promo.textContent = ''; promo.hidden = false; const color = game.turn();
+      promo.append(el('span', null, 'Ton pion devient :'));
+      ['q', 'r', 'b', 'n'].forEach(t => { const b = el('button', { 'aria-label': t }); b.append(img(color, t)); b.addEventListener('click', () => { promo.hidden = true; const mv = game.move({ from, to, promotion: t }); pending = null; sel = null; after(mv); }); promo.append(b); });
+    }
     function after(mv) {
-      last = mv; if (mv.captured) { sfx.coin(); env.vibe(30); } else sfx.pop();
+      last = mv; hintMv = null; if (mv.captured) { sfx.coin(); env.vibe(30); } else sfx.pop();
       render(); persist();
       if (checkEnd()) return;
-      if (mode === 'robot' && game.turn() !== human) { thinking = true; render(); setTimeout(robotMove, 80); }
+      if (mode === 'robot' && game.turn() !== human) { thinking = true; render(); setTimeout(robotMove, 120); }
     }
     function undo() {
-      if (thinking || over) return; if (!game.history().length) return;
+      if (thinking || over || pending) return; if (!game.history().length) return;
       game.undo(); if (mode === 'robot' && game.turn() !== human && game.history().length) game.undo();
-      sel = null; last = null; render(); persist(); sfx.tap();
+      sel = null; last = null; hintMv = null; render(); persist(); sfx.tap();
+    }
+    function hint() {
+      if (thinking || over || pending) return; if (mode === 'robot' && game.turn() !== human) return;
+      sfx.ok(); const best = bestMove(2, 0); if (!best) return; hintMv = best; sel = null; render();
+      clearTimeout(hintT); hintT = setTimeout(() => { hintMv = null; render(); }, 2500);
     }
     function material(color) { let m = 0; game.board().forEach(row => row.forEach(p => { if (p && p.color === color) m += VAL[p.type]; })); return m; }
     function checkEnd() {
@@ -3564,11 +3616,11 @@ GAMES.push({
       let score, title, text, win;
       if (mate) {
         const winner = loserTurn === 'w' ? 'b' : 'w';
-        if (mode === 'robot') { win = winner === human; score = win ? 1000 + Math.round(material(human) / 10) : Math.round((3900 - material('b')) / 10); title = win ? 'Échec et mat !' : 'Le Robot gagne'; text = win ? 'Tu as battu le Robot' : 'Le Robot t\'a mis mat'; }
+        if (mode === 'robot') { win = winner === human; const bonus = [0, 300, 700][lvl]; score = win ? 1000 + bonus + Math.round(material(human) / 10) : Math.round((3900 - material('b')) / 10); title = win ? 'Échec et mat !' : 'Le Robot gagne'; text = win ? 'Tu as battu le Robot (' + LVL[lvl].n + ')' : 'Le Robot t\'a mis mat'; }
         else { win = true; score = 1000; title = 'Échec et mat !'; text = (winner === 'w' ? 'Les Blancs' : 'Les Noirs') + ' gagnent'; }
       } else { score = 400; title = 'Partie nulle'; text = game.in_stalemate() ? 'Pat : plus aucun coup possible' : 'Match nul'; win = false; }
-      status.textContent = title; env.setScore(score);
-      setTimeout(() => env.gameOver(score, { win, title, text }), 900);
+      status.textContent = title; env.setScore(score); cells[Object.keys(cells).find(s => { const p = game.get(s); return p && p.type === 'k' && p.color === loserTurn; })].classList.add('mate');
+      setTimeout(() => env.gameOver(score, { win, title, text }), 1200);
       return true;
     }
     // --- IA : minimax alpha-bêta, captures d'abord
@@ -3576,7 +3628,7 @@ GAMES.push({
       let s = 0; const b = game.board();
       for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
         const p = b[r][f]; if (!p) continue; let v = VAL[p.type];
-        const center = 3.5 - Math.abs(f - 3.5) + 3.5 - Math.abs(r - 3.5); // 0..7
+        const center = 3.5 - Math.abs(f - 3.5) + 3.5 - Math.abs(r - 3.5);
         if (p.type === 'n' || p.type === 'b' || p.type === 'q') v += center * 4;
         if (p.type === 'p') v += (p.color === 'w' ? 7 - r : r) * 6 + center * 2;
         if (p.type === 'k') v -= center * 3;
@@ -3592,19 +3644,20 @@ GAMES.push({
       if (maximizing) { let best = -Infinity; for (const m of ms) { game.move(m); best = Math.max(best, search(depth - 1, alpha, beta, false)); game.undo(); alpha = Math.max(alpha, best); if (beta <= alpha) break; } return best; }
       let best = Infinity; for (const m of ms) { game.move(m); best = Math.min(best, search(depth - 1, alpha, beta, true)); game.undo(); beta = Math.min(beta, best); if (beta <= alpha) break; } return best;
     }
-    function robotMove() {
-      const depth = tier >= 2 ? 3 : 2, noise = tier >= 2 ? 10 : 60; const robot = game.turn(), maxi = robot === 'w';
+    function bestMove(depth, noise) {
+      const side = game.turn(), maxi = side === 'w';
       const ms = orderMoves(game.moves({ verbose: true })); let best = null, bestV = maxi ? -Infinity : Infinity;
-      for (const m of ms) {
-        game.move(m); let v = search(depth - 1, -Infinity, Infinity, !maxi) + rnd(-noise, noise); game.undo();
-        if (maxi ? v > bestV : v < bestV) { bestV = v; best = m; }
-      }
+      for (const m of ms) { game.move(m); const v = search(depth - 1, -Infinity, Infinity, !maxi) + rnd(-noise, noise); game.undo(); if (maxi ? v > bestV : v < bestV) { bestV = v; best = m; } }
+      return best;
+    }
+    function robotMove() {
+      const best = bestMove(LVL[lvl].d, LVL[lvl].noise);
       thinking = false; if (!best) { checkEnd(); return; }
       const mv = game.move(best); last = mv; if (mv.captured) sfx.hit(); else sfx.pop(); render(); persist(); checkEnd();
     }
     fit(); render();
     if (mode === 'robot' && game.turn() !== human && !game.game_over()) { thinking = true; render(); setTimeout(robotMove, 300); }
-    return { resize: fit };
+    return { resize: fit, stop: () => clearTimeout(hintT) };
   }
 });
 
@@ -4060,7 +4113,7 @@ const HELP = {
   }),
   chess: () => ({
     'But du jeu': 'Mettre le roi adverse échec et mat : il est attaqué et ne peut plus s\'échapper.',
-    'Comment jouer': ['Touche une pièce : ses cases possibles s\'affichent (points et cercles roses pour les prises)', 'Touche la case où tu veux aller', 'Bouton « Robot / 2 joueurs » pour jouer contre l\'ordinateur ou à deux', 'Bouton « Annuler » pour reprendre ton dernier coup'],
+    'Comment jouer': ['Touche une pièce : ses cases possibles s\'affichent (points et cercles roses pour les prises)', 'Touche la case où tu veux aller', 'Bouton « Robot / 2 joueurs » pour jouer contre l\'ordinateur ou à deux, et « Facile / Moyen / Fort » pour sa force', 'Bouton « Annuler » pour reprendre ton dernier coup, « Indice » pour voir un bon coup', 'Un pion qui arrive au bout devient la pièce de ton choix'],
     'Les pièces': ['Pion : avance d\'une case (deux au premier coup), prend en diagonale', 'Tour : lignes droites · Fou : diagonales · Dame : les deux', 'Cavalier : en L, il saute par-dessus les autres', 'Roi : une case dans tous les sens'],
     'Astuce': 'Sors tes cavaliers et tes fous au début, protège ton roi, et regarde ce que le Robot attaque avant de jouer.'
   }),

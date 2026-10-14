@@ -1,0 +1,2 @@
+Pièces d'échecs « rhosgfx » par RhosGFX — licence CC0 1.0 Universal (domaine public).
+Source : https://github.com/lichess-org/lila/tree/master/public/piece/rhosgfx
