@@ -1,18 +1,18 @@
 /* ===== Duel Arena (dès 13 ans) — combat 1 contre 1 ===== */
 GAMES.push({
-  id: 'duel', title: 'Duel Arena', tagline: 'Combat en 3 rounds contre le Robot', minAge: 13, color: '#ff4f9a',
+  id: 'duel', landscape: true, title: 'Duel Arena', tagline: 'Combat en 3 rounds contre le Robot', minAge: 13, color: '#ff4f9a',
   icon: '<svg viewBox="0 0 64 64"><rect x="10" y="48" width="44" height="6" rx="3" fill="#362b8a"/><circle cx="20" cy="18" r="7" fill="#ffb27a"/><rect x="14" y="26" width="12" height="16" rx="4" fill="#38e0d6"/><rect x="26" y="28" width="14" height="6" rx="3" fill="#ffb27a"/><circle cx="46" cy="18" r="7" fill="#c9c9d6"/><rect x="40" y="26" width="12" height="16" rx="4" fill="#ff4f9a"/><rect x="42" y="16" width="8" height="3" fill="#ff4f4f"/><path d="M34 22l4 6-6 2z" fill="#ffd23f"/></svg>',
   howto: ['', '', 'Flèches pour bouger, SAUT, POING (rapide) et PIED (puissant). Accroupi (bas) = garde. Gagne 2 rounds sur 3 contre le Robot.'],
   pad: { left: true, buttons: [{ k: 'up', label: 'SAUT' }, { k: 'a', label: 'POING' }, { k: 'b', label: 'PIED' }], hint: 'Bas ou S = garde' },
   stars: s => s >= 2500 ? 3 : s >= 1500 ? 2 : s >= 800 ? 1 : 0,
-  create(env) {
+  create(env, saved) {
     const { input, sfx } = env;
     const pr = Particles();
     const ATT = { punch: { dur: .28, hitAt: .1, range: 62, dmg: 8, kb: 120, cd: .1 }, kick: { dur: .5, hitAt: .22, range: 92, dmg: 15, kb: 260, cd: .25 } };
     let P, A, round = 1, wins = [0, 0], roundT = 60, state = 'fight', stateT = 0, t = 0, score = 0, banner = 'ROUND 1', bannerT = 1.5, shake = 0, over = false;
     const floorY = () => env.H - 50;
     function fighter(x, face, color, name) { return { x, y: 0, vx: 0, vy: 0, face, color, name, hp: 100, act: 'idle', actT: 0, cd: 0, block: false, hitT: 0, hitDone: false, ai: { t: 0, plan: 'approach' }, stun: 0 }; }
-    function newRound() { P = fighter(env.W * .3, 1, '#38e0d6', env.profile.name); A = fighter(env.W * .7, -1, '#ff4f9a', 'Robot'); roundT = 60; state = 'fight'; banner = 'ROUND ' + round; bannerT = 1.5; }
+    function newRound() { P = fighter(env.W * .3, 1, '#38e0d6', env.profile.name); A = fighter(env.W * .7, -1, '#ff4f9a', 'Robot'); roundT = 60; state = 'fight'; banner = 'ROUND ' + round; bannerT = 1.5; env.save({ round, wins: wins.slice(), score }, 'Round ' + round + ' · ' + wins[0] + ' – ' + wins[1]); }
     function attack(f, kind) { if (f.act !== 'idle' || f.cd > 0 || f.stun > 0 || f.y < 0) return; f.act = kind; f.actT = 0; f.hitDone = false; sfx.punch(); }
     function control(f, dt) {
       const spec = ATT[f.act];
@@ -98,6 +98,7 @@ GAMES.push({
       });
       if (bannerT > 0) { c.globalAlpha = Math.min(1, bannerT * 1.5); Draw.text(c, banner, W / 2, H * .3, 30, '#ffd23f'); c.globalAlpha = 1; }
     }
+    if (saved && saved.wins) { round = clamp(saved.round | 0, 1, 3); wins = [saved.wins[0] | 0, saved.wins[1] | 0]; score = saved.score | 0; }
     newRound();
     return { update, draw, resize: () => { P.x = clamp(P.x, 30, env.W - 30); A.x = clamp(A.x, 30, env.W - 30); } };
   }

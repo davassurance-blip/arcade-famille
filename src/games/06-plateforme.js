@@ -1,11 +1,11 @@
 /* ===== Plateforme Pixel (dès 8 ans) — 3 niveaux générés ===== */
 GAMES.push({
-  id: 'platform', title: 'Plateforme Pixel', tagline: 'Cours, saute, attrape les pièces', minAge: 8, color: '#5ad1ff',
+  id: 'platform', landscape: true, title: 'Plateforme Pixel', tagline: 'Cours, saute, attrape les pièces', minAge: 8, color: '#5ad1ff',
   icon: '<svg viewBox="0 0 64 64"><rect x="4" y="46" width="56" height="14" fill="#b5642a"/><rect x="4" y="46" width="56" height="4" fill="#3fbf4f"/><rect x="34" y="26" width="22" height="8" fill="#b5642a"/><rect x="34" y="26" width="22" height="3" fill="#3fbf4f"/><circle cx="45" cy="16" r="5" fill="#ffd23f"/><rect x="14" y="22" width="12" height="12" rx="3" fill="#ffb27a"/><rect x="13" y="18" width="14" height="6" rx="2" fill="#ff4f4f"/><rect x="15" y="34" width="10" height="10" rx="2" fill="#38e0d6"/><circle cx="18" cy="27" r="1.5" fill="#1b1540"/><circle cx="23" cy="27" r="1.5" fill="#1b1540"/></svg>',
   howto: ['', 'Flèches pour courir, SAUT pour sauter. Saute sur les blobs pour les écraser, attrape les pièces, atteins le drapeau !', 'Mode difficile : trous plus larges, piques, blobs rapides. 3 niveaux, 3 vies.'],
   pad: { left: true, buttons: [{ k: 'a', label: 'SAUT' }] },
   stars: s => s >= 900 ? 3 : s >= 500 ? 2 : s >= 200 ? 1 : 0,
-  create(env) {
+  create(env, saved) {
     const { input, sfx } = env; const hard = env.tier >= 2;
     const ROWS = 12; let TS = 40, level = 0, lives = 3, score = 0, coins = 0, world = null, p = null, enemies = [], cam = 0, t = 0, inv = 0, msg = '', msgT = 0, checkpoint = 0, over = false;
     const pr = Particles();
@@ -37,13 +37,14 @@ GAMES.push({
       const old = TS; TS = clamp(Math.floor(Math.min(env.H / ROWS, env.W / 10)), 24, 56); const k = TS / old;
       if (world && k !== 1) { p.x *= k; p.y *= k; p.w *= k; p.h *= k; cam *= k; for (const e of enemies) { e.x *= k; e.y *= k; e.w *= k; e.h *= k; } }
     }
-    function startLevel(L) { level = L; world = gen(L); spawn(TS * 5); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; }
+    function persist() { env.save({ level, lives, score, coins }, 'Niveau ' + (level + 1) + ' · ' + lives + ' vie' + (lives > 1 ? 's' : '') + ' · ' + score + ' pts'); }
+    function startLevel(L) { level = L; world = gen(L); spawn(TS * 5); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; persist(); }
     function solid(cx, cy) { if (cy >= ROWS) return false; if (cx < 0 || cx >= world.cols) return true; if (cy < 0) return false; return world.g[cy][cx] === 1; }
     function tileAt(cx, cy) { return (cy < 0 || cy >= ROWS || cx < 0 || cx >= world.cols) ? 0 : world.g[cy][cx]; }
     function hit(reason) {
       if (inv > 0) return; lives--; sfx.hit(); env.vibe(150); pr.burst(p.x + p.w / 2, p.y + p.h / 2, '#ff6a55', 16, 240);
       if (lives <= 0) { over = true; env.gameOver(score, { text: 'Niveau ' + (level + 1) + ' · ' + coins + ' pièces' }); return; }
-      spawn(checkpoint * TS + TS); msg = reason; msgT = 1.5;
+      spawn(checkpoint * TS + TS); msg = reason; msgT = 1.5; persist();
     }
     function update(dt) {
       if (over) return; t += dt; inv = Math.max(0, inv - dt); msgT = Math.max(0, msgT - dt);
@@ -122,7 +123,8 @@ GAMES.push({
       Draw.lives(c, lives, 3, 22, 14);
       if (msgT > 0) { c.globalAlpha = Math.min(1, msgT); c.lineWidth = 6; c.strokeStyle = level === 2 ? '#1b1540' : '#fff'; c.font = '900 28px ' + getComputedStyle(document.body).getPropertyValue('--font-display'); c.textAlign = 'center'; c.textBaseline = 'middle'; c.strokeText(msg, W / 2, H * .3); Draw.text(c, msg, W / 2, H * .3, 28, level === 2 ? '#fff' : '#1b1540'); c.globalAlpha = 1; }
     }
-    resize(); startLevel(0);
+    resize();
+    if (saved && typeof saved.level === 'number') { lives = clamp(saved.lives | 0, 1, 3); score = saved.score | 0; coins = saved.coins | 0; startLevel(clamp(saved.level | 0, 0, 2)); } else startLevel(0);
     return { update, draw, resize };
   }
 });

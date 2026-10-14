@@ -31,7 +31,7 @@ const defaultState = () => ({
     { id: 2, name: 'Pilote', age: 10, color: COLORS[1], avatar: 1 },
     { id: 3, name: 'Boss', age: 13, color: COLORS[2], avatar: 2 }
   ],
-  scores: {}, stars: {}
+  scores: {}, stars: {}, lastProfile: null, resume: null
 });
 let S = defaultState();
 function load() {
@@ -125,7 +125,7 @@ function toast(msg) {
 function renderProfiles() {
   const box = $('#profiles'); box.textContent = '';
   for (const p of S.profiles) {
-    const c = el('button', { class: 'pcard', style: '--pc:' + p.color, onclick: () => { Sfx.unlock(); Sfx.ok(); current = p; renderHome(); show('home'); } },
+    const c = el('button', { class: 'pcard', style: '--pc:' + p.color, onclick: () => { Sfx.unlock(); Sfx.ok(); current = p; S.lastProfile = p.id; save(); renderHome(); show('home'); } },
       avatarEl(p), el('span', { class: 'nm' }, p.name), el('span', { class: 'ag' }, p.age + ' ans · ' + TIER_NAME[tierOf(p.age)]));
     box.append(c);
   }
@@ -153,7 +153,13 @@ function renderHome() {
   const tier = tierOf(current.age);
   $('#home-sub').textContent = ['Facile et rigolo', 'Réflexes et aventure', 'Mode gamer'][tier];
   const mine = GAMES.filter(g => current.age >= g.minAge), other = GAMES.filter(g => current.age < g.minAge);
-  const gb = $('#games'); gb.textContent = ''; mine.forEach(g => gb.append(gameTile(g, false)));
+  const gb = $('#games'); gb.textContent = '';
+  const r = S.resume, rdef = r && r.pid === current.id && GAMES.find(g => g.id === r.gid);
+  if (rdef && current.age >= rdef.minAge) {
+    const b = el('button', { class: 'resume', style: '--tc:' + rdef.color, onclick: () => { Sfx.unlock(); Sfx.ok(); launch(rdef, r.data); } },
+      el('b', null, 'Reprendre ' + rdef.title), el('i', null, r.label || 'Partie en cours'));
+    gb.append(b);
+  } mine.forEach(g => gb.append(gameTile(g, false)));
   const lb = $('#games-locked'); lb.textContent = ''; other.forEach(g => lb.append(gameTile(g, true)));
   $('#locked-wrap').hidden = other.length === 0;
 }
@@ -227,6 +233,18 @@ function buildPad(spec) {
   pad.append(L); if (spec.hint) pad.append(el('div', { class: 'hint' }, spec.hint)); pad.append(R);
 }
 
+/* ---------- Plein écran & orientation ---------- */
+const FS = {
+  ok: !!(document.fullscreenEnabled || document.webkitFullscreenEnabled),
+  on() { return !!(document.fullscreenElement || document.webkitFullscreenElement); },
+  enter() { const d = document.documentElement; try { const p = d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : d.webkitRequestFullscreen ? d.webkitRequestFullscreen() : null; if (p && p.catch) p.catch(() => { }); } catch (e) { } },
+  exit() { try { const p = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : null; if (p && p.catch) p.catch(() => { }); } catch (e) { } },
+  toggle() { this.on() ? this.exit() : this.enter(); },
+  lock(o) { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock(o).catch(() => { }); } catch (e) { } },
+  unlock() { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) { } }
+};
+['btn-fs', 'btn-fs-game'].forEach(id => { const b = $('#' + id); if (!FS.ok) b.hidden = true; else b.addEventListener('click', () => { Sfx.tap(); FS.toggle(); }); });
+
 /* ---------- Lanceur de jeu ---------- */
 const Game = {
   active: false, def: null, inst: null, raf: 0, last: 0, paused: false, score: 0, env: null,
@@ -255,16 +273,19 @@ function makeEnv(def) {
     setScore(n) { Game.score = n; $('#g-score').textContent = n; },
     hud(t) { $('#g-hud').textContent = t; },
     gameOver(score, opts) { endGame(score, opts || {}); },
+    save(data, label) { S.resume = { gid: def.id, pid: current.id, data, label }; save(); },
     color: def.color
   };
 }
-function launch(def) {
-  Game.def = def; Game.active = true; Game.paused = false; Game.score = 0;
+function launch(def, saved) {
+  Game.def = def; Game.saved = saved || null; Game.active = true; Game.paused = false; Game.score = 0;
   $('#g-title').textContent = def.title; $('#g-score').textContent = '0'; $('#g-hud').textContent = '';
   $('#g-over').hidden = true; $('#g-pause').hidden = true;
   domRoot.textContent = ''; domRoot.classList.toggle('on', !!def.dom);
   buildPad(def.pad);
   show('game');
+  if (FS.ok && !FS.on()) FS.enter();
+  if (def.landscape) setTimeout(() => FS.lock('landscape'), 150);
   Input.reset();
   resizeCanvas();
   // intro
@@ -277,7 +298,7 @@ function startRun() {
   domRoot.textContent = '';
   Input.reset();
   Game.env = makeEnv(Game.def);
-  Game.inst = Game.def.create(Game.env);
+  Game.inst = Game.def.create(Game.env, Game.saved); Game.saved = null;
   if (Game.inst.resize) Game.inst.resize();
   Game.score = 0; $('#g-score').textContent = '0';
   Game.last = performance.now();
@@ -303,6 +324,7 @@ function endGame(score, opts) {
   S.scores[pid] = S.scores[pid] || {};
   const prev = S.scores[pid][gid] || 0, rec = score > prev;
   if (rec) S.scores[pid][gid] = score;
+  S.resume = null;
   const earned = Game.def.stars ? Game.def.stars(score) : Math.min(3, Math.floor(score / 100));
   S.stars[pid] = (S.stars[pid] || 0) + earned;
   save();
@@ -314,10 +336,13 @@ function endGame(score, opts) {
   if (opts.win) Sfx.win(); else Sfx.lose();
 }
 function quitGame() {
+  const abandon = !!Game.inst && !Game.over; // partie quittée volontairement en cours de route
   cancelAnimationFrame(Game.raf);
   if (Game.inst && Game.inst.stop) try { Game.inst.stop(); } catch (e) { }
   Game.inst = null; Game.active = false; Game.over = false; Game.paused = false;
   domRoot.textContent = ''; Input.reset();
+  FS.unlock();
+  if (abandon) { S.resume = null; save(); }
   renderHome(); show('home');
 }
 $('#i-go').addEventListener('click', () => { Sfx.unlock(); Sfx.ok(); Game.over = false; startRun(); });
@@ -384,7 +409,7 @@ async function openParent() {
 $('#btn-parent-1').addEventListener('click', openParent);
 $('#btn-parent-2').addEventListener('click', openParent);
 $('#btn-parent-back').addEventListener('click', () => { save(); renderProfiles(); if (current) { current = S.profiles.find(p => p.id === current.id) || null; } if (current) { renderHome(); show('home'); } else show('profiles'); });
-$('#chip').addEventListener('click', () => { Sfx.tap(); renderProfiles(); show('profiles'); });
+$('#chip').addEventListener('click', () => { Sfx.tap(); S.lastProfile = null; save(); renderProfiles(); show('profiles'); });
 
 function confirmBox(title, text) {
   return new Promise(res => {

@@ -82,6 +82,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .iconbtn{width:46px;height:46px;border-radius:14px;background:var(--panel);display:grid;place-items:center;flex:none;transition:transform .12s}
 .iconbtn:active{transform:scale(.92)}
 .iconbtn svg{width:24px;height:24px}
+.iconbtn.sm{width:38px;height:38px;border-radius:11px;background:var(--panel2)}.iconbtn.sm svg{width:20px;height:20px}
 .stars{display:flex;align-items:center;gap:6px;background:var(--panel);border-radius:999px;padding:8px 14px;font-family:var(--font-display);font-size:17px;color:var(--sun);font-variant-numeric:tabular-nums}
 .stars svg{width:20px;height:20px}
 
@@ -102,6 +103,9 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .tile.lock{filter:saturate(.25) brightness(.7);cursor:default}
 .tile.lock:hover{transform:none}
 .tile.lock .best{color:var(--fg)}
+.resume{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;text-align:left;border-radius:var(--radius);padding:14px 18px;color:var(--ink);
+  background:linear-gradient(120deg,var(--lime),var(--tc));box-shadow:0 10px 24px rgba(0,0,0,.28);animation:bob 2s ease-in-out infinite}
+.resume b{font-family:var(--font-display);font-size:19px}.resume i{font-style:normal;font-size:13px;font-weight:700;opacity:.8}
 .foot{margin-top:28px;text-align:center;color:var(--muted);font-size:12.5px;font-weight:600}
 
 /* Écran de jeu */
@@ -235,6 +239,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
     <button id="chip" class="chip" title="Changer de joueur"><span class="av" id="chip-av"></span><span><small>Joueur</small><span id="chip-name">—</span></span></button>
     <div class="spacer"></div>
     <div class="stars" title="Étoiles gagnées"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg><span id="star-count">0</span></div>
+    <button id="btn-fs" class="iconbtn" title="Plein écran" aria-label="Plein écran"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg></button>
     <button id="btn-parent-2" class="iconbtn" title="Espace parents"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v3h6V7a3 3 0 0 0-3-3zm0 9a2 2 0 0 0-1 3.7V19h2v-2.3A2 2 0 0 0 12 13z"/></svg></button>
   </div>
   <div class="scroll"><div class="wrap">
@@ -253,6 +258,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
     <button id="btn-quit" class="backbtn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 4.6L13.9 3 5 12l8.9 9 1.5-1.6L8 12z"/></svg>Menu</button>
     <span class="ttl" id="g-title"></span>
     <div class="hud"><span class="sub" id="g-hud"></span><span id="g-score">0</span></div>
+    <button id="btn-fs-game" class="iconbtn sm" title="Plein écran" aria-label="Plein écran"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg></button>
   </div>
   <div id="g-stage">
     <canvas id="g-canvas"></canvas>
@@ -371,7 +377,7 @@ const defaultState = () => ({
     { id: 2, name: 'Pilote', age: 10, color: COLORS[1], avatar: 1 },
     { id: 3, name: 'Boss', age: 13, color: COLORS[2], avatar: 2 }
   ],
-  scores: {}, stars: {}
+  scores: {}, stars: {}, lastProfile: null, resume: null
 });
 let S = defaultState();
 function load() {
@@ -465,7 +471,7 @@ function toast(msg) {
 function renderProfiles() {
   const box = $('#profiles'); box.textContent = '';
   for (const p of S.profiles) {
-    const c = el('button', { class: 'pcard', style: '--pc:' + p.color, onclick: () => { Sfx.unlock(); Sfx.ok(); current = p; renderHome(); show('home'); } },
+    const c = el('button', { class: 'pcard', style: '--pc:' + p.color, onclick: () => { Sfx.unlock(); Sfx.ok(); current = p; S.lastProfile = p.id; save(); renderHome(); show('home'); } },
       avatarEl(p), el('span', { class: 'nm' }, p.name), el('span', { class: 'ag' }, p.age + ' ans · ' + TIER_NAME[tierOf(p.age)]));
     box.append(c);
   }
@@ -493,7 +499,13 @@ function renderHome() {
   const tier = tierOf(current.age);
   $('#home-sub').textContent = ['Facile et rigolo', 'Réflexes et aventure', 'Mode gamer'][tier];
   const mine = GAMES.filter(g => current.age >= g.minAge), other = GAMES.filter(g => current.age < g.minAge);
-  const gb = $('#games'); gb.textContent = ''; mine.forEach(g => gb.append(gameTile(g, false)));
+  const gb = $('#games'); gb.textContent = '';
+  const r = S.resume, rdef = r && r.pid === current.id && GAMES.find(g => g.id === r.gid);
+  if (rdef && current.age >= rdef.minAge) {
+    const b = el('button', { class: 'resume', style: '--tc:' + rdef.color, onclick: () => { Sfx.unlock(); Sfx.ok(); launch(rdef, r.data); } },
+      el('b', null, 'Reprendre ' + rdef.title), el('i', null, r.label || 'Partie en cours'));
+    gb.append(b);
+  } mine.forEach(g => gb.append(gameTile(g, false)));
   const lb = $('#games-locked'); lb.textContent = ''; other.forEach(g => lb.append(gameTile(g, true)));
   $('#locked-wrap').hidden = other.length === 0;
 }
@@ -567,6 +579,18 @@ function buildPad(spec) {
   pad.append(L); if (spec.hint) pad.append(el('div', { class: 'hint' }, spec.hint)); pad.append(R);
 }
 
+/* ---------- Plein écran & orientation ---------- */
+const FS = {
+  ok: !!(document.fullscreenEnabled || document.webkitFullscreenEnabled),
+  on() { return !!(document.fullscreenElement || document.webkitFullscreenElement); },
+  enter() { const d = document.documentElement; try { const p = d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : d.webkitRequestFullscreen ? d.webkitRequestFullscreen() : null; if (p && p.catch) p.catch(() => { }); } catch (e) { } },
+  exit() { try { const p = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : null; if (p && p.catch) p.catch(() => { }); } catch (e) { } },
+  toggle() { this.on() ? this.exit() : this.enter(); },
+  lock(o) { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock(o).catch(() => { }); } catch (e) { } },
+  unlock() { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) { } }
+};
+['btn-fs', 'btn-fs-game'].forEach(id => { const b = $('#' + id); if (!FS.ok) b.hidden = true; else b.addEventListener('click', () => { Sfx.tap(); FS.toggle(); }); });
+
 /* ---------- Lanceur de jeu ---------- */
 const Game = {
   active: false, def: null, inst: null, raf: 0, last: 0, paused: false, score: 0, env: null,
@@ -595,16 +619,19 @@ function makeEnv(def) {
     setScore(n) { Game.score = n; $('#g-score').textContent = n; },
     hud(t) { $('#g-hud').textContent = t; },
     gameOver(score, opts) { endGame(score, opts || {}); },
+    save(data, label) { S.resume = { gid: def.id, pid: current.id, data, label }; save(); },
     color: def.color
   };
 }
-function launch(def) {
-  Game.def = def; Game.active = true; Game.paused = false; Game.score = 0;
+function launch(def, saved) {
+  Game.def = def; Game.saved = saved || null; Game.active = true; Game.paused = false; Game.score = 0;
   $('#g-title').textContent = def.title; $('#g-score').textContent = '0'; $('#g-hud').textContent = '';
   $('#g-over').hidden = true; $('#g-pause').hidden = true;
   domRoot.textContent = ''; domRoot.classList.toggle('on', !!def.dom);
   buildPad(def.pad);
   show('game');
+  if (FS.ok && !FS.on()) FS.enter();
+  if (def.landscape) setTimeout(() => FS.lock('landscape'), 150);
   Input.reset();
   resizeCanvas();
   // intro
@@ -617,7 +644,7 @@ function startRun() {
   domRoot.textContent = '';
   Input.reset();
   Game.env = makeEnv(Game.def);
-  Game.inst = Game.def.create(Game.env);
+  Game.inst = Game.def.create(Game.env, Game.saved); Game.saved = null;
   if (Game.inst.resize) Game.inst.resize();
   Game.score = 0; $('#g-score').textContent = '0';
   Game.last = performance.now();
@@ -643,6 +670,7 @@ function endGame(score, opts) {
   S.scores[pid] = S.scores[pid] || {};
   const prev = S.scores[pid][gid] || 0, rec = score > prev;
   if (rec) S.scores[pid][gid] = score;
+  S.resume = null;
   const earned = Game.def.stars ? Game.def.stars(score) : Math.min(3, Math.floor(score / 100));
   S.stars[pid] = (S.stars[pid] || 0) + earned;
   save();
@@ -654,10 +682,13 @@ function endGame(score, opts) {
   if (opts.win) Sfx.win(); else Sfx.lose();
 }
 function quitGame() {
+  const abandon = !!Game.inst && !Game.over; // partie quittée volontairement en cours de route
   cancelAnimationFrame(Game.raf);
   if (Game.inst && Game.inst.stop) try { Game.inst.stop(); } catch (e) { }
   Game.inst = null; Game.active = false; Game.over = false; Game.paused = false;
   domRoot.textContent = ''; Input.reset();
+  FS.unlock();
+  if (abandon) { S.resume = null; save(); }
   renderHome(); show('home');
 }
 $('#i-go').addEventListener('click', () => { Sfx.unlock(); Sfx.ok(); Game.over = false; startRun(); });
@@ -724,7 +755,7 @@ async function openParent() {
 $('#btn-parent-1').addEventListener('click', openParent);
 $('#btn-parent-2').addEventListener('click', openParent);
 $('#btn-parent-back').addEventListener('click', () => { save(); renderProfiles(); if (current) { current = S.profiles.find(p => p.id === current.id) || null; } if (current) { renderHome(); show('home'); } else show('profiles'); });
-$('#chip').addEventListener('click', () => { Sfx.tap(); renderProfiles(); show('profiles'); });
+$('#chip').addEventListener('click', () => { Sfx.tap(); S.lastProfile = null; save(); renderProfiles(); show('profiles'); });
 
 function confirmBox(title, text) {
   return new Promise(res => {
@@ -1078,12 +1109,12 @@ GAMES.push({
 
 /* ===== Plateforme Pixel (dès 8 ans) — 3 niveaux générés ===== */
 GAMES.push({
-  id: 'platform', title: 'Plateforme Pixel', tagline: 'Cours, saute, attrape les pièces', minAge: 8, color: '#5ad1ff',
+  id: 'platform', landscape: true, title: 'Plateforme Pixel', tagline: 'Cours, saute, attrape les pièces', minAge: 8, color: '#5ad1ff',
   icon: '<svg viewBox="0 0 64 64"><rect x="4" y="46" width="56" height="14" fill="#b5642a"/><rect x="4" y="46" width="56" height="4" fill="#3fbf4f"/><rect x="34" y="26" width="22" height="8" fill="#b5642a"/><rect x="34" y="26" width="22" height="3" fill="#3fbf4f"/><circle cx="45" cy="16" r="5" fill="#ffd23f"/><rect x="14" y="22" width="12" height="12" rx="3" fill="#ffb27a"/><rect x="13" y="18" width="14" height="6" rx="2" fill="#ff4f4f"/><rect x="15" y="34" width="10" height="10" rx="2" fill="#38e0d6"/><circle cx="18" cy="27" r="1.5" fill="#1b1540"/><circle cx="23" cy="27" r="1.5" fill="#1b1540"/></svg>',
   howto: ['', 'Flèches pour courir, SAUT pour sauter. Saute sur les blobs pour les écraser, attrape les pièces, atteins le drapeau !', 'Mode difficile : trous plus larges, piques, blobs rapides. 3 niveaux, 3 vies.'],
   pad: { left: true, buttons: [{ k: 'a', label: 'SAUT' }] },
   stars: s => s >= 900 ? 3 : s >= 500 ? 2 : s >= 200 ? 1 : 0,
-  create(env) {
+  create(env, saved) {
     const { input, sfx } = env; const hard = env.tier >= 2;
     const ROWS = 12; let TS = 40, level = 0, lives = 3, score = 0, coins = 0, world = null, p = null, enemies = [], cam = 0, t = 0, inv = 0, msg = '', msgT = 0, checkpoint = 0, over = false;
     const pr = Particles();
@@ -1115,13 +1146,14 @@ GAMES.push({
       const old = TS; TS = clamp(Math.floor(Math.min(env.H / ROWS, env.W / 10)), 24, 56); const k = TS / old;
       if (world && k !== 1) { p.x *= k; p.y *= k; p.w *= k; p.h *= k; cam *= k; for (const e of enemies) { e.x *= k; e.y *= k; e.w *= k; e.h *= k; } }
     }
-    function startLevel(L) { level = L; world = gen(L); spawn(TS * 5); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; }
+    function persist() { env.save({ level, lives, score, coins }, 'Niveau ' + (level + 1) + ' · ' + lives + ' vie' + (lives > 1 ? 's' : '') + ' · ' + score + ' pts'); }
+    function startLevel(L) { level = L; world = gen(L); spawn(TS * 5); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; persist(); }
     function solid(cx, cy) { if (cy >= ROWS) return false; if (cx < 0 || cx >= world.cols) return true; if (cy < 0) return false; return world.g[cy][cx] === 1; }
     function tileAt(cx, cy) { return (cy < 0 || cy >= ROWS || cx < 0 || cx >= world.cols) ? 0 : world.g[cy][cx]; }
     function hit(reason) {
       if (inv > 0) return; lives--; sfx.hit(); env.vibe(150); pr.burst(p.x + p.w / 2, p.y + p.h / 2, '#ff6a55', 16, 240);
       if (lives <= 0) { over = true; env.gameOver(score, { text: 'Niveau ' + (level + 1) + ' · ' + coins + ' pièces' }); return; }
-      spawn(checkpoint * TS + TS); msg = reason; msgT = 1.5;
+      spawn(checkpoint * TS + TS); msg = reason; msgT = 1.5; persist();
     }
     function update(dt) {
       if (over) return; t += dt; inv = Math.max(0, inv - dt); msgT = Math.max(0, msgT - dt);
@@ -1200,7 +1232,8 @@ GAMES.push({
       Draw.lives(c, lives, 3, 22, 14);
       if (msgT > 0) { c.globalAlpha = Math.min(1, msgT); c.lineWidth = 6; c.strokeStyle = level === 2 ? '#1b1540' : '#fff'; c.font = '900 28px ' + getComputedStyle(document.body).getPropertyValue('--font-display'); c.textAlign = 'center'; c.textBaseline = 'middle'; c.strokeText(msg, W / 2, H * .3); Draw.text(c, msg, W / 2, H * .3, 28, level === 2 ? '#fff' : '#1b1540'); c.globalAlpha = 1; }
     }
-    resize(); startLevel(0);
+    resize();
+    if (saved && typeof saved.level === 'number') { lives = clamp(saved.lives | 0, 1, 3); score = saved.score | 0; coins = saved.coins | 0; startLevel(clamp(saved.level | 0, 0, 2)); } else startLevel(0);
     return { update, draw, resize };
   }
 });
@@ -1260,19 +1293,19 @@ GAMES.push({
 
 /* ===== Duel Arena (dès 13 ans) — combat 1 contre 1 ===== */
 GAMES.push({
-  id: 'duel', title: 'Duel Arena', tagline: 'Combat en 3 rounds contre le Robot', minAge: 13, color: '#ff4f9a',
+  id: 'duel', landscape: true, title: 'Duel Arena', tagline: 'Combat en 3 rounds contre le Robot', minAge: 13, color: '#ff4f9a',
   icon: '<svg viewBox="0 0 64 64"><rect x="10" y="48" width="44" height="6" rx="3" fill="#362b8a"/><circle cx="20" cy="18" r="7" fill="#ffb27a"/><rect x="14" y="26" width="12" height="16" rx="4" fill="#38e0d6"/><rect x="26" y="28" width="14" height="6" rx="3" fill="#ffb27a"/><circle cx="46" cy="18" r="7" fill="#c9c9d6"/><rect x="40" y="26" width="12" height="16" rx="4" fill="#ff4f9a"/><rect x="42" y="16" width="8" height="3" fill="#ff4f4f"/><path d="M34 22l4 6-6 2z" fill="#ffd23f"/></svg>',
   howto: ['', '', 'Flèches pour bouger, SAUT, POING (rapide) et PIED (puissant). Accroupi (bas) = garde. Gagne 2 rounds sur 3 contre le Robot.'],
   pad: { left: true, buttons: [{ k: 'up', label: 'SAUT' }, { k: 'a', label: 'POING' }, { k: 'b', label: 'PIED' }], hint: 'Bas ou S = garde' },
   stars: s => s >= 2500 ? 3 : s >= 1500 ? 2 : s >= 800 ? 1 : 0,
-  create(env) {
+  create(env, saved) {
     const { input, sfx } = env;
     const pr = Particles();
     const ATT = { punch: { dur: .28, hitAt: .1, range: 62, dmg: 8, kb: 120, cd: .1 }, kick: { dur: .5, hitAt: .22, range: 92, dmg: 15, kb: 260, cd: .25 } };
     let P, A, round = 1, wins = [0, 0], roundT = 60, state = 'fight', stateT = 0, t = 0, score = 0, banner = 'ROUND 1', bannerT = 1.5, shake = 0, over = false;
     const floorY = () => env.H - 50;
     function fighter(x, face, color, name) { return { x, y: 0, vx: 0, vy: 0, face, color, name, hp: 100, act: 'idle', actT: 0, cd: 0, block: false, hitT: 0, hitDone: false, ai: { t: 0, plan: 'approach' }, stun: 0 }; }
-    function newRound() { P = fighter(env.W * .3, 1, '#38e0d6', env.profile.name); A = fighter(env.W * .7, -1, '#ff4f9a', 'Robot'); roundT = 60; state = 'fight'; banner = 'ROUND ' + round; bannerT = 1.5; }
+    function newRound() { P = fighter(env.W * .3, 1, '#38e0d6', env.profile.name); A = fighter(env.W * .7, -1, '#ff4f9a', 'Robot'); roundT = 60; state = 'fight'; banner = 'ROUND ' + round; bannerT = 1.5; env.save({ round, wins: wins.slice(), score }, 'Round ' + round + ' · ' + wins[0] + ' – ' + wins[1]); }
     function attack(f, kind) { if (f.act !== 'idle' || f.cd > 0 || f.stun > 0 || f.y < 0) return; f.act = kind; f.actT = 0; f.hitDone = false; sfx.punch(); }
     function control(f, dt) {
       const spec = ATT[f.act];
@@ -1358,16 +1391,22 @@ GAMES.push({
       });
       if (bannerT > 0) { c.globalAlpha = Math.min(1, bannerT * 1.5); Draw.text(c, banner, W / 2, H * .3, 30, '#ffd23f'); c.globalAlpha = 1; }
     }
+    if (saved && saved.wins) { round = clamp(saved.round | 0, 1, 3); wins = [saved.wins[0] | 0, saved.wins[1] | 0]; score = saved.score | 0; }
     newRound();
     return { update, draw, resize: () => { P.x = clamp(P.x, 30, env.W - 30); A.x = clamp(A.x, 30, env.W - 30); } };
   }
 });
 
 /* ---------- Démarrage ---------- */
-load(); renderProfiles(); show('profiles');
+load(); renderProfiles();
+current = S.profiles.find(p => p.id === S.lastProfile) || null;
+if (current) { renderHome(); show('home'); } else show('profiles');
 // Pas de zoom sur double-tap, pas de menu contextuel sur appui long (tablette)
 document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
 document.addEventListener('gesturestart', e => e.preventDefault());
+// Sauvegarde immédiate quand l'appli passe en arrière-plan
+document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+window.addEventListener('pagehide', save);
 
 </script>
 
