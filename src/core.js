@@ -217,7 +217,7 @@ const ICONS = {
 function buildPad(spec) {
   const pad = $('#g-pad'); pad.textContent = '';
   if (!spec) { pad.hidden = true; return; }
-  pad.hidden = false;
+  pad.hidden = false; pad.classList.toggle('big', !!spec.big);
   const mk = (k, label) => {
     const b = el('button', { class: k, 'aria-label': label, html: ICONS[k] || '' });
     if (!ICONS[k]) b.textContent = label;
