@@ -4,7 +4,7 @@ Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 8 jeux, profils par �
 Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 
 ## Jouer / installer
-- Version en ligne (GitHub Pages) : `https://<utilisateur>.github.io/arcade-famille/`
+- Version en ligne (GitHub Pages) : https://davassurance-blip.github.io/arcade-famille/
   Ouvrir une fois sur le téléphone ou la tablette, puis **« Ajouter à l'écran d'accueil »** : l'appli fonctionne ensuite sans réseau.
 - Version fichier unique : `docs/index.html` (Android : ouvrir avec Chrome depuis l'appli Fichiers).
 
