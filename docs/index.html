@@ -4307,7 +4307,7 @@ GAMES.push({
     }
     function next() { round++; seq.push(rndi(0, PADS.length - 1)); env.setScore(round - 1); env.hud('Tour ' + round); play(); }
     function press(i) {
-      if (playing || over) return; light(i, 250);
+      if (playing || over || !seq.length || idx >= seq.length) return; light(i, 250);
       if (i === seq[idx]) { idx++; env.vibe(10); if (idx === seq.length) { status.textContent = 'Bravo !'; sfx.ok(); env.setScore(round); timers.push(setTimeout(next, 900)); } }
       else { over = true; grid.classList.add('lock'); status.textContent = 'Oups, c\'était ' + ['rouge', 'bleu', 'jaune', 'vert', 'violet', 'orange'][seq[idx]]; btns[seq[idx]].classList.add('on'); sfx.lose(); env.vibe(150); timers.push(setTimeout(() => env.gameOver(round - 1, { text: round - 1 + ' tour' + (round > 2 ? 's' : '') + ' réussi' + (round > 2 ? 's' : '') }), 1300)); }
     }
