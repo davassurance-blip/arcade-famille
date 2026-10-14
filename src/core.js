@@ -194,9 +194,9 @@ function setupStageInput(stage) {
   });
   stage.addEventListener('pointermove', e => {
     const p = pos(e); Input.pointer.x = p.x; Input.pointer.y = p.y;
-    const s = Input._start; if (s && !s.swiped && Input.pointer.down) {
+    const s = Input._start; if (s && (!s.swiped || s.rearm) && Input.pointer.down) {
       const dx = p.x - s.x, dy = p.y - s.y;
-      if (Math.hypot(dx, dy) > 24) { s.swiped = true; Input.swipe = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); }
+      if (Math.hypot(dx, dy) > 24) { s.swiped = true; Input.swipe = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); s.x = p.x; s.y = p.y; s.rearm = true; }
     }
   });
   const up = e => {
@@ -227,8 +227,10 @@ function buildPad(spec) {
     b.addEventListener('contextmenu', e => e.preventDefault());
     return b;
   };
-  if (spec.hint && !spec.left && !spec.buttons) { pad.append(el('div', { class: 'hint' }, spec.hint)); return; }
-  const L = el('div', { class: 'grp' }); if (spec.left) { L.append(mk('left', 'Gauche'), mk('right', 'Droite')); }
+  if (spec.hint && !spec.left && !spec.buttons && !spec.dpad) { pad.append(el('div', { class: 'hint' }, spec.hint)); return; }
+  const L = el('div', { class: spec.dpad ? 'dpad' : 'grp' });
+  if (spec.dpad) { const u = mk('up', 'Haut'), l = mk('left', 'Gauche'), r = mk('right', 'Droite'), d = mk('down', 'Bas'); u.style.gridArea = '1/2'; l.style.gridArea = '2/1'; r.style.gridArea = '2/3'; d.style.gridArea = '3/2'; L.append(u, l, r, d); }
+  else if (spec.left) { L.append(mk('left', 'Gauche'), mk('right', 'Droite')); }
   const R = el('div', { class: 'grp' }); (spec.buttons || []).forEach(b => R.append(mk(b.k, b.label)));
   pad.append(L); if (spec.hint) pad.append(el('div', { class: 'hint' }, spec.hint)); pad.append(R);
 }
@@ -248,7 +250,7 @@ const FS = {
 /* ---------- Lanceur de jeu ---------- */
 const Game = {
   active: false, def: null, inst: null, raf: 0, last: 0, paused: false, score: 0, env: null,
-  pause() { if (!this.active || this.paused || !$('#g-over').hidden) return; this.paused = true; $('#g-pause').hidden = false; },
+  pause() { if (!this.active || this.paused || !$('#g-over').hidden || !$('#g-help').hidden) return; this.paused = true; $('#g-pause').hidden = false; },
   resume() { this.paused = false; $('#g-pause').hidden = true; this.last = performance.now(); Input.reset(); },
 };
 const canvas = $('#g-canvas'), ctx = canvas.getContext('2d'), stage = $('#g-stage'), domRoot = $('#g-dom');
@@ -351,6 +353,18 @@ $('#o-again').addEventListener('click', () => { Sfx.ok(); Game.over = false; sta
 $('#o-menu').addEventListener('click', quitGame);
 $('#btn-quit').addEventListener('click', () => { if (!$('#g-intro').hidden || Game.over) quitGame(); else Game.pause(); });
 $('#p-resume').addEventListener('click', () => Game.resume());
+/* Ampoule : fiche d'aide du jeu (met en pause) */
+function openHelp() {
+  const def = Game.def; if (!def) return; Sfx.tap();
+  const tier = tierOf(current.age); const h = (typeof HELP !== 'undefined' && HELP[def.id]) || null;
+  $('#h-title').textContent = def.title; const body = $('#h-body'); body.textContent = '';
+  const sections = h ? (typeof h === 'function' ? h(tier) : h) : { 'But du jeu': [def.howto[tier] || def.howto[0]] };
+  for (const name in sections) { body.append(el('h3', null, name)); const items = sections[name]; if (Array.isArray(items)) { const ul = el('ul'); items.forEach(x => ul.append(el('li', null, x))); body.append(ul); } else body.append(el('p', null, items)); }
+  const running = Game.inst && !Game.over && $('#g-intro').hidden; if (running && !Game.paused) { Game.paused = true; Game._helpPaused = true; }
+  $('#g-help').hidden = false;
+}
+$('#btn-help').addEventListener('click', openHelp);
+$('#h-close').addEventListener('click', () => { $('#g-help').hidden = true; if (Game._helpPaused) { Game._helpPaused = false; Game.resume(); } });
 $('#p-quit').addEventListener('click', quitGame);
 setupStageInput(stage);
 

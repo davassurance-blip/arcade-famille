@@ -65,7 +65,11 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .iconbtn{width:46px;height:46px;border-radius:14px;background:var(--panel);display:grid;place-items:center;flex:none;transition:transform .12s}
 .iconbtn:active{transform:scale(.92)}
 .iconbtn svg{width:24px;height:24px}
-.iconbtn.sm{width:38px;height:38px;border-radius:11px;background:var(--panel2)}.iconbtn.sm svg{width:20px;height:20px}
+.iconbtn.sm{width:38px;height:38px;border-radius:11px;background:var(--panel2)}
+.iconbtn.bulb{background:var(--sun);color:var(--ink);animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}50%{box-shadow:0 0 0 6px rgba(255,210,63,.35)}}
+.card.help{text-align:left;max-width:440px;max-height:90%;overflow:auto}.card.help h2{text-align:center;font-size:24px}
+.help-body{font-size:15.5px;line-height:1.45}.help-body h3{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--sun);margin:14px 0 4px}.help-body p{margin:0 0 6px}.help-body ul{margin:0;padding-left:18px}.help-body li{margin:2px 0}.iconbtn.sm svg{width:20px;height:20px}
 .stars{display:flex;align-items:center;gap:6px;background:var(--panel);border-radius:999px;padding:8px 14px;font-family:var(--font-display);font-size:17px;color:var(--sun);font-variant-numeric:tabular-nums}
 .stars svg{width:20px;height:20px}
 
@@ -105,6 +109,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 #g-dom.on{display:block}
 .pad{display:flex;justify-content:space-between;align-items:flex-end;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));gap:12px;flex:none;background:rgba(0,0,0,.25)}
 .pad .grp{display:flex;gap:12px}
+.pad .dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:2px}.pad .dpad button{width:52px;height:52px;border-radius:14px;background:var(--panel2)}.pad .dpad button.up{background:var(--panel2);color:var(--fg)}
 .pad button{width:66px;height:66px;border-radius:50%;background:var(--panel2);box-shadow:0 6px 0 #1a1350;font-family:var(--font-display);font-size:14px;display:grid;place-items:center;touch-action:none;transition:transform .05s,box-shadow .05s}
 .pad button svg{width:28px;height:28px}
 .pad button.on,.pad button:active{transform:translateY(5px);box-shadow:0 1px 0 #1a1350;background:var(--violet)}
@@ -208,7 +213,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}
   .pad{position:absolute;left:0;right:0;bottom:0;background:transparent;pointer-events:none;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));z-index:3}
-  .pad button{pointer-events:auto;opacity:.82;width:58px;height:58px}.pad.big button.a{width:76px;height:76px}.pad .hint{display:none}
+  .pad button{pointer-events:auto;opacity:.82;width:58px;height:58px}.pad .dpad{grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px)}.pad .dpad button{width:46px;height:46px}.pad.big button.a{width:76px;height:76px}.pad .hint{display:none}
   .topbar{padding:6px 12px}.logo{padding-block:10px 4px}.logo h1{font-size:30px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

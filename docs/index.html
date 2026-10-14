@@ -82,7 +82,11 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .iconbtn{width:46px;height:46px;border-radius:14px;background:var(--panel);display:grid;place-items:center;flex:none;transition:transform .12s}
 .iconbtn:active{transform:scale(.92)}
 .iconbtn svg{width:24px;height:24px}
-.iconbtn.sm{width:38px;height:38px;border-radius:11px;background:var(--panel2)}.iconbtn.sm svg{width:20px;height:20px}
+.iconbtn.sm{width:38px;height:38px;border-radius:11px;background:var(--panel2)}
+.iconbtn.bulb{background:var(--sun);color:var(--ink);animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(255,210,63,0)}50%{box-shadow:0 0 0 6px rgba(255,210,63,.35)}}
+.card.help{text-align:left;max-width:440px;max-height:90%;overflow:auto}.card.help h2{text-align:center;font-size:24px}
+.help-body{font-size:15.5px;line-height:1.45}.help-body h3{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--sun);margin:14px 0 4px}.help-body p{margin:0 0 6px}.help-body ul{margin:0;padding-left:18px}.help-body li{margin:2px 0}.iconbtn.sm svg{width:20px;height:20px}
 .stars{display:flex;align-items:center;gap:6px;background:var(--panel);border-radius:999px;padding:8px 14px;font-family:var(--font-display);font-size:17px;color:var(--sun);font-variant-numeric:tabular-nums}
 .stars svg{width:20px;height:20px}
 
@@ -122,6 +126,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 #g-dom.on{display:block}
 .pad{display:flex;justify-content:space-between;align-items:flex-end;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));gap:12px;flex:none;background:rgba(0,0,0,.25)}
 .pad .grp{display:flex;gap:12px}
+.pad .dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:2px}.pad .dpad button{width:52px;height:52px;border-radius:14px;background:var(--panel2)}.pad .dpad button.up{background:var(--panel2);color:var(--fg)}
 .pad button{width:66px;height:66px;border-radius:50%;background:var(--panel2);box-shadow:0 6px 0 #1a1350;font-family:var(--font-display);font-size:14px;display:grid;place-items:center;touch-action:none;transition:transform .05s,box-shadow .05s}
 .pad button svg{width:28px;height:28px}
 .pad button.on,.pad button:active{transform:translateY(5px);box-shadow:0 1px 0 #1a1350;background:var(--violet)}
@@ -225,7 +230,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}
   .pad{position:absolute;left:0;right:0;bottom:0;background:transparent;pointer-events:none;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));z-index:3}
-  .pad button{pointer-events:auto;opacity:.82;width:58px;height:58px}.pad.big button.a{width:76px;height:76px}.pad .hint{display:none}
+  .pad button{pointer-events:auto;opacity:.82;width:58px;height:58px}.pad .dpad{grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px)}.pad .dpad button{width:46px;height:46px}.pad.big button.a{width:76px;height:76px}.pad .hint{display:none}
   .topbar{padding:6px 12px}.logo{padding-block:10px 4px}.logo h1{font-size:30px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -274,6 +279,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
     <button id="btn-quit" class="backbtn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 4.6L13.9 3 5 12l8.9 9 1.5-1.6L8 12z"/></svg>Menu</button>
     <span class="ttl" id="g-title"></span>
     <div class="hud"><span class="sub" id="g-hud"></span><span id="g-score">0</span></div>
+    <button id="btn-help" class="iconbtn sm bulb" title="Comment jouer ?" aria-label="Comment jouer ?"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 21h6v-1H9zm3-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zm2 13h-4v-1.2l-.8-.6A5 5 0 1 1 17 10a5 5 0 0 1-2.2 4.2l-.8.6z"/></svg></button>
     <button id="btn-fs-game" class="iconbtn sm" title="Plein écran" aria-label="Plein écran"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg></button>
   </div>
   <div id="g-stage">
@@ -296,6 +302,13 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
           <button id="o-again" class="btn pri">Rejouer</button>
           <button id="o-menu" class="btn">Retour aux jeux</button>
         </div>
+      </div>
+    </div>
+    <div id="g-help" class="overlay" hidden>
+      <div class="card help">
+        <h2 id="h-title"></h2>
+        <div id="h-body" class="help-body"></div>
+        <div class="btns"><button id="h-close" class="btn pri">J'ai compris !</button></div>
       </div>
     </div>
     <div id="g-pause" class="overlay" hidden>
@@ -556,9 +569,9 @@ function setupStageInput(stage) {
   });
   stage.addEventListener('pointermove', e => {
     const p = pos(e); Input.pointer.x = p.x; Input.pointer.y = p.y;
-    const s = Input._start; if (s && !s.swiped && Input.pointer.down) {
+    const s = Input._start; if (s && (!s.swiped || s.rearm) && Input.pointer.down) {
       const dx = p.x - s.x, dy = p.y - s.y;
-      if (Math.hypot(dx, dy) > 24) { s.swiped = true; Input.swipe = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); }
+      if (Math.hypot(dx, dy) > 24) { s.swiped = true; Input.swipe = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); s.x = p.x; s.y = p.y; s.rearm = true; }
     }
   });
   const up = e => {
@@ -589,8 +602,10 @@ function buildPad(spec) {
     b.addEventListener('contextmenu', e => e.preventDefault());
     return b;
   };
-  if (spec.hint && !spec.left && !spec.buttons) { pad.append(el('div', { class: 'hint' }, spec.hint)); return; }
-  const L = el('div', { class: 'grp' }); if (spec.left) { L.append(mk('left', 'Gauche'), mk('right', 'Droite')); }
+  if (spec.hint && !spec.left && !spec.buttons && !spec.dpad) { pad.append(el('div', { class: 'hint' }, spec.hint)); return; }
+  const L = el('div', { class: spec.dpad ? 'dpad' : 'grp' });
+  if (spec.dpad) { const u = mk('up', 'Haut'), l = mk('left', 'Gauche'), r = mk('right', 'Droite'), d = mk('down', 'Bas'); u.style.gridArea = '1/2'; l.style.gridArea = '2/1'; r.style.gridArea = '2/3'; d.style.gridArea = '3/2'; L.append(u, l, r, d); }
+  else if (spec.left) { L.append(mk('left', 'Gauche'), mk('right', 'Droite')); }
   const R = el('div', { class: 'grp' }); (spec.buttons || []).forEach(b => R.append(mk(b.k, b.label)));
   pad.append(L); if (spec.hint) pad.append(el('div', { class: 'hint' }, spec.hint)); pad.append(R);
 }
@@ -610,7 +625,7 @@ const FS = {
 /* ---------- Lanceur de jeu ---------- */
 const Game = {
   active: false, def: null, inst: null, raf: 0, last: 0, paused: false, score: 0, env: null,
-  pause() { if (!this.active || this.paused || !$('#g-over').hidden) return; this.paused = true; $('#g-pause').hidden = false; },
+  pause() { if (!this.active || this.paused || !$('#g-over').hidden || !$('#g-help').hidden) return; this.paused = true; $('#g-pause').hidden = false; },
   resume() { this.paused = false; $('#g-pause').hidden = true; this.last = performance.now(); Input.reset(); },
 };
 const canvas = $('#g-canvas'), ctx = canvas.getContext('2d'), stage = $('#g-stage'), domRoot = $('#g-dom');
@@ -713,6 +728,18 @@ $('#o-again').addEventListener('click', () => { Sfx.ok(); Game.over = false; sta
 $('#o-menu').addEventListener('click', quitGame);
 $('#btn-quit').addEventListener('click', () => { if (!$('#g-intro').hidden || Game.over) quitGame(); else Game.pause(); });
 $('#p-resume').addEventListener('click', () => Game.resume());
+/* Ampoule : fiche d'aide du jeu (met en pause) */
+function openHelp() {
+  const def = Game.def; if (!def) return; Sfx.tap();
+  const tier = tierOf(current.age); const h = (typeof HELP !== 'undefined' && HELP[def.id]) || null;
+  $('#h-title').textContent = def.title; const body = $('#h-body'); body.textContent = '';
+  const sections = h ? (typeof h === 'function' ? h(tier) : h) : { 'But du jeu': [def.howto[tier] || def.howto[0]] };
+  for (const name in sections) { body.append(el('h3', null, name)); const items = sections[name]; if (Array.isArray(items)) { const ul = el('ul'); items.forEach(x => ul.append(el('li', null, x))); body.append(ul); } else body.append(el('p', null, items)); }
+  const running = Game.inst && !Game.over && $('#g-intro').hidden; if (running && !Game.paused) { Game.paused = true; Game._helpPaused = true; }
+  $('#g-help').hidden = false;
+}
+$('#btn-help').addEventListener('click', openHelp);
+$('#h-close').addEventListener('click', () => { $('#g-help').hidden = true; if (Game._helpPaused) { Game._helpPaused = false; Game.resume(); } });
 $('#p-quit').addEventListener('click', quitGame);
 setupStageInput(stage);
 
@@ -3310,30 +3337,33 @@ GAMES.push({
   id: 'snake', title: 'Serpent Néon', tagline: 'Mange, grandis, ne te mords pas', minAge: 8, color: '#9dff5c',
   icon: '<svg viewBox="0 0 64 64"><path d="M12 48h16V32H40v16h12" stroke="#9dff5c" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="48" r="7" fill="#9dff5c"/><circle cx="54" cy="46" r="2" fill="#1b1540"/><circle cx="14" cy="18" r="6" fill="#ff4f9a"/></svg>',
   howto: ['', 'Glisse le doigt (ou flèches) pour tourner. Mange les points, évite les murs et ta queue.', 'Des blocs apparaissent sur le terrain. Plus tu manges, plus ça accélère.'],
-  pad: { hint: 'Glisse le doigt pour tourner · flèches au clavier' },
+  pad: { dpad: true, hint: 'ou glisse le doigt / tape à côté de la tête' },
   stars: s => s >= 200 ? 3 : s >= 100 ? 2 : s >= 40 ? 1 : 0,
   create(env) {
     const { input, sfx } = env; const hard = env.tier >= 2;
     let cols = 20, rows = 20, cell = 20, ox = 0, oy = 0;
-    let snake, dir, ndir, food, walls, acc, step, score, dead, t = 0, grow, flash = 0;
+    let snake, dir, ndir, queue = [], food, walls, acc, step, score, dead, t = 0, grow, flash = 0;
     const pr = Particles();
     function resize() { const W = env.W, H = env.H; cols = W > H ? 26 : 18; rows = W > H ? 16 : 26; cell = Math.floor(Math.min((W - 16) / cols, (H - 16) / rows)); ox = Math.floor((W - cols * cell) / 2); oy = Math.floor((H - rows * cell) / 2); }
     function reset() {
       resize(); snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }, { x: Math.floor(cols / 2) - 1, y: Math.floor(rows / 2) }, { x: Math.floor(cols / 2) - 2, y: Math.floor(rows / 2) }];
-      dir = { x: 1, y: 0 }; ndir = dir; walls = []; acc = 0; step = hard ? .13 : .16; score = 0; dead = false; grow = 0; placeFood();
+      dir = { x: 1, y: 0 }; ndir = dir; queue = []; walls = []; acc = 0; step = hard ? .14 : .19; score = 0; dead = false; grow = 0; placeFood();
     }
     function free(x, y) { return !snake.some(s => s.x === x && s.y === y) && !walls.some(w => w.x === x && w.y === y); }
     function placeFood() { let n = 0; do { food = { x: rndi(0, cols - 1), y: rndi(0, rows - 1) }; } while (!free(food.x, food.y) && n++ < 500); }
-    function turn(nx, ny) { if (nx === -dir.x && ny === -dir.y) return; ndir = { x: nx, y: ny }; }
+    // file d'attente de 2 virages : deux balayages rapides donnent deux virages successifs
+    function turn(nx, ny) { const last = queue.length ? queue[queue.length - 1] : dir; if ((nx === -last.x && ny === -last.y) || (nx === last.x && ny === last.y)) return; if (queue.length < 2) queue.push({ x: nx, y: ny }); }
+    function tapTurn(tp) { const hx = ox + (snake[0].x + .5) * cell, hy = oy + (snake[0].y + .5) * cell; const dx = tp.x - hx, dy = tp.y - hy; if (dir.x !== 0) turn(0, dy > 0 ? 1 : -1); else turn(dx > 0 ? 1 : -1, 0); }
     function update(dt) {
       if (dead) return; t += dt; flash = Math.max(0, flash - dt);
       if (input.pressed.left || input.swipe === 'left') turn(-1, 0); if (input.pressed.right || input.swipe === 'right') turn(1, 0);
       if (input.pressed.up || input.swipe === 'up') turn(0, -1); if (input.pressed.down || input.swipe === 'down') turn(0, 1);
+      if (input.tap) tapTurn(input.tap);
       acc += dt; if (acc < step) return; acc -= step;
-      dir = ndir; const h = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      if (queue.length) dir = queue.shift(); const h = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
       if (h.x < 0 || h.y < 0 || h.x >= cols || h.y >= rows || !free(h.x, h.y) && !(h.x === snake[snake.length - 1].x && h.y === snake[snake.length - 1].y && grow === 0)) { die(); return; }
       snake.unshift(h);
-      if (h.x === food.x && h.y === food.y) { score += 10; grow += hard ? 2 : 1; sfx.coin(); env.vibe(20); pr.burst(ox + (food.x + .5) * cell, oy + (food.y + .5) * cell, '#ff4f9a', 10); step = Math.max(hard ? .07 : .085, step * .975); placeFood(); flash = .2;
+      if (h.x === food.x && h.y === food.y) { score += 10; grow += hard ? 2 : 1; sfx.coin(); env.vibe(20); pr.burst(ox + (food.x + .5) * cell, oy + (food.y + .5) * cell, '#ff4f9a', 10); step = Math.max(hard ? .08 : .1, step * .982); placeFood(); flash = .2;
         if (hard && snake.length % 3 === 0) { let n = 0, w; do { w = { x: rndi(0, cols - 1), y: rndi(0, rows - 1) }; } while ((!free(w.x, w.y) || Math.abs(w.x - h.x) + Math.abs(w.y - h.y) < 4) && n++ < 200); if (n < 200) walls.push(w); }
       }
       if (grow > 0) grow--; else snake.pop();
@@ -3578,64 +3608,142 @@ GAMES.push({
   }
 });
 
-/* ===== Casse-Briques (dès 8 ans) ===== */
+/* ===== Casse-Briques (dès 8 ans) — niveaux dessinés, capsules, combos, boss ===== */
+const BRICK_LEVELS = [
+  // . vide  1-7 couleur simple  H solide(2)  S solide(3)  X indestructible  E explosive  M mobile
+  ['..111111..', '.22222222.', '3333333333', '.44444444.', '..555555..'],
+  ['.11....11.', '1221..1221', '1233333321', '.14444441.', '..155551..', '...1661...', '....11....'],
+  ['..1....1..', '...1..1...', '..111111..', '.11H11H11.', '1111111111', '1.111111.1', '1.1....1.1', '...11.11..'],
+  ['XXXXXXXXXX', '.1111111..', '.2E22E22..', '.3333333..', '.4E44E44..', '.5555555..', '..........', 'HHHHHHHHHH'],
+  ['1.1.1.1.1.', '.2.2.2.2.2', '3.3.3.3.3.', '.4.4.4.4.4', '5.5.5.5.5.', '.H.H.H.H.H', 'M.M.M.M.M.'],
+  ['....SS....', '...S11S...', '..S1221S..', '.S123321S.', 'S12344321S', '.XXXXXXXX.', '..E....E..'],
+  ['MMMMMMMMMM', '..........', 'E1E1E1E1E1', '2222222222', '..........', 'H.H.H.H.H.', '.3.3.3.3.3'],
+  ['1111111111', '1XXXXXXXX1', '1X222222X1', '1X2SSSS2X1', '1X2S44S2X1', '1X2SSSS2X1', '1X222222X1', '1XXXX.XXX1'],
+  ['..M....M..', '.1111111..', 'E2222222E.', '.3333333..', '..44444...', '...555....', '....6.....', 'HHHHHHHHHH'],
+  ['7E7E7E7E7E', 'SSSSSSSSSS', '1111111111', 'M..M..M..M', '2222222222', 'X.X.X.X.X.', '3333333333']
+];
 GAMES.push({
-  id: 'bricks', title: 'Casse-Briques', tagline: 'Renvoie la balle, casse tout', minAge: 8, color: '#ff6a55',
+  id: 'bricks', title: 'Casse-Briques', tagline: 'Capsules, combos et boss', minAge: 8, color: '#ff6a55',
   icon: '<svg viewBox="0 0 64 64"><g><rect x="6" y="8" width="16" height="8" rx="2" fill="#ff4f4f"/><rect x="24" y="8" width="16" height="8" rx="2" fill="#ff9f1c"/><rect x="42" y="8" width="16" height="8" rx="2" fill="#ffd23f"/><rect x="6" y="18" width="16" height="8" rx="2" fill="#9dff5c"/><rect x="24" y="18" width="16" height="8" rx="2" fill="#38e0d6"/><rect x="42" y="18" width="16" height="8" rx="2" fill="#9b7bff"/></g><circle cx="36" cy="40" r="4" fill="#fff5e1"/><rect x="22" y="52" width="24" height="6" rx="3" fill="#fff5e1"/></svg>',
-  howto: ['', 'Glisse le doigt pour déplacer la raquette. Casse toutes les briques sans laisser tomber la balle !', 'Briques renforcées (2 coups), balle rapide, 3 vies. Chaque niveau accélère.'],
-  pad: { left: true, buttons: [{ k: 'a', label: 'GO' }], hint: 'ou glisse le doigt' },
-  stars: s => s >= 1200 ? 3 : s >= 600 ? 2 : s >= 200 ? 1 : 0,
-  create(env) {
+  howto: ['', 'Glisse le doigt pour la raquette. Attrape les capsules : multi-balles, laser, balle de feu… Un boss tous les 5 niveaux !', 'Balle rapide, briques renforcées, capsules piégées. Enchaîne les briques sans toucher la raquette pour le combo.'],
+  pad: { left: true, buttons: [{ k: 'a', label: 'GO' }], hint: 'ou glisse le doigt · GO = lancer / tirer' },
+  stars: s => s >= 4000 ? 3 : s >= 1800 ? 2 : s >= 500 ? 1 : 0,
+  create(env, saved) {
     const { input, sfx } = env; const hard = env.tier >= 2;
-    const COLS = 8; let bricks = [], ball, pad, lives = 3, score = 0, level = 1, stuck = true, over = false, t = 0, flash = 0;
+    const COLS = 10; let bricks = [], balls = [], caps = [], lasers = [], pad, lives = 3, score = 0, level = 1, over = false, t = 0, flash = 0, combo = 0, boss = null, msg = '', msgT = 0, shake = 0;
+    let wide = 0, laser = 0, fire = 0, slow = 0, sticky = 0, laserT = 0;
     const pr = Particles();
-    const ROWC = ['#ff4f4f', '#ff9f1c', '#ffd23f', '#9dff5c', '#38e0d6', '#9b7bff', '#ff4f9a'];
+    const ROWC = ['', '#ff4f4f', '#ff9f1c', '#ffd23f', '#9dff5c', '#38e0d6', '#9b7bff', '#ff4f9a'];
+    const CAPS = { multi: ['#ffd23f', '×3'], wide: ['#38e0d6', 'LARGE'], laser: ['#ff4f9a', 'LASER'], fire: ['#ff9f1c', 'FEU'], slow: ['#9dff5c', 'LENT'], sticky: ['#9b7bff', 'COLLE'], life: ['#ff6a55', 'VIE'], small: ['#6b6b8f', 'MINI'] };
+    const bw = () => (env.W - 20) / COLS, bh = () => Math.min(24, env.H * .032);
+    function persist() { env.save({ level, lives, score }, 'Niveau ' + level + ' · ' + lives + ' vie' + (lives > 1 ? 's' : '') + ' · ' + score + ' pts'); }
     function layout() {
-      const W = env.W; const rows = Math.min(7, 4 + level + (hard ? 1 : 0)); const bw = (W - 20) / COLS, bh = Math.min(26, env.H * .035);
-      bricks = []; for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) { const hp = hard && r < 2 && (c + r) % 3 === 0 ? 2 : 1; bricks.push({ x: 10 + c * bw + 2, y: 50 + r * (bh + 4), w: bw - 4, h: bh, hp, c: ROWC[r % ROWC.length] }); }
-      pad = { x: W / 2, w: clamp(W * .22, 70, 130), h: 14 }; reset();
+      const W = env.W; bricks = []; caps = []; lasers = []; boss = null; combo = 0;
+      const isBoss = level % 5 === 0;
+      if (isBoss) { const hp = 20 + level * 3 + (hard ? 10 : 0); boss = { x: W / 2, y: 90, w: Math.min(220, W * .5), h: 44, hp, max: hp, vx: 120 + level * 8, hitT: 0, shootT: 2 }; }
+      else {
+        const L = BRICK_LEVELS[(level - 1) % BRICK_LEVELS.length];
+        L.forEach((row, r) => row.split('').forEach((ch, c) => {
+          if (ch === '.') return; const b = { x: 10 + c * bw() + 2, y: 46 + r * (bh() + 4), w: bw() - 4, h: bh(), hp: 1, c: ROWC[1 + (r % 7)], kind: 'n' };
+          if (/[1-7]/.test(ch)) { b.c = ROWC[+ch]; } else if (ch === 'H') { b.hp = 2; b.c = '#c9c9d6'; } else if (ch === 'S') { b.hp = 3; b.c = '#8a8aa8'; } else if (ch === 'X') { b.hp = 99; b.kind = 'x'; b.c = '#4b3fa3'; } else if (ch === 'E') { b.kind = 'e'; b.c = '#ff6a55'; } else if (ch === 'M') { b.kind = 'm'; b.c = '#ffd23f'; b.vx = 60 * pick([-1, 1]); }
+          if (hard && b.hp === 1 && b.kind === 'n' && Math.random() < .15) b.hp = 2;
+          bricks.push(b);
+        }));
+      }
+      pad = pad || { x: W / 2, w: 0, h: 14 }; wide = 0; laser = 0; fire = 0; slow = 0; sticky = 0; reset();
+      msg = isBoss ? 'BOSS !' : 'Niveau ' + level; msgT = 1.6;
     }
-    function reset() { ball = { x: pad.x, y: env.H - 60, vx: 0, vy: 0, r: 8, sp: (hard ? 360 : 300) + level * 25 }; stuck = true; }
-    function launch() { if (!stuck) return; stuck = false; const a = rnd(-.6, .6); ball.vx = Math.sin(a) * ball.sp; ball.vy = -Math.cos(a) * ball.sp; sfx.jump(); }
+    function padW() { return clamp(env.W * (wide > 0 ? .34 : .22), wide > 0 ? 110 : 70, wide > 0 ? 200 : 130); }
+    function reset() { balls = [{ x: pad.x, y: env.H - 60, vx: 0, vy: 0, r: 8, stuck: true }]; }
+    function speed() { return ((hard ? 340 : 290) + level * 18) * (slow > 0 ? .65 : 1); }
+    function launch(b) { if (!b.stuck) return; b.stuck = false; const a = rnd(-.5, .5); b.vx = Math.sin(a) * speed(); b.vy = -Math.cos(a) * speed(); sfx.jump(); }
+    function dropCap(x, y) {
+      if (Math.random() > (hard ? .2 : .26)) return;
+      const pool = ['multi', 'multi', 'wide', 'laser', 'fire', 'slow', 'sticky', lives < 3 ? 'life' : 'wide']; if (hard) pool.push('small', 'small');
+      caps.push({ x, y, k: pick(pool), vy: 110 });
+    }
+    function pick_(c) {
+      sfx.ok(); env.vibe(25); score += 20; const name = CAPS[c.k][1];
+      if (c.k === 'multi') { const src = balls.filter(b => !b.stuck)[0] || balls[0]; for (let i = 0; i < 2; i++) { const a = rnd(0, Math.PI * 2); balls.push({ x: src.x, y: src.y, vx: Math.cos(a) * speed(), vy: -Math.abs(Math.sin(a) * speed()) - 60, r: 8, stuck: false }); } }
+      else if (c.k === 'wide') wide = 15; else if (c.k === 'laser') laser = 12; else if (c.k === 'fire') fire = 8; else if (c.k === 'slow') slow = 10; else if (c.k === 'sticky') sticky = 12;
+      else if (c.k === 'life') lives = Math.min(5, lives + 1); else if (c.k === 'small') { wide = 0; pad.w = 60; }
+      msg = name; msgT = 1;
+    }
+    function hitBrick(b, i, byFire) {
+      if (b.kind === 'x' && !byFire) { sfx.tick(); return false; }
+      b.hp -= byFire ? 99 : 1; combo++;
+      if (b.hp > 0) { score += 5; sfx.hit(); return true; }
+      bricks.splice(i, 1); score += (10 + Math.min(combo, 10) * 2) * level; pr.burst(b.x + b.w / 2, b.y + b.h / 2, b.c, 10, 160); sfx.coin(); env.vibe(12); dropCap(b.x + b.w / 2, b.y + b.h / 2);
+      if (b.kind === 'e') { shake = .25; sfx.hit(); for (let j = bricks.length - 1; j >= 0; j--) { const o = bricks[j]; if (o.kind !== 'x' && Math.abs(o.x - b.x) < b.w * 1.6 && Math.abs(o.y - b.y) < b.h * 2.6) { bricks.splice(j, 1); score += 10 * level; pr.burst(o.x + o.w / 2, o.y + o.h / 2, o.c, 8, 160); } } }
+      return true;
+    }
+    function loseBall() { lives--; flash = .5; combo = 0; sfx.lose(); env.vibe(150); if (lives <= 0) { over = true; env.gameOver(score, { text: 'Niveau ' + level }); return; } wide = 0; laser = 0; fire = 0; reset(); persist(); }
     function update(dt) {
-      if (over) return; t += dt; flash = Math.max(0, flash - dt); const W = env.W, H = env.H;
-      if (input.held.left) pad.x -= 520 * dt; if (input.held.right) pad.x += 520 * dt;
+      if (over) return; t += dt; flash = Math.max(0, flash - dt); msgT = Math.max(0, msgT - dt); shake = Math.max(0, shake - dt); const W = env.W, H = env.H;
+      wide = Math.max(0, wide - dt); laser = Math.max(0, laser - dt); fire = Math.max(0, fire - dt); slow = Math.max(0, slow - dt); sticky = Math.max(0, sticky - dt); laserT = Math.max(0, laserT - dt);
+      pad.w += (padW() - pad.w) * Math.min(1, dt * 8);
+      if (input.held.left) pad.x -= 560 * dt; if (input.held.right) pad.x += 560 * dt;
       if (input.pointer.down) pad.x += (input.pointer.x - pad.x) * Math.min(1, dt * 16);
       pad.x = clamp(pad.x, pad.w / 2, W - pad.w / 2);
-      if (input.pressed.a || input.tap || input.pointer.justDown) launch();
-      if (stuck) { ball.x = pad.x; ball.y = H - 60; }
-      else {
-        // sous-pas pour ne pas traverser les briques
-        const steps = 3; for (let s = 0; s < steps; s++) {
+      const go = input.pressed.a || input.tap || input.pointer.justDown;
+      if (go) { balls.forEach(launch); if (laser > 0 && laserT <= 0) { lasers.push({ x: pad.x - pad.w / 2 + 8, y: H - 50 }, { x: pad.x + pad.w / 2 - 8, y: H - 50 }); laserT = .3; sfx.tick(); } }
+      const py = H - 44;
+      for (let bi = balls.length - 1; bi >= 0; bi--) {
+        const ball = balls[bi];
+        if (ball.stuck) { ball.x = pad.x + (ball.off || 0); ball.y = py - ball.r; continue; }
+        const steps = 3; let lost = false;
+        for (let s = 0; s < steps && !lost; s++) {
           ball.x += ball.vx * dt / steps; ball.y += ball.vy * dt / steps;
-          if (ball.x < ball.r) { ball.x = ball.r; ball.vx *= -1; sfx.tick(); } if (ball.x > W - ball.r) { ball.x = W - ball.r; ball.vx *= -1; sfx.tick(); } if (ball.y < 36 + ball.r) { ball.y = 36 + ball.r; ball.vy *= -1; sfx.tick(); }
-          const py = H - 44;
-          if (ball.vy > 0 && ball.y + ball.r >= py && ball.y + ball.r <= py + pad.h + 6 && Math.abs(ball.x - pad.x) <= pad.w / 2 + ball.r) { const rel = (ball.x - pad.x) / (pad.w / 2); const a = rel * 1.1; ball.vx = Math.sin(a) * ball.sp; ball.vy = -Math.abs(Math.cos(a) * ball.sp); ball.y = py - ball.r; sfx.pop(); }
+          if (ball.x < ball.r) { ball.x = ball.r; ball.vx *= -1; } if (ball.x > W - ball.r) { ball.x = W - ball.r; ball.vx *= -1; } if (ball.y < 36 + ball.r) { ball.y = 36 + ball.r; ball.vy *= -1; }
+          if (ball.vy > 0 && ball.y + ball.r >= py && ball.y + ball.r <= py + pad.h + 8 && Math.abs(ball.x - pad.x) <= pad.w / 2 + ball.r) {
+            combo = 0; const rel = (ball.x - pad.x) / (pad.w / 2); const a = rel * 1.15; const sp = speed(); ball.vx = Math.sin(a) * sp; ball.vy = -Math.abs(Math.cos(a) * sp); ball.y = py - ball.r; sfx.pop();
+            if (sticky > 0) { ball.stuck = true; ball.off = ball.x - pad.x; ball.vx = ball.vy = 0; }
+          }
           for (let i = bricks.length - 1; i >= 0; i--) {
             const b = bricks[i]; if (ball.x + ball.r < b.x || ball.x - ball.r > b.x + b.w || ball.y + ball.r < b.y || ball.y - ball.r > b.y + b.h) continue;
-            const ox = Math.min(ball.x + ball.r - b.x, b.x + b.w - ball.x + ball.r), oy = Math.min(ball.y + ball.r - b.y, b.y + b.h - ball.y + ball.r);
-            if (ox < oy) ball.vx *= -1; else ball.vy *= -1;
-            b.hp--; if (b.hp <= 0) { bricks.splice(i, 1); score += 10 * level; pr.burst(b.x + b.w / 2, b.y + b.h / 2, b.c, 10, 160); sfx.coin(); env.vibe(15); } else { score += 5; sfx.hit(); }
-            break;
+            const byFire = fire > 0;
+            if (!byFire || b.kind === 'x') { const ox = Math.min(ball.x + ball.r - b.x, b.x + b.w - ball.x + ball.r), oy = Math.min(ball.y + ball.r - b.y, b.y + b.h - ball.y + ball.r); if (ox < oy) ball.vx *= -1; else ball.vy *= -1; }
+            hitBrick(b, i, byFire && b.kind !== 'x'); break;
           }
-          if (ball.y > H + 20) { lives--; flash = .5; sfx.lose(); env.vibe(150); if (lives <= 0) { over = true; env.gameOver(score, { text: 'Niveau ' + level }); return; } reset(); break; }
+          if (boss && Math.abs(ball.x - boss.x) < boss.w / 2 + ball.r && Math.abs(ball.y - boss.y) < boss.h / 2 + ball.r) { ball.vy *= -1; ball.y = boss.y + (ball.vy > 0 ? boss.h / 2 + ball.r : -boss.h / 2 - ball.r); boss.hp -= fire > 0 ? 3 : 1; boss.hitT = .1; score += 15; combo++; sfx.hit(); pr.burst(ball.x, ball.y, '#fff', 5, 120); }
+          if (ball.y > H + 20) { balls.splice(bi, 1); lost = true; }
         }
       }
-      if (!bricks.length) { level++; score += 100 * level; sfx.win(); layout(); }
-      pr.update(dt); env.setScore(score); env.hud('Niv. ' + level + ' · ' + bricks.length + ' briques');
+      if (!balls.length) { loseBall(); if (over) return; }
+      for (let i = caps.length - 1; i >= 0; i--) { const c = caps[i]; c.y += c.vy * dt; if (c.y > H + 20) { caps.splice(i, 1); continue; } if (c.y > py - 14 && c.y < py + pad.h + 14 && Math.abs(c.x - pad.x) < pad.w / 2 + 16) { caps.splice(i, 1); pick_(c); } }
+      for (let i = lasers.length - 1; i >= 0; i--) { const l = lasers[i]; l.y -= 700 * dt; if (l.y < 30) { lasers.splice(i, 1); continue; } let hit = false; for (let j = bricks.length - 1; j >= 0; j--) { const b = bricks[j]; if (l.x > b.x && l.x < b.x + b.w && l.y > b.y && l.y < b.y + b.h) { hitBrick(b, j, false); hit = true; break; } } if (!hit && boss && Math.abs(l.x - boss.x) < boss.w / 2 && Math.abs(l.y - boss.y) < boss.h / 2) { boss.hp--; boss.hitT = .1; score += 10; hit = true; } if (hit) lasers.splice(i, 1); }
+      for (const b of bricks) if (b.kind === 'm') { b.x += b.vx * dt; if (b.x < 10 || b.x + b.w > W - 10) b.vx *= -1; }
+      if (boss) {
+        boss.x += boss.vx * dt; if (boss.x < boss.w / 2 + 10 || boss.x > W - boss.w / 2 - 10) boss.vx *= -1; boss.hitT = Math.max(0, boss.hitT - dt);
+        boss.shootT -= dt; if (boss.shootT <= 0) { bricks.push({ x: boss.x - 14, y: boss.y + 30, w: 28, h: 16, hp: 1, c: '#ff4f4f', kind: 'd', vy: 120 }); boss.shootT = 2.5 - Math.min(1.2, level * .05); }
+        if (boss.hp <= 0) { score += 500 * (level / 5); sfx.win(); shake = .5; for (let i = 0; i < 5; i++) setTimeout(() => pr.burst(boss ? boss.x + rnd(-60, 60) : W / 2, 90, pick(['#ffd23f', '#ff4f9a', '#fff']), 16, 240), i * 90); boss = null; msg = 'Boss vaincu !'; msgT = 2; }
+      }
+      for (let i = bricks.length - 1; i >= 0; i--) { const b = bricks[i]; if (b.kind === 'd') { b.y += b.vy * dt; if (b.y > H) bricks.splice(i, 1); else if (b.y + b.h > py && b.y < py + pad.h && Math.abs(b.x + b.w / 2 - pad.x) < pad.w / 2 + 10) { bricks.splice(i, 1); pad.w = 60; wide = 0; flash = .3; sfx.ko(); } } }
+      const remaining = bricks.filter(b => b.kind !== 'x' && b.kind !== 'd').length;
+      if (!remaining && !boss) { level++; score += 100 * level; sfx.win(); layout(); persist(); }
+      pr.update(dt); env.setScore(score); env.hud('Niv. ' + level + (combo > 2 ? ' · combo ' + combo : '') + (balls.length > 1 ? ' · ' + balls.length + ' balles' : ''));
     }
     function draw(c) {
-      const W = env.W, H = env.H; c.fillStyle = '#17123a'; c.fillRect(0, 0, W, H);
+      const W = env.W, H = env.H; c.save(); if (shake > 0) c.translate(rnd(-5, 5) * shake, rnd(-5, 5) * shake);
+      c.fillStyle = '#17123a'; c.fillRect(-10, -10, W + 20, H + 20);
       c.fillStyle = 'rgba(255,255,255,.05)'; for (let i = 0; i < 40; i++) c.fillRect((i * 83) % W, (i * 47 + t * 10) % H, 2, 2);
       if (flash > 0) { c.fillStyle = 'rgba(255,80,80,' + flash * .4 + ')'; c.fillRect(0, 0, W, H); }
-      for (const b of bricks) { c.fillStyle = b.c; Draw.rr(c, b.x, b.y, b.w, b.h, 5); c.fill(); c.fillStyle = 'rgba(255,255,255,.3)'; c.fillRect(b.x + 3, b.y + 3, b.w - 6, 3); if (b.hp > 1) { c.strokeStyle = '#fff'; c.lineWidth = 2; Draw.rr(c, b.x + 2, b.y + 2, b.w - 4, b.h - 4, 4); c.stroke(); } }
-      c.fillStyle = '#fff5e1'; c.shadowColor = '#38e0d6'; c.shadowBlur = 14; Draw.rr(c, pad.x - pad.w / 2, H - 44, pad.w, pad.h, 7); c.fill();
-      c.beginPath(); c.arc(ball.x, ball.y, ball.r, 0, 7); c.fill(); c.shadowBlur = 0;
-      pr.draw(c); Draw.lives(c, lives, 3, 22, 10);
-      if (stuck) Draw.text(c, 'Tape pour lancer', W / 2, H * .6, 22, 'rgba(255,255,255,.7)');
+      for (const b of bricks) { c.fillStyle = b.c; Draw.rr(c, b.x, b.y, b.w, b.h, 5); c.fill(); c.fillStyle = 'rgba(255,255,255,.3)'; c.fillRect(b.x + 3, b.y + 3, b.w - 6, 3); if (b.hp > 1 && b.kind !== 'x') { c.strokeStyle = '#fff'; c.lineWidth = 2; Draw.rr(c, b.x + 2, b.y + 2, b.w - 4, b.h - 4, 4); c.stroke(); if (b.hp > 2) c.strokeRect(b.x + 6, b.y + 6, b.w - 12, b.h - 12); } if (b.kind === 'x') { c.fillStyle = 'rgba(0,0,0,.3)'; c.fillRect(b.x + 2, b.y + b.h / 2 - 1, b.w - 4, 2); } if (b.kind === 'e') { c.fillStyle = '#fff'; c.beginPath(); c.arc(b.x + b.w / 2, b.y + b.h / 2, 4 + Math.sin(t * 10) * 1.5, 0, 7); c.fill(); } }
+      if (boss) { const b = boss; c.fillStyle = b.hitT > 0 ? '#fff' : '#ff4f9a'; Draw.rr(c, b.x - b.w / 2, b.y - b.h / 2, b.w, b.h, 14); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(b.x - b.w * .25, b.y, 9, 0, 7); c.arc(b.x + b.w * .25, b.y, 9, 0, 7); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(b.x - b.w * .25 + 3, b.y - 2, 4, 0, 7); c.arc(b.x + b.w * .25 + 3, b.y - 2, 4, 0, 7); c.fill(); c.strokeStyle = '#1b1540'; c.lineWidth = 3; c.beginPath(); c.moveTo(b.x - 14, b.y + 14); c.lineTo(b.x + 14, b.y + 14); c.stroke(); const bw2 = Math.min(360, W - 40); c.fillStyle = 'rgba(0,0,0,.5)'; Draw.rr(c, W / 2 - bw2 / 2, 14, bw2, 12, 6); c.fill(); c.fillStyle = '#ff4f9a'; if (b.hp > 0) { Draw.rr(c, W / 2 - bw2 / 2, 14, bw2 * b.hp / b.max, 12, 6); c.fill(); } }
+      for (const cp of caps) { const k = CAPS[cp.k]; c.fillStyle = k[0]; c.shadowColor = k[0]; c.shadowBlur = 12; Draw.rr(c, cp.x - 22, cp.y - 11, 44, 22, 8); c.fill(); c.shadowBlur = 0; Draw.text(c, k[1], cp.x, cp.y + 1, 10, '#1b1540'); }
+      c.fillStyle = '#ff4f9a'; for (const l of lasers) c.fillRect(l.x - 2, l.y - 10, 4, 16);
+      const py = H - 44; c.fillStyle = laser > 0 ? '#ff4f9a' : sticky > 0 ? '#9b7bff' : '#fff5e1'; c.shadowColor = c.fillStyle; c.shadowBlur = 14; Draw.rr(c, pad.x - pad.w / 2, py, pad.w, pad.h, 7); c.fill();
+      for (const b of balls) { c.fillStyle = fire > 0 ? '#ff9f1c' : '#fff5e1'; c.shadowColor = c.fillStyle; c.beginPath(); c.arc(b.x, b.y, b.r, 0, 7); c.fill(); } c.shadowBlur = 0;
+      pr.draw(c); c.restore();
+      Draw.lives(c, lives, Math.max(3, lives), 22, 10);
+      const fx = []; if (wide > 0) fx.push('LARGE ' + Math.ceil(wide)); if (laser > 0) fx.push('LASER ' + Math.ceil(laser)); if (fire > 0) fx.push('FEU ' + Math.ceil(fire)); if (slow > 0) fx.push('LENT ' + Math.ceil(slow)); if (sticky > 0) fx.push('COLLE ' + Math.ceil(sticky));
+      if (fx.length) Draw.text(c, fx.join(' · '), W - 12, 14, 11, '#ffd23f', 'right', 800);
+      if (balls.every(b => b.stuck)) Draw.text(c, 'Tape pour lancer', W / 2, H * .6, 22, 'rgba(255,255,255,.7)');
+      if (msgT > 0) { c.globalAlpha = Math.min(1, msgT); Draw.text(c, msg, W / 2, H * .45, 30, '#ffd23f'); c.globalAlpha = 1; }
     }
+    if (saved && saved.level) { level = clamp(saved.level | 0, 1, 99); lives = clamp(saved.lives | 0, 1, 5); score = saved.score | 0; }
     layout();
-    return { update, draw, resize: layout };
+    return { update, draw, resize: () => { pad.x = clamp(pad.x, 0, env.W); } };
   }
 });
 
@@ -3901,6 +4009,89 @@ GAMES.push({
     return { update, draw };
   }
 });
+
+/* ===== Fiches d'aide (ampoule) — par jeu, adaptées à l'âge (tier 0 petits, 1 moyens, 2 grands) ===== */
+const HELP = {
+  fruits: t => ({
+    'But du jeu': 'Attrape le plus de fruits possible dans ton panier.',
+    'Commandes': ['Glisse ton doigt à gauche ou à droite pour déplacer le panier', 'Ou utilise les flèches ◀ ▶'],
+    'Attention': t === 0 ? ['Les bombes noires font perdre un cœur', 'Tu as 3 cœurs'] : ['Les bombes noires font perdre un cœur', 'Un fruit qui tombe par terre fait aussi perdre un cœur', 'Les fruits dorés valent 50 points'],
+    'Astuce': 'Attrape plusieurs fruits d\'affilée sans bombe : le combo donne des points en plus.'
+  }),
+  frog: () => ({
+    'But du jeu': 'Fais courir la grenouille le plus loin possible.',
+    'Commandes': ['Tape sur l\'écran ou sur SAUT pour sauter par-dessus les troncs'],
+    'Points': ['Chaque mètre parcouru rapporte des points', 'Une mouche attrapée = 25 points'],
+    'Astuce': 'Saute juste avant le tronc, pas trop tôt. Ça va de plus en plus vite !'
+  }),
+  memo: () => ({
+    'But du jeu': 'Retrouve toutes les paires de formes identiques.',
+    'Règle': ['Retourne deux cartes', 'Si elles sont pareilles, elles restent ouvertes', 'Sinon elles se referment : mémorise leur place !'],
+    'Points': 'Moins tu fais de coups et plus tu es rapide, plus tu gagnes de points.'
+  }),
+  calc: t => ({
+    'But du jeu': 'Réponds à un maximum de calculs en 60 secondes.',
+    'Règle': t === 0 ? ['Tape la bonne réponse parmi les 3', 'Les calculs vont jusqu\'à 10'] : ['Tape la bonne réponse parmi les 4', 'Une erreur enlève 2 secondes', 'Enchaîne 4 bonnes réponses : les points sont multipliés (×2 puis ×3)'],
+    'Astuce': 'Mieux vaut réfléchir une seconde que se tromper : l\'erreur casse la série.'
+  }),
+  moles: t => ({
+    'But du jeu': 'Tape sur les taupes dès qu\'elles sortent de leur trou.',
+    'Règle': t === 0 ? ['Chaque taupe touchée = 1 point', 'Tu as 30 secondes'] : ['Chaque taupe touchée = 1 point', 'Les bombes enlèvent 3 points : ne les touche pas !', 'Tu as 30 secondes'],
+    'Astuce': 'Garde le doigt au-dessus du milieu de la grille pour aller vite partout.'
+  }),
+  rocket: t => ({
+    'But du jeu': 'Fais voler la fusée entre les nuages le plus longtemps possible.',
+    'Commandes': ['Tape sur l\'écran (ou HOP) : la fusée monte', 'Ne touche à rien : elle redescend'],
+    'Points': ['Chaque passage entre deux nuages = 10 points', 'Chaque étoile attrapée = 5 points'],
+    'Vies': t === 0 ? 'Tu as 3 cœurs.' : t === 1 ? 'Tu as 2 cœurs.' : 'Une seule vie : sois précis !'
+  }),
+  platform: t => ({
+    'But du jeu': 'Rejoins le drapeau rose à la fin de chacun des 5 niveaux.',
+    'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter', 'Maintiens SAUT pour sauter plus haut, appui bref pour un petit saut'],
+    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Escargots : lents · Blobs : moyens · Sauterelles : elles bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
+    'Objets': ['Bloc « ? » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rose : il encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Drapeau vert au milieu du niveau = checkpoint'],
+    'Astuce': 'Tomber dans un trou coûte un cœur mais tu reprends au dernier checkpoint.'
+  }),
+  snake: t => ({
+    'But du jeu': 'Mange les points roses pour grandir sans te cogner.',
+    'Commandes': ['Croix directionnelle en bas de l\'écran', 'Ou glisse le doigt dans la direction voulue (même sans lever le doigt)', 'Ou tape à côté de la tête : au-dessus, en dessous, à gauche ou à droite', 'Deux virages rapides sont mémorisés l\'un après l\'autre'],
+    'Règle': ['Toucher un mur ou ta propre queue termine la partie', 'Plus tu manges, plus ça va vite' + (t === 2 ? ' · Des blocs rouges apparaissent sur le terrain' : '')],
+    'Astuce': 'Tourne en suivant les bords pour garder de la place au milieu.'
+  }),
+  chess: () => ({
+    'But du jeu': 'Mettre le roi adverse échec et mat : il est attaqué et ne peut plus s\'échapper.',
+    'Comment jouer': ['Touche une pièce : ses cases possibles s\'affichent (points et cercles roses pour les prises)', 'Touche la case où tu veux aller', 'Bouton « Robot / 2 joueurs » pour jouer contre l\'ordinateur ou à deux', 'Bouton « Annuler » pour reprendre ton dernier coup'],
+    'Les pièces': ['Pion : avance d\'une case (deux au premier coup), prend en diagonale', 'Tour : lignes droites · Fou : diagonales · Dame : les deux', 'Cavalier : en L, il saute par-dessus les autres', 'Roi : une case dans tous les sens'],
+    'Astuce': 'Sors tes cavaliers et tes fous au début, protège ton roi, et regarde ce que le Robot attaque avant de jouer.'
+  }),
+  bricks: t => ({
+    'But du jeu': 'Casse toutes les briques avec la balle sans la laisser tomber.',
+    'Commandes': ['Glisse le doigt pour la raquette', 'GO (ou tape l\'écran) : lancer la balle, ou tirer avec le LASER'],
+    'Les capsules': ['×3 : trois balles · LARGE : grande raquette · LASER : tu tires', 'FEU : la balle traverse les briques · LENT : balle ralentie', 'COLLE : la balle se colle à la raquette · VIE : un cœur de plus' + (t === 2 ? ' · MINI : piège, petite raquette' : '')],
+    'Les briques': ['Grises avec contour : 2 ou 3 coups', 'Violettes foncées : incassables (sauf balle de feu)', 'Rouges qui clignotent : explosives, elles détruisent leurs voisines', 'Jaunes : elles bougent'],
+    'Boss': 'Tous les 5 niveaux, un boss arrive : renvoie la balle dessus jusqu\'à vider sa jauge, et évite ses projectiles rouges.',
+    'Astuce': 'La balle part dans la direction du bord de la raquette qu\'elle touche. Enchaîne les briques sans toucher la raquette pour le combo.'
+  }),
+  galaxy: t => ({
+    'But du jeu': 'Détruis les vagues d\'envahisseurs et le boss de chaque étape.',
+    'Commandes': ['Glisse le doigt (ou ◀ ▶) pour piloter', 'Le vaisseau tire tout seul'],
+    'Les capsules': ['ARME : tir double, triple puis quadruple', 'RAPIDE : cadence doublée 10 s · LASER : rayon continu 7 s', 'BOUCLIER : absorbe un coup · VIE : un cœur de plus'],
+    'Étape': ['5 vagues, puis le BOSS avec sa jauge en haut', 'Les petits chasseurs orange traversent l\'écran : faciles à abattre, mais ils foncent sur toi'],
+    'Attention': 'Se faire toucher fait perdre un niveau d\'arme.' + (t === 2 ? ' Les envahisseurs ripostent et des astéroïdes tombent.' : '')
+  }),
+  blocks: () => ({
+    'But du jeu': 'Empile les pièces pour remplir des lignes complètes, qui disparaissent.',
+    'Commandes': ['Glisse à gauche / droite : déplacer', 'Tape l\'écran ou TOUR : tourner la pièce', 'Glisse vers le bas ou BAS : chute immédiate'],
+    'Points': ['1 ligne = 100 · 2 = 300 · 3 = 500 · 4 d\'un coup = 800 (× le niveau)', 'Tous les 10 lignes, le niveau monte et ça accélère'],
+    'Astuce': 'Garde une colonne vide sur le côté pour y glisser la barre et faire 4 lignes d\'un coup.'
+  }),
+  duel: () => ({
+    'But du jeu': 'Gagne 2 rounds sur 3 contre le Robot en vidant sa barre de vie.',
+    'Commandes': ['◀ ▶ : bouger · SAUT : sauter', 'POING : coup rapide (8 dégâts) · PIED : coup puissant (15 dégâts) mais plus lent', 'Bas (ou S) : garde, les coups ne font presque rien'],
+    'Règle': ['60 secondes par round ; s\'il reste du temps, celui qui a le plus de vie gagne', 'Les points dépendent des dégâts, de la vie restante et du temps'],
+    'Astuce': 'Recule quand le Robot attaque, puis frappe au pied quand il se retourne.'
+  })
+};
 
 /* ---------- Démarrage ---------- */
 GAMES.sort((a, b) => a.minAge - b.minAge); // les jeux des petits d'abord

@@ -38,6 +38,7 @@
     <button id="btn-quit" class="backbtn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 4.6L13.9 3 5 12l8.9 9 1.5-1.6L8 12z"/></svg>Menu</button>
     <span class="ttl" id="g-title"></span>
     <div class="hud"><span class="sub" id="g-hud"></span><span id="g-score">0</span></div>
+    <button id="btn-help" class="iconbtn sm bulb" title="Comment jouer ?" aria-label="Comment jouer ?"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 21h6v-1H9zm3-19a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zm2 13h-4v-1.2l-.8-.6A5 5 0 1 1 17 10a5 5 0 0 1-2.2 4.2l-.8.6z"/></svg></button>
     <button id="btn-fs-game" class="iconbtn sm" title="Plein écran" aria-label="Plein écran"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg></button>
   </div>
   <div id="g-stage">
@@ -60,6 +61,13 @@
           <button id="o-again" class="btn pri">Rejouer</button>
           <button id="o-menu" class="btn">Retour aux jeux</button>
         </div>
+      </div>
+    </div>
+    <div id="g-help" class="overlay" hidden>
+      <div class="card help">
+        <h2 id="h-title"></h2>
+        <div id="h-body" class="help-body"></div>
+        <div class="btns"><button id="h-close" class="btn pri">J'ai compris !</button></div>
       </div>
     </div>
     <div id="g-pause" class="overlay" hidden>
