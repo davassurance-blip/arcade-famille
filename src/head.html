@@ -215,6 +215,10 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .chess-promo{display:flex;align-items:center;gap:8px;background:var(--panel);border-radius:16px;padding:8px 12px;font-weight:700}
 .chess-promo button{width:48px;height:48px;border-radius:12px;background:#f3ead8;display:grid;place-items:center}.chess-promo button img{width:84%;height:84%}
 
+/* 2048 */
+.g2048{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:12px;touch-action:none;max-width:100%;-webkit-user-select:none;user-select:none}
+.g2048 .t{background:rgba(238,228,218,.35);border-radius:8px;display:grid;place-items:center;font-family:var(--font-display);font-weight:900;font-variant-numeric:tabular-nums;transition:background .1s}
+.g2048 .t.v2,.g2048 .t.v4,.g2048 .t.v8,.g2048 .t.v16,.g2048 .t.v32,.g2048 .t.v64,.g2048 .t.v128,.g2048 .t.v256,.g2048 .t.v512,.g2048 .t.v1024,.g2048 .t.v2048{animation:pop .18s}
 /* Paysage sur téléphone : barre compacte, manette par-dessus le jeu */
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}

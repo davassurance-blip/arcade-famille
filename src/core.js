@@ -187,7 +187,7 @@ window.addEventListener('keyup', e => { const k = KEYMAP[e.code]; if (k) release
 function setupStageInput(stage) {
   const pos = e => { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
   stage.addEventListener('pointerdown', e => {
-    if (e.target.closest('.overlay') || e.target.closest('#g-dom')) return;
+    if (e.target.closest('.overlay') || (e.target.closest('#g-dom') && !(Game.def && Game.def.swipeDom))) return;
     const p = pos(e); Input.pointer.x = p.x; Input.pointer.y = p.y; Input.pointer.down = true; Input.pointer.justDown = true;
     Input._start = { x: p.x, y: p.y, t: performance.now(), swiped: false };
     try { stage.setPointerCapture(e.pointerId); } catch (err) { }
