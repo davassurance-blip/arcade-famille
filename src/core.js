@@ -343,6 +343,7 @@ function quitGame() {
   domRoot.textContent = ''; Input.reset();
   FS.unlock();
   if (abandon) { S.resume = null; save(); }
+  if (window.__pendingReload) { window.__pendingReload(); return; }
   renderHome(); show('home');
 }
 $('#i-go').addEventListener('click', () => { Sfx.unlock(); Sfx.ok(); Game.over = false; startRun(); });

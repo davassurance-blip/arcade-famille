@@ -31,7 +31,13 @@ CSP = ("default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe
        "manifest-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'")
 sw_reg = """<script>
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  const had = !!navigator.serviceWorker.controller; let done = false;
+  const apply = () => { if (done) return; done = true; location.reload(); };
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!had) return; // première installation : rien à recharger
+    if (window.Game && Game.active) { window.__pendingReload = apply; try { toast('Nouvelle version prête'); } catch (e) { } } else apply();
+  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(r => { r.update().catch(() => {}); setInterval(() => r.update().catch(() => {}), 3600000); }).catch(() => {}));
 }
 </script>"""
 reset = "<style>html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>"
@@ -42,7 +48,7 @@ page = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 8 jeux, profils par âge, espace parents protégé.">
+<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 13 jeux, profils par âge, espace parents protégé.">
 <meta name="theme-color" content="#17123a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -86,7 +92,7 @@ for n in (192, 512):
 manifest = {
     "name": "Arcade Famille", "short_name": "Arcade", "lang": "fr", "start_url": "./index.html", "scope": "./",
     "display": "fullscreen", "orientation": "any", "background_color": "#17123a", "theme_color": "#17123a",
-    "description": "8 jeux hors ligne pour enfants de 5 à 13 ans.",
+    "description": "13 jeux hors ligne pour enfants de 5 à 13 ans.",
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]
 }
@@ -96,7 +102,7 @@ ver = hashlib.sha1(page.encode()).hexdigest()[:8]
 sw = f"""// Service worker : tout est mis en cache à l'installation, l'appli marche ensuite sans réseau.
 const CACHE = 'arcade-{ver}';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
-self.addEventListener('install', e => {{ e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); }});
+self.addEventListener('install', e => {{ e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, {{ cache: 'reload' }})))).then(() => self.skipWaiting())); }});
 self.addEventListener('activate', e => {{ e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); }});
 self.addEventListener('fetch', e => {{
   if (e.request.method !== 'GET') return;

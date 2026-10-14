@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 8 jeux, profils par âge, espace parents protégé.">
+<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 13 jeux, profils par âge, espace parents protégé.">
 <meta name="theme-color" content="#17123a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -704,6 +704,7 @@ function quitGame() {
   domRoot.textContent = ''; Input.reset();
   FS.unlock();
   if (abandon) { S.resume = null; save(); }
+  if (window.__pendingReload) { window.__pendingReload(); return; }
   renderHome(); show('home');
 }
 $('#i-go').addEventListener('click', () => { Sfx.unlock(); Sfx.ok(); Game.over = false; startRun(); });
@@ -3767,7 +3768,13 @@ window.addEventListener('pagehide', save);
 
 <script>
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  const had = !!navigator.serviceWorker.controller; let done = false;
+  const apply = () => { if (done) return; done = true; location.reload(); };
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!had) return; // première installation : rien à recharger
+    if (window.Game && Game.active) { window.__pendingReload = apply; try { toast('Nouvelle version prête'); } catch (e) { } } else apply();
+  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(r => { r.update().catch(() => {}); setInterval(() => r.update().catch(() => {}), 3600000); }).catch(() => {}));
 }
 </script>
 </body>
