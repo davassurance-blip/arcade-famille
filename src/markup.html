@@ -1,0 +1,122 @@
+<div id="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<section id="scr-profiles" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="logo">
+      <h1 aria-label="Arcade Famille"><span class="c1">A</span><span class="c2">R</span><span class="c3">C</span><span class="c4">A</span><span class="c5">D</span><span class="c6">E</span> <span class="c7">F</span><span class="c1">A</span><span class="c2">M</span><span class="c3">I</span><span class="c4">L</span><span class="c5">L</span><span class="c6">E</span></h1>
+      <p>Qui joue aujourd'hui ?</p>
+    </div>
+    <div id="profiles" class="profiles"></div>
+    <div class="foot">
+      <button id="btn-parent-1" class="btn sm">Espace parents</button>
+      <p>100 % hors ligne · aucune donnée ne quitte l'appareil</p>
+    </div>
+  </div></div>
+</section>
+
+<section id="scr-home" class="screen" hidden>
+  <div class="topbar">
+    <button id="chip" class="chip" title="Changer de joueur"><span class="av" id="chip-av"></span><span><small>Joueur</small><span id="chip-name">—</span></span></button>
+    <div class="spacer"></div>
+    <div class="stars" title="Étoiles gagnées"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg><span id="star-count">0</span></div>
+    <button id="btn-parent-2" class="iconbtn" title="Espace parents"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v3h6V7a3 3 0 0 0-3-3zm0 9a2 2 0 0 0-1 3.7V19h2v-2.3A2 2 0 0 0 12 13z"/></svg></button>
+  </div>
+  <div class="scroll"><div class="wrap">
+    <div class="sect"><h2 id="home-title">Tes jeux</h2><p id="home-sub"></p></div>
+    <div id="games" class="games"></div>
+    <div id="locked-wrap" hidden>
+      <div class="sect"><h2>Bientôt pour toi</h2><p>Ces jeux se débloquent en grandissant</p></div>
+      <div id="games-locked" class="games"></div>
+    </div>
+    <p class="foot">Tape sur un jeu pour y jouer. Les records sont gardés pour chaque joueur.</p>
+  </div></div>
+</section>
+
+<section id="scr-game" class="screen" hidden>
+  <div class="gamebar">
+    <button id="btn-quit" class="backbtn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 4.6L13.9 3 5 12l8.9 9 1.5-1.6L8 12z"/></svg>Menu</button>
+    <span class="ttl" id="g-title"></span>
+    <div class="hud"><span class="sub" id="g-hud"></span><span id="g-score">0</span></div>
+  </div>
+  <div id="g-stage">
+    <canvas id="g-canvas"></canvas>
+    <div id="g-dom"></div>
+    <div id="g-intro" class="overlay" hidden>
+      <div class="card">
+        <h2 id="i-title"></h2>
+        <p id="i-text"></p>
+        <div class="btns"><button id="i-go" class="btn pri">C'est parti !</button></div>
+      </div>
+    </div>
+    <div id="g-over" class="overlay" hidden>
+      <div class="card">
+        <div id="o-rec" class="rec" hidden>Nouveau record !</div>
+        <h2 id="o-title">Partie terminée</h2>
+        <div class="big" id="o-score">0</div>
+        <p id="o-text"></p>
+        <div class="btns">
+          <button id="o-again" class="btn pri">Rejouer</button>
+          <button id="o-menu" class="btn">Retour aux jeux</button>
+        </div>
+      </div>
+    </div>
+    <div id="g-pause" class="overlay" hidden>
+      <div class="card"><h2>Pause</h2><div class="btns"><button id="p-resume" class="btn pri">Reprendre</button><button id="p-quit" class="btn">Quitter</button></div></div>
+    </div>
+  </div>
+  <div id="g-pad" class="pad" hidden></div>
+</section>
+
+<section id="scr-parent" class="screen" hidden>
+  <div class="topbar">
+    <button id="btn-parent-back" class="backbtn"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.4 4.6L13.9 3 5 12l8.9 9 1.5-1.6L8 12z"/></svg>Retour</button>
+    <h2 style="font-size:20px">Espace parents</h2>
+  </div>
+  <div class="scroll"><div class="parent">
+    <div class="box">
+      <h3>Joueurs</h3>
+      <p>L'âge décide des jeux visibles : dès 4 ans, dès 8 ans, dès 13 ans.</p>
+      <div id="p-list"></div>
+      <div class="row" style="margin-top:10px"><button id="p-add" class="btn sm">+ Ajouter un joueur</button></div>
+    </div>
+    <div class="box">
+      <h3>Réglages</h3>
+      <div class="toggle"><span>Sons et musique</span><button id="t-sound" class="sw" role="switch" aria-checked="true" aria-label="Sons"></button></div>
+      <div class="toggle"><span>Vibrations (téléphone)</span><button id="t-vibe" class="sw on" role="switch" aria-checked="true" aria-label="Vibrations"></button></div>
+    </div>
+    <div class="box">
+      <h3>Code parent</h3>
+      <p>Protège cet espace. 4 chiffres, demandé à chaque ouverture.</p>
+      <div class="row"><button id="p-pin" class="btn sm">Changer le code</button></div>
+    </div>
+    <div class="box">
+      <h3>Données</h3>
+      <p>Tout est enregistré uniquement sur cet appareil. Aucune connexion, aucune publicité, aucun achat.</p>
+      <div class="row"><button id="p-reset-scores" class="btn sm">Effacer les records</button><button id="p-reset-all" class="btn sm warn">Tout réinitialiser</button></div>
+    </div>
+    <div class="box">
+      <h3>Installer sur l'appareil</h3>
+      <p><b>Android (Chrome)</b> : menu ⋮ → « Ajouter à l'écran d'accueil ».<br><b>iPhone / iPad (Safari)</b> : bouton Partager → « Sur l'écran d'accueil ».</p>
+      <p>Version <span id="p-version"></span></p>
+    </div>
+  </div></div>
+</section>
+
+<div id="modal-pin" class="overlay" hidden style="position:fixed;z-index:40">
+  <div class="card">
+    <h2 id="pin-title">Code parent</h2>
+    <p id="pin-text">Entre le code à 4 chiffres</p>
+    <div class="dots" id="pin-dots"><i></i><i></i><i></i><i></i></div>
+    <div class="err" id="pin-err"></div>
+    <div class="pinpad" id="pinpad"></div>
+    <div class="btns"><button id="pin-cancel" class="btn sm">Annuler</button></div>
+  </div>
+</div>
+
+<div id="modal-confirm" class="overlay" hidden style="position:fixed;z-index:40">
+  <div class="card">
+    <h2 id="cf-title"></h2>
+    <p id="cf-text"></p>
+    <div class="btns"><button id="cf-ok" class="btn warn">Confirmer</button><button id="cf-no" class="btn">Annuler</button></div>
+  </div>
+</div>
