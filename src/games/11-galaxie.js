@@ -7,9 +7,9 @@ GAMES.push({
   stars: s => s >= 4000 ? 3 : s >= 1800 ? 2 : s >= 600 ? 1 : 0,
   create(env, saved) {
     const { input, sfx } = env; const hard = env.tier >= 2;
-    const WAVES = 3; // vagues par étape avant le boss
+    const WAVES = 5; // vagues par étape avant le boss
     let ship, shots = [], foes = [], rocks = [], bullets = [], drops = [], boss = null, lives = 3, score = 0, stage = 1, wave = 0, t = 0, fire = 0, inv = 0, over = false, waveT = 1, msg = '', msgT = 0, big = false;
-    let weapon = 1, rapid = 0, laser = 0, shield = 0, shake = 0;
+    let weapon = 1, rapid = 0, laser = 0, shield = 0, shake = 0, scoutT = 2;
     const pr = Particles(); let neb = null, nebW = 0, nebH = 0;
     const STAGE_COL = ['#ff4f9a', '#9dff5c', '#ffd23f', '#38e0d6', '#ff9f1c', '#c084fc'];
     const DROPS = { up: { c: '#ffd23f', l: 'ARME' }, rapid: { c: '#ff9f1c', l: 'RAPIDE' }, laser: { c: '#ff4f9a', l: 'LASER' }, shield: { c: '#38e0d6', l: 'BOUCLIER' }, life: { c: '#9dff5c', l: 'VIE' } };
@@ -21,15 +21,19 @@ GAMES.push({
       const W = env.W, H = env.H; if (neb && nebW === W && nebH === H) return; nebW = W; nebH = H;
       neb = document.createElement('canvas'); neb.width = W; neb.height = H * 2; const c = neb.getContext('2d');
       const cols = ['#5b2a8a', '#1f6f8a', '#8a2a5b', '#2a5b8a']; let seed = 7; const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-      for (let i = 0; i < 14; i++) { const x = r() * W, y = r() * H * 2, rad = 80 + r() * 160; const g = c.createRadialGradient(x, y, 0, x, y, rad); g.addColorStop(0, cols[i % 4] + 'aa'); g.addColorStop(1, cols[i % 4] + '00'); c.fillStyle = g; c.beginPath(); c.arc(x, y, rad, 0, 7); c.fill(); }
+      for (let i = 0; i < 14; i++) { const x = r() * W, y0 = r() * H * 2, rad = 80 + r() * 160; for (const y of [y0 - H * 2, y0, y0 + H * 2]) { const g = c.createRadialGradient(x, y, 0, x, y, rad); g.addColorStop(0, cols[i % 4] + 'aa'); g.addColorStop(1, cols[i % 4] + '00'); c.fillStyle = g; c.beginPath(); c.arc(x, y, rad, 0, 7); c.fill(); } }
       // planètes lointaines
       for (let i = 0; i < 3; i++) { const x = r() * W, y = r() * H * 2, rad = 18 + r() * 30; const g = c.createRadialGradient(x - rad * .4, y - rad * .4, rad * .1, x, y, rad); g.addColorStop(0, '#ffe3a3'); g.addColorStop(1, ['#c0603a', '#3a7fc0', '#7a5cc0'][i]); c.fillStyle = g; c.beginPath(); c.arc(x, y, rad, 0, 7); c.fill(); if (i === 1) { c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = 3; c.beginPath(); c.ellipse(x, y, rad * 1.7, rad * .4, -.4, 0, 7); c.stroke(); } }
     }
     // --- vagues et boss
     function spawnWave() {
       wave++; msg = 'Étape ' + stage + ' · Vague ' + wave + '/' + WAVES; msgT = 1.6; big = false;
-      const n = Math.min(16, 5 + wave * 2 + stage * 2), cols = Math.min(8, n), W = env.W, col = STAGE_COL[(stage - 1) % STAGE_COL.length];
+      const n = Math.min(24, 8 + wave * 2 + stage * 3), cols = Math.min(8, n), W = env.W, col = STAGE_COL[(stage - 1) % STAGE_COL.length];
       for (let i = 0; i < n; i++) { const c = i % cols, r = Math.floor(i / cols); foes.push({ x: W / 2 + (c - (cols - 1) / 2) * Math.min(60, W / (cols + 1)), y: -40 - r * 50, ty: 70 + r * 50, ph: rnd(0, 6), hp: (hard || stage > 2) && i % 4 === 0 ? 2 : 1, c: r % 2 ? col : '#e9e4ff', shootT: rnd(2, 6), kind: r % 2 }); }
+    }
+    function spawnScout() {
+      const W = env.W, side = Math.random() < .5 ? -1 : 1; const n = stage > 1 || hard ? 3 : 2;
+      for (let i = 0; i < n; i++) foes.push({ kind: 2, x: side < 0 ? -20 - i * 34 : W + 20 + i * 34, y: rnd(40, 140), vx: -side * (170 + stage * 15), vy: 90 + stage * 10, ph: rnd(0, 6), hp: 1, c: '#ff9f1c' });
     }
     function spawnBoss() {
       msg = 'BOSS !'; msgT = 2; big = true; sfx.hit();
@@ -72,10 +76,21 @@ GAMES.push({
       fire -= dt; if (fire <= 0) { shoot(); fire = (rapid > 0 ? .13 : hard ? .24 : .3); }
       for (let i = shots.length - 1; i >= 0; i--) { const s = shots[i]; s.y -= 600 * dt; s.x += s.vx * dt; if (s.y < -10 || s.x < -10 || s.x > W + 10) shots.splice(i, 1); }
       // vagues / boss
-      if (!foes.length && !boss) { waveT -= dt; if (waveT <= 0) { if (wave >= WAVES) spawnBoss(); else spawnWave(); waveT = 2.2; } }
+      if (!foes.some(f => f.kind !== 2) && !boss) { waveT -= dt; if (waveT <= 0) { if (wave >= WAVES) spawnBoss(); else spawnWave(); waveT = 2.2; } }
       const sp = 1 + (stage - 1) * .15 + wave * .05;
+      if (foes.some(f => f.kind !== 2) && !boss) { scoutT -= dt; if (scoutT <= 0) { spawnScout(); scoutT = rnd(2.2, 4) / sp; } }
       for (let i = foes.length - 1; i >= 0; i--) {
-        const f = foes[i]; f.y += (f.ty - f.y) * Math.min(1, dt * 2); f.x += Math.sin(t * 1.5 + f.ph) * (f.kind ? 60 : 40) * dt * sp; f.ty += 5 * dt * sp;
+        const f = foes[i];
+        if (f.kind === 2) {
+          f.x += f.vx * dt; f.y += (f.vy + Math.sin(t * 4 + f.ph) * 80) * dt;
+          if (f.x < -40 || f.x > W + 40 || f.y > H + 20) { foes.splice(i, 1); continue; }
+          let dead = false; for (let j = shots.length - 1; j >= 0; j--) { const s = shots[j]; if (Math.abs(s.x - f.x) < 14 && Math.abs(s.y - f.y) < 12) { shots.splice(j, 1); foes.splice(i, 1); score += 10 * stage; pr.burst(f.x, f.y, f.c, 8, 160); sfx.coin(); drop(f.x, f.y); dead = true; break; } }
+          if (dead) continue;
+          if (laser > 0 && Math.abs(f.x - ship.x) < 14 && f.y < ship.y) { foes.splice(i, 1); score += 10 * stage; pr.burst(f.x, f.y, f.c, 8, 160); sfx.coin(); continue; }
+          if (inv <= 0 && Math.abs(f.x - ship.x) < 22 && Math.abs(f.y - ship.y) < 20) { foes.splice(i, 1); pr.burst(f.x, f.y, f.c, 8, 160); hitShip(); }
+          continue;
+        }
+        f.y += (f.ty - f.y) * Math.min(1, dt * 2); f.x += Math.sin(t * 1.5 + f.ph) * (f.kind ? 60 : 40) * dt * sp; f.ty += 5 * dt * sp;
         if ((hard || stage > 1) && f.y > 0) { f.shootT -= dt; if (f.shootT <= 0) { bullets.push({ x: f.x, y: f.y + 14, vx: 0, vy: 240 }); f.shootT = rnd(3, 8) / sp; } }
         for (let j = shots.length - 1; j >= 0; j--) { const s = shots[j]; if (Math.abs(s.x - f.x) < 18 && Math.abs(s.y - f.y) < 16) { shots.splice(j, 1); damageFoe(f, i, 1); break; } }
         if (!foes[i]) continue;
@@ -102,7 +117,7 @@ GAMES.push({
       for (let i = rocks.length - 1; i >= 0; i--) { const r = rocks[i]; r.y += r.vy * dt; r.rot += r.vr * dt; if (r.y > H + 30) { rocks.splice(i, 1); continue; } for (let j = shots.length - 1; j >= 0; j--) { if (Math.hypot(shots[j].x - r.x, shots[j].y - r.y) < r.r) { shots.splice(j, 1); r.r -= 6; score += 5; sfx.tick(); if (r.r < 8) { rocks.splice(i, 1); pr.burst(r.x, r.y, '#b5642a', 8); break; } } } if (rocks[i] && inv <= 0 && Math.hypot(r.x - ship.x, r.y - ship.y) < r.r + 16) { rocks.splice(i, 1); hitShip(); } }
       for (let i = bullets.length - 1; i >= 0; i--) { const b = bullets[i]; b.x += b.vx * dt; b.y += b.vy * dt; if (b.y > H + 10 || b.x < -10 || b.x > W + 10 || b.y < -40) { bullets.splice(i, 1); continue; } if (inv <= 0 && Math.abs(b.x - ship.x) < 16 && Math.abs(b.y - ship.y) < 18) { bullets.splice(i, 1); hitShip(); } }
       for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.y += d.vy * dt; d.x += Math.sin(t * 3 + d.y * .02) * 20 * dt; if (d.y > H + 20) { drops.splice(i, 1); continue; } if (Math.abs(d.x - ship.x) < 28 && Math.abs(d.y - ship.y) < 30) { drops.splice(i, 1); pickUp(d); } }
-      pr.update(dt); env.setScore(score); env.hud('Étape ' + stage + ' · ' + WNAME[weapon] + (laser > 0 ? ' · Laser' : rapid > 0 ? ' · Rapide' : ''));
+      pr.update(dt); env.setScore(score); env.hud('Étape ' + stage + ' · V' + Math.min(wave, WAVES) + '/' + WAVES + ' · ' + WNAME[weapon] + (laser > 0 ? ' · Laser' : rapid > 0 ? ' · Rapide' : ''));
     }
     function draw(c) {
       const W = env.W, H = env.H; makeNebula();
@@ -111,7 +126,7 @@ GAMES.push({
       const ny = (t * 12) % (H * 2); c.globalAlpha = .55; c.drawImage(neb, 0, ny - H * 2); c.drawImage(neb, 0, ny); c.globalAlpha = 1;
       c.fillStyle = '#fff'; for (let i = 0; i < 90; i++) { const layer = i % 3, sx = (i * 97) % W, sy = ((i * 53) + t * (18 + layer * 30)) % H; c.globalAlpha = .25 + layer * .25; c.fillRect(sx, sy, 1 + layer, 1 + layer); } c.globalAlpha = 1;
       for (const r of rocks) { c.save(); c.translate(r.x, r.y); c.rotate(r.rot); c.fillStyle = '#8a5a2b'; c.beginPath(); for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2, rr = r.r * (k % 2 ? .8 : 1); c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } c.closePath(); c.fill(); c.fillStyle = 'rgba(0,0,0,.25)'; c.beginPath(); c.arc(r.r * .3, -r.r * .2, r.r * .25, 0, 7); c.fill(); c.restore(); }
-      for (const f of foes) { c.fillStyle = f.c; if (f.kind) { c.beginPath(); c.moveTo(f.x, f.y + 14); c.lineTo(f.x + 18, f.y - 8); c.lineTo(f.x, f.y - 2); c.lineTo(f.x - 18, f.y - 8); c.closePath(); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(f.x, f.y + 2, 4, 0, 7); c.fill(); } else { c.beginPath(); c.ellipse(f.x, f.y, 18, 10, 0, 0, 7); c.fill(); c.fillStyle = 'rgba(255,255,255,.85)'; c.beginPath(); c.ellipse(f.x, f.y - 6, 9, 8, 0, Math.PI, 0); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(f.x - 3, f.y - 7, 2, 0, 7); c.arc(f.x + 3, f.y - 7, 2, 0, 7); c.fill(); } if (f.hp > 1) { c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.ellipse(f.x, f.y, 21, 13, 0, 0, 7); c.stroke(); } }
+      for (const f of foes) { c.fillStyle = f.c; if (f.kind === 2) { c.save(); c.translate(f.x, f.y); c.rotate(f.vx > 0 ? .3 : -.3); c.beginPath(); c.moveTo(0, -12); c.lineTo(10, 8); c.lineTo(0, 3); c.lineTo(-10, 8); c.closePath(); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(0, -2, 2.5, 0, 7); c.fill(); c.restore(); continue; } if (f.kind) { c.beginPath(); c.moveTo(f.x, f.y + 14); c.lineTo(f.x + 18, f.y - 8); c.lineTo(f.x, f.y - 2); c.lineTo(f.x - 18, f.y - 8); c.closePath(); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(f.x, f.y + 2, 4, 0, 7); c.fill(); } else { c.beginPath(); c.ellipse(f.x, f.y, 18, 10, 0, 0, 7); c.fill(); c.fillStyle = 'rgba(255,255,255,.85)'; c.beginPath(); c.ellipse(f.x, f.y - 6, 9, 8, 0, Math.PI, 0); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(f.x - 3, f.y - 7, 2, 0, 7); c.arc(f.x + 3, f.y - 7, 2, 0, 7); c.fill(); } if (f.hp > 1) { c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.ellipse(f.x, f.y, 21, 13, 0, 0, 7); c.stroke(); } }
       if (boss) { const b = boss; c.save(); c.translate(b.x, b.y); c.fillStyle = b.hitT > 0 ? '#fff' : b.c; c.beginPath(); c.moveTo(0, 36); c.lineTo(b.w / 2, 0); c.lineTo(b.w / 3, -26); c.lineTo(-b.w / 3, -26); c.lineTo(-b.w / 2, 0); c.closePath(); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.ellipse(0, -6, b.w / 5, 12, 0, 0, 7); c.fill(); c.fillStyle = '#ff4f4f'; c.beginPath(); c.arc(-b.w / 8, -6, 5 + Math.sin(b.ph * 6) * 2, 0, 7); c.arc(b.w / 8, -6, 5 + Math.sin(b.ph * 6) * 2, 0, 7); c.fill(); c.fillStyle = '#ff9f1c'; c.beginPath(); c.moveTo(-10, 36); c.lineTo(0, 50 + Math.sin(t * 40) * 6); c.lineTo(10, 36); c.fill(); c.restore(); }
       c.fillStyle = '#ffd23f'; for (const s of shots) c.fillRect(s.x - 2, s.y - 8, 4, 14);
       if (laser > 0) { c.fillStyle = 'rgba(255,79,154,.35)'; c.fillRect(ship.x - 9, 0, 18, ship.y - 10); c.fillStyle = '#ff4f9a'; c.fillRect(ship.x - 3 + Math.sin(t * 60) * 2, 0, 6, ship.y - 10); }
