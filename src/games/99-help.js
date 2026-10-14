@@ -73,6 +73,36 @@ const HELP = {
     'Points': ['1 ligne = 100 · 2 = 300 · 3 = 500 · 4 d\'un coup = 800 (× le niveau)', 'Tous les 10 lignes, le niveau monte et ça accélère'],
     'Astuce': 'Garde une colonne vide sur le côté pour y glisser la barre et faire 4 lignes d\'un coup.'
   }),
+  g2048: () => ({
+    'But du jeu': 'Obtenir une tuile 2048 en fusionnant les tuiles.',
+    'Règle': ['Glisse dans une direction (ou croix) : toutes les tuiles glissent au maximum', 'Deux tuiles de même valeur qui se touchent fusionnent (2+2 = 4, 4+4 = 8…)', 'Une nouvelle tuile (2 ou 4) apparaît à chaque coup', 'Quand la grille est pleine et qu\'aucune fusion n\'est possible, c\'est fini'],
+    'Astuce': 'Choisis un coin, garde ta plus grosse tuile dedans, et ne glisse presque jamais dans la direction opposée.'
+  }),
+  glouton: t => ({
+    'But du jeu': 'Manger toutes les pastilles du labyrinthe sans te faire attraper.',
+    'Commandes': ['Croix directionnelle, ou glisse le doigt', 'Le Glouton continue tout seul ; ta direction s\'applique au prochain croisement', 'Les tunnels sur les côtés ressortent de l\'autre côté'],
+    'Les fantômes': ['Rouge : te suit à la trace', 'Rose : vise devant toi pour te couper la route', 'Bleu : imprévisible', 'Orange : fonce puis se dégonfle quand il est près'],
+    'Super-pastilles': ['Les 4 grosses pastilles rendent les fantômes bleus pendant ' + (t === 2 ? '5' : '7') + ' secondes : mange-les ! 200, 400, 800 puis 1600 points', 'Quand ils clignotent, ils vont redevenir dangereux'],
+    'Bonus': 'Une cerise apparaît deux fois par niveau au milieu : 100 points × le niveau.'
+  }),
+  simon: () => ({
+    'But du jeu': 'Répéter la suite de couleurs le plus longtemps possible.',
+    'Règle': ['Les couleurs s\'allument avec leur son : regarde et écoute', 'Rejoue-les dans le même ordre en tapant dessus', 'Si tu réussis, la suite s\'allonge d\'une couleur'],
+    'Astuce': 'Chante les couleurs dans ta tête ou associe chaque son à une note.'
+  }),
+  road: t => ({
+    'But du jeu': 'Rouler le plus loin possible sans accident et sans panne d\'essence.',
+    'Commandes': ['Tape à gauche ou à droite de l\'écran pour changer de voie', 'Ou utilise ◀ ▶'],
+    'Règle': ['La jauge d\'essence baisse : attrape les bidons verts « E »', 'Les étoiles valent 50 points', t === 0 ? 'Tu as 3 cœurs : un accident en enlève un' : 'Un seul accident et c\'est fini !'],
+    'Astuce': 'Regarde loin devant : les voitures lentes se voient venir de loin.'
+  }),
+  defense: () => ({
+    'But du jeu': 'Empêcher les ennemis d\'atteindre la SORTIE pendant 20 vagues.',
+    'Comment jouer': ['Choisis un type de tour en bas, puis tape une case verte pour la poser (ça coûte de l\'or)', 'Tape une tour posée pour voir sa portée, puis « Améliorer » (3 niveaux)', '« Lancer » démarre la vague tout de suite (sinon elle part toute seule au bout du compte à rebours)'],
+    'Les tours': ['Arc : tire vite, pas cher', 'Canon : gros dégâts de zone, lent', 'Glace : ralentit les ennemis de moitié'],
+    'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
+    'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
+  }),
   duel: () => ({
     'But du jeu': 'Gagne 2 rounds sur 3 contre le Robot en vidant sa barre de vie.',
     'Commandes': ['◀ ▶ : bouger · SAUT : sauter', 'POING : coup rapide (8 dégâts) · PIED : coup puissant (15 dégâts) mais plus lent', 'Bas (ou S) : garde, les coups ne font presque rien'],

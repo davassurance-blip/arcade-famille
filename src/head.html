@@ -219,6 +219,13 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .g2048{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;background:#bbada0;padding:8px;border-radius:12px;touch-action:none;max-width:100%;-webkit-user-select:none;user-select:none}
 .g2048 .t{background:rgba(238,228,218,.35);border-radius:8px;display:grid;place-items:center;font-family:var(--font-display);font-weight:900;font-variant-numeric:tabular-nums;transition:background .1s}
 .g2048 .t.v2,.g2048 .t.v4,.g2048 .t.v8,.g2048 .t.v16,.g2048 .t.v32,.g2048 .t.v64,.g2048 .t.v128,.g2048 .t.v256,.g2048 .t.v512,.g2048 .t.v1024,.g2048 .t.v2048{animation:pop .18s}
+/* Jacques a dit */
+.simon-status{font-family:var(--font-display);font-size:22px;color:var(--sun);min-height:1.4em;text-align:center}
+.simon{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(100%,420px);aspect-ratio:1;max-height:100%;flex:1;min-height:0}
+.simon.six{grid-template-columns:1fr 1fr 1fr;aspect-ratio:3/2}
+.spad{border-radius:22px;background:color-mix(in srgb,var(--c) 45%,#1b1540);box-shadow:inset 0 -8px 0 rgba(0,0,0,.25);transition:background .08s,transform .08s,box-shadow .08s;touch-action:none}
+.spad.on{background:var(--c);transform:scale(1.04);box-shadow:0 0 30px var(--c),inset 0 -8px 0 rgba(0,0,0,.15)}
+.simon.lock .spad{pointer-events:none}
 /* Paysage sur téléphone : barre compacte, manette par-dessus le jeu */
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}
