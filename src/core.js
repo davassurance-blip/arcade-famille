@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '1.3';
+const VERSION = '2.0';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -31,7 +31,7 @@ const defaultState = () => ({
     { id: 2, name: 'Pilote', age: 10, color: COLORS[1], avatar: 1 },
     { id: 3, name: 'Boss', age: 13, color: COLORS[2], avatar: 2 }
   ],
-  scores: {}, stars: {}, lastProfile: null, resume: null
+  scores: {}, stars: {}, plays: {}, wins: {}, badges: {}, lastProfile: null, resume: null
 });
 let S = defaultState();
 function load() {
@@ -73,6 +73,50 @@ const AVATARS = [
   '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="26" fill="#1b1540" opacity=".9"/><path d="M30 36l8-16 10 12 2-14 10 14 10-12 6 16z" fill="#1b1540" opacity=".9"/><circle cx="41" cy="52" r="4" fill="#fff"/><circle cx="59" cy="52" r="4" fill="#fff"/><path d="M40 64q10 8 20 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
   '<svg viewBox="0 0 100 100"><path d="M50 18c18 0 30 14 30 32v30H20V50c0-18 12-32 30-32z" fill="#1b1540" opacity=".9"/><rect x="30" y="44" width="40" height="14" rx="7" fill="#fff"/><circle cx="40" cy="51" r="4" fill="#1b1540"/><circle cx="60" cy="51" r="4" fill="#1b1540"/><path d="M42 68h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>'
 ];
+AVATARS.push(
+  '<svg viewBox="0 0 100 100"><path d="M22 28l12 14h32l12-14-4 44a24 24 0 0 1-48 0z" fill="#1b1540" opacity=".9"/><path d="M22 28l10 2-4 12z M78 28l-10 2 4 12z" fill="#fff" opacity=".6"/><circle cx="40" cy="56" r="4" fill="#fff"/><circle cx="60" cy="56" r="4" fill="#fff"/><path d="M46 68l4 4 4-4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  '<svg viewBox="0 0 100 100"><path d="M30 80V40a20 20 0 0 1 40 0v40z" fill="#1b1540" opacity=".9"/><path d="M34 40l-6-10 10 4 4-12 8 10 8-10 4 12 10-4-6 10z" fill="#1b1540" opacity=".9"/><circle cx="42" cy="52" r="4" fill="#fff"/><circle cx="58" cy="52" r="4" fill="#fff"/><path d="M40 66q10 6 20 0" stroke="#fff" stroke-width="3" fill="none"/><rect x="38" y="72" width="4" height="6" fill="#fff"/><rect x="58" y="72" width="4" height="6" fill="#fff"/></svg>',
+  '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="26" ry="30" fill="#1b1540" opacity=".9"/><ellipse cx="40" cy="50" rx="7" ry="10" fill="#fff"/><ellipse cx="60" cy="50" rx="7" ry="10" fill="#fff"/><circle cx="41" cy="52" r="3" fill="#1b1540"/><circle cx="61" cy="52" r="3" fill="#1b1540"/><path d="M44 70h12" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M50 22V10M44 12l6-4 6 4" stroke="#1b1540" stroke-width="3" fill="none"/></svg>',
+  '<svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="26" fill="#1b1540" opacity=".9"/><path d="M50 28l-6-20 12 16z" fill="#fff" opacity=".9"/><path d="M50 28l-6-20 12 16z" fill="#1b1540" opacity=".3"/><circle cx="41" cy="52" r="4" fill="#fff"/><circle cx="59" cy="52" r="4" fill="#fff"/><path d="M40 64q10 8 20 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M28 40l-10-6M72 40l10-6" stroke="#1b1540" stroke-width="4" stroke-linecap="round"/></svg>',
+  '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="26" fill="#1b1540" opacity=".9"/><rect x="24" y="42" width="52" height="16" rx="8" fill="#fff"/><circle cx="40" cy="50" r="4" fill="#1b1540"/><circle cx="60" cy="50" r="4" fill="#1b1540"/><path d="M70 36l16-8-6 14z" fill="#1b1540" opacity=".9"/><path d="M44 68h12" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>',
+  '<svg viewBox="0 0 100 100"><path d="M26 76V48a24 24 0 0 1 48 0v28z" fill="#1b1540" opacity=".9"/><path d="M26 48l-10-8 12-2zM74 48l10-8-12-2z" fill="#1b1540" opacity=".9"/><path d="M34 34l6-14 6 10 4-14 4 14 6-10 6 14z" fill="#fff" opacity=".7"/><circle cx="41" cy="54" r="4" fill="#ffd23f"/><circle cx="59" cy="54" r="4" fill="#ffd23f"/><path d="M38 68q6-6 12 0 6-6 12 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M30 76l-6 10 10-4zM70 76l6 10-10-4z" fill="#1b1540" opacity=".9"/></svg>'
+);
+/* Récompenses : avatars et couleurs débloqués avec les étoiles, badges */
+const AVATAR_COST = [0, 0, 0, 0, 0, 0, 5, 12, 20, 35, 50, 75];
+const BONUS_COLORS = [['#ff3cac', 15], ['#00f5d4', 30], ['#c6ff00', 50], ['#ffffff', 80]];
+const BADGES = [
+  { id: 'first', n: 'Première partie', d: 'Jouer une partie', t: r => r.plays >= 1 },
+  { id: 'ten', n: 'Habitué', d: 'Jouer 10 parties', t: r => r.plays >= 10 },
+  { id: 'fifty', n: 'Accro', d: 'Jouer 50 parties', t: r => r.plays >= 50 },
+  { id: 'explorer', n: 'Explorateur', d: 'Essayer tous tes jeux', t: r => r.allGames },
+  { id: 'star10', n: '10 étoiles', d: 'Gagner 10 étoiles', t: r => r.stars >= 10 },
+  { id: 'star50', n: '50 étoiles', d: 'Gagner 50 étoiles', t: r => r.stars >= 50 },
+  { id: 'star100', n: 'Constellation', d: 'Gagner 100 étoiles', t: r => r.stars >= 100 },
+  { id: 'pro3', n: 'Triple pro', d: '3 étoiles d\'un coup dans 3 jeux différents', t: r => r.pros >= 3 },
+  { id: 'platform', n: 'Héros de la plateforme', d: 'Finir les 5 niveaux de Plateforme Pixel', t: r => r.wins.platform },
+  { id: 'chess', n: 'Champion d\'échecs', d: 'Battre le Robot aux échecs', t: r => r.wins.chess },
+  { id: 'duel', n: 'Maître du Duel', d: 'Battre le Robot en Duel Arena', t: r => r.wins.duel },
+  { id: 'g2048', n: '2048 !', d: 'Atteindre la tuile 2048', t: r => r.wins.g2048 },
+  { id: 'defense', n: 'Général', d: 'Tenir toutes les vagues de Tour de Défense', t: r => r.wins.defense },
+  { id: 'galaxy', n: 'As de l\'espace', d: '1 800 points dans Galaxie', t: r => (r.scores.galaxy || 0) >= 1800 },
+  { id: 'bricks', n: 'Démolisseur', d: '1 800 points au Casse-Briques', t: r => (r.scores.bricks || 0) >= 1800 },
+  { id: 'calc', n: 'Tête à calculs', d: '200 points en Calcul Éclair', t: r => (r.scores.calc || 0) >= 200 },
+  { id: 'simon', n: 'Mémoire d\'éléphant', d: '8 tours à Jacques a dit', t: r => (r.scores.simon || 0) >= 8 }
+];
+function rewardsOf(pid) {
+  const plays = S.plays && S.plays[pid] || {}, total = Object.values(plays).reduce((a, b) => a + b, 0);
+  const prof = S.profiles.find(p => p.id === pid); const mine = prof ? GAMES.filter(g => prof.age >= g.minAge) : [];
+  const scores = S.scores[pid] || {}; let pros = 0; for (const g of GAMES) if (scores[g.id] && g.stars && g.stars(scores[g.id]) >= 3) pros++;
+  return { plays: total, allGames: mine.length > 0 && mine.every(g => plays[g.id]), stars: starsOf(pid), pros, wins: S.wins && S.wins[pid] || {}, scores };
+}
+function unlockedAvatars(pid) { const st = starsOf(pid); return AVATAR_COST.map((c, i) => st >= c); }
+function unlockedColors(pid) { const st = starsOf(pid); return COLORS.concat(BONUS_COLORS.filter(b => st >= b[1]).map(b => b[0])); }
+function checkRewards(pid, starsBefore) {
+  const r = rewardsOf(pid); S.badges = S.badges || {}; S.badges[pid] = S.badges[pid] || []; const news = [];
+  for (const b of BADGES) if (!S.badges[pid].includes(b.id) && b.t(r)) { S.badges[pid].push(b.id); news.push('Badge : ' + b.n); }
+  const after = starsOf(pid); AVATAR_COST.forEach((c, i) => { if (c > starsBefore && c <= after) news.push('Nouvel avatar débloqué !'); }); BONUS_COLORS.forEach(b => { if (b[1] > starsBefore && b[1] <= after) news.push('Nouvelle couleur débloquée !'); });
+  return news;
+}
 function avatarEl(p, cls = 'av') {
   const s = el('span', { class: cls, style: '--pc:' + p.color });
   s.innerHTML = AVATARS[p.avatar % AVATARS.length];
@@ -328,7 +372,11 @@ function endGame(score, opts) {
   if (rec) S.scores[pid][gid] = score;
   S.resume = null;
   const earned = Game.def.stars ? Game.def.stars(score) : Math.min(3, Math.floor(score / 100));
-  S.stars[pid] = (S.stars[pid] || 0) + earned;
+  const starsBefore = starsOf(pid); S.stars[pid] = (S.stars[pid] || 0) + earned;
+  S.plays = S.plays || {}; S.plays[pid] = S.plays[pid] || {}; S.plays[pid][gid] = (S.plays[pid][gid] || 0) + 1;
+  if (opts.win) { S.wins = S.wins || {}; S.wins[pid] = S.wins[pid] || {}; S.wins[pid][gid] = true; }
+  const news = checkRewards(pid, starsBefore);
+  const nb = $('#o-new'); nb.textContent = ''; nb.hidden = !news.length; news.forEach(n => nb.append(el('div', { class: 'newrew' }, n))); if (news.length) setTimeout(() => Sfx.win(), 600);
   save();
   $('#o-rec').hidden = !(rec && score > 0);
   $('#o-title').textContent = opts.title || (opts.win ? 'Bravo !' : 'Partie terminée');
@@ -422,6 +470,25 @@ async function openParent() {
   renderParent(); show('parent');
 }
 $('#btn-parent-1').addEventListener('click', openParent);
+/* Mes récompenses (accessible à l'enfant) */
+function renderRewards() {
+  const pid = current.id, st = starsOf(pid), r = rewardsOf(pid); S.badges = S.badges || {}; const mine = S.badges[pid] || [];
+  $('#rw-stars').textContent = st;
+  const av = $('#rw-avatars'); av.textContent = ''; const unl = unlockedAvatars(pid);
+  AVATARS.forEach((svg, i) => {
+    const ok = unl[i]; const b = el('button', { class: 'rw-av' + (ok ? '' : ' lock') + (current.avatar === i ? ' on' : ''), 'aria-label': 'Avatar ' + (i + 1) });
+    b.append(avatarEl({ color: current.color, avatar: i })); if (!ok) b.append(el('span', { class: 'cost' }, AVATAR_COST[i] + ' ★'));
+    b.addEventListener('click', () => { if (!ok) { toast('Il te faut ' + AVATAR_COST[i] + ' étoiles'); Sfx.ko(); return; } current.avatar = i; save(); Sfx.ok(); renderRewards(); renderHome(); });
+    av.append(b);
+  });
+  const co = $('#rw-colors'); co.textContent = ''; const allC = COLORS.concat(BONUS_COLORS.map(b => b[0])), unlC = unlockedColors(pid);
+  allC.forEach((col, i) => { const ok = unlC.includes(col); const b = el('button', { class: (ok ? '' : 'lock') + (current.color === col ? ' on' : ''), style: 'background:' + col, 'aria-label': 'Couleur' }); if (!ok) b.append(el('span', { class: 'cost' }, BONUS_COLORS[i - COLORS.length][1] + '★')); b.addEventListener('click', () => { if (!ok) { toast('Il te faut ' + BONUS_COLORS[i - COLORS.length][1] + ' étoiles'); Sfx.ko(); return; } current.color = col; save(); Sfx.ok(); renderRewards(); renderHome(); }); co.append(b); });
+  const bl = $('#rw-badges'); bl.textContent = '';
+  BADGES.forEach(b => { const got = mine.includes(b.id); bl.append(el('div', { class: 'badge' + (got ? ' got' : '') }, el('span', { class: 'bi', html: got ? '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg>' : '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v3h6V7a3 3 0 0 0-3-3z"/></svg>' }), el('span', null, el('b', null, b.n), el('small', null, b.d)))); });
+  $('#rw-count').textContent = mine.length + ' / ' + BADGES.length;
+}
+$('#star-pill').addEventListener('click', () => { Sfx.unlock(); Sfx.tap(); renderRewards(); $('#modal-rewards').hidden = false; });
+$('#rw-close').addEventListener('click', () => { $('#modal-rewards').hidden = true; });
 $('#btn-parent-2').addEventListener('click', openParent);
 $('#btn-parent-back').addEventListener('click', () => { save(); renderProfiles(); if (current) { current = S.profiles.find(p => p.id === current.id) || null; } if (current) { renderHome(); show('home'); } else show('profiles'); });
 $('#chip').addEventListener('click', () => { Sfx.tap(); S.lastProfile = null; save(); renderProfiles(); show('profiles'); });

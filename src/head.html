@@ -226,6 +226,19 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .spad{border-radius:22px;background:color-mix(in srgb,var(--c) 45%,#1b1540);box-shadow:inset 0 -8px 0 rgba(0,0,0,.25);transition:background .08s,transform .08s,box-shadow .08s;touch-action:none}
 .spad.on{background:var(--c);transform:scale(1.04);box-shadow:0 0 30px var(--c),inset 0 -8px 0 rgba(0,0,0,.15)}
 .simon.lock .spad{pointer-events:none}
+/* Récompenses */
+.stars{cursor:pointer}
+.card.rewards{text-align:left;max-width:460px;max-height:92%;overflow:auto}.card.rewards h2{text-align:center}.card.rewards h3{font-size:15px;margin:16px 0 8px;color:var(--sun);letter-spacing:.06em;text-transform:uppercase}
+.rw-top{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;font-size:14px;justify-content:center;text-align:center}.rw-top svg{width:18px;height:18px;color:var(--sun);flex:none}
+.rw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.rw-av{position:relative;background:var(--panel2);border-radius:16px;padding:6px;display:grid;place-items:center;border:3px solid transparent}.rw-av .av{width:52px;height:52px}.rw-av.on{border-color:var(--lime)}
+.rw-av.lock .av{filter:grayscale(1) brightness(.5)}.rw-av .cost,.swatches .cost{position:absolute;inset:auto auto 4px auto;font:800 10px var(--font-body);background:var(--ink);color:var(--sun);padding:2px 6px;border-radius:999px}
+.swatches button{position:relative}.swatches button.lock{filter:grayscale(.8) brightness(.5)}.swatches .cost{bottom:-6px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.rw-count{font-size:12px;color:var(--muted);letter-spacing:0;text-transform:none;margin-left:6px}
+.badges{display:flex;flex-direction:column;gap:6px}.badge{display:flex;align-items:center;gap:10px;background:var(--panel2);border-radius:12px;padding:8px 10px;opacity:.45}.badge.got{opacity:1;background:linear-gradient(90deg,rgba(255,210,63,.25),var(--panel2))}
+.badge .bi{width:30px;height:30px;border-radius:50%;background:var(--ink);display:grid;place-items:center;flex:none;color:var(--muted)}.badge.got .bi{color:var(--sun)}.badge .bi svg{width:18px;height:18px}
+.badge b{display:block;font-family:var(--font-display);font-size:15px}.badge small{display:block;color:var(--muted);font-size:12px}
+.newrew{display:inline-block;margin:4px 3px 0;background:var(--sun);color:var(--ink);font:800 12.5px var(--font-body);padding:5px 12px;border-radius:999px;animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
 /* Paysage sur téléphone : barre compacte, manette par-dessus le jeu */
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}

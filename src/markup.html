@@ -18,7 +18,7 @@
   <div class="topbar">
     <button id="chip" class="chip" title="Changer de joueur"><span class="av" id="chip-av"></span><span><small>Joueur</small><span id="chip-name">—</span></span></button>
     <div class="spacer"></div>
-    <div class="stars" title="Étoiles gagnées"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg><span id="star-count">0</span></div>
+    <button id="star-pill" class="stars" title="Mes récompenses"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg><span id="star-count">0</span></button>
     <button id="btn-fs" class="iconbtn" title="Plein écran" aria-label="Plein écran"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 0h2v6h-6v-2h4z"/></svg></button>
     <button id="btn-parent-2" class="iconbtn" title="Espace parents"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v3h6V7a3 3 0 0 0-3-3zm0 9a2 2 0 0 0-1 3.7V19h2v-2.3A2 2 0 0 0 12 13z"/></svg></button>
   </div>
@@ -54,6 +54,7 @@
     <div id="g-over" class="overlay" hidden>
       <div class="card">
         <div id="o-rec" class="rec" hidden>Nouveau record !</div>
+        <div id="o-new" hidden></div>
         <h2 id="o-title">Partie terminée</h2>
         <div class="big" id="o-score">0</div>
         <p id="o-text"></p>
@@ -107,7 +108,7 @@
     <div class="box">
       <h3>Installer sur l'appareil</h3>
       <p><b>Android (Chrome)</b> : menu ⋮ → « Ajouter à l'écran d'accueil ».<br><b>iPhone / iPad (Safari)</b> : bouton Partager → « Sur l'écran d'accueil ».</p>
-      <p>Version <span id="p-version"></span> · règles des échecs : chess.js (BSD)</p>
+      <p>Version <span id="p-version"></span> · règles des échecs : chess.js (BSD) · pièces : rhosgfx (CC0) · 2048 : règles de G. Cirulli (MIT)</p>
     </div>
   </div></div>
 </section>
@@ -120,6 +121,20 @@
     <div class="err" id="pin-err"></div>
     <div class="pinpad" id="pinpad"></div>
     <div class="btns"><button id="pin-cancel" class="btn sm">Annuler</button></div>
+  </div>
+</div>
+
+<div id="modal-rewards" class="overlay" hidden style="position:fixed;z-index:40">
+  <div class="card rewards">
+    <h2>Mes récompenses</h2>
+    <p class="rw-top"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z"/></svg> <span id="rw-stars">0</span> étoiles · gagne des étoiles en jouant pour tout débloquer</p>
+    <h3>Mon avatar</h3>
+    <div id="rw-avatars" class="rw-grid"></div>
+    <h3>Ma couleur</h3>
+    <div id="rw-colors" class="swatches"></div>
+    <h3>Mes badges <span id="rw-count" class="rw-count"></span></h3>
+    <div id="rw-badges" class="badges"></div>
+    <div class="btns"><button id="rw-close" class="btn pri">Fermer</button></div>
   </div>
 </div>
 

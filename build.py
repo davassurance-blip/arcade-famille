@@ -48,7 +48,7 @@ page = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 13 jeux, profils par âge, espace parents protégé.">
+<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 18 jeux, profils par âge, espace parents protégé.">
 <meta name="theme-color" content="#17123a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -92,7 +92,7 @@ for n in (192, 512):
 manifest = {
     "name": "Arcade Famille", "short_name": "Arcade", "lang": "fr", "start_url": "./index.html", "scope": "./",
     "display": "fullscreen", "orientation": "any", "background_color": "#17123a", "theme_color": "#17123a",
-    "description": "13 jeux hors ligne pour enfants de 5 à 13 ans.",
+    "description": "18 jeux hors ligne pour enfants de 5 à 13 ans.",
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]
 }
