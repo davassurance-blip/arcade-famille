@@ -1,5 +1,5 @@
 // Service worker : tout est mis en cache à l'installation, l'appli marche ensuite sans réseau.
-const CACHE = 'arcade-a5a4b0a9';
+const CACHE = 'arcade-ccdb271b';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

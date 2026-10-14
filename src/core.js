@@ -243,6 +243,8 @@ function resizeCanvas() {
   if (Game.inst && Game.inst.resize) Game.inst.resize();
 }
 window.addEventListener('resize', () => { if (Game.active) resizeCanvas(); });
+window.addEventListener('orientationchange', () => { setTimeout(() => { if (Game.active) resizeCanvas(); }, 250); setTimeout(() => { if (Game.active) resizeCanvas(); }, 800); });
+if (window.ResizeObserver) new ResizeObserver(() => { if (Game.active) resizeCanvas(); }).observe(stage);
 document.addEventListener('visibilitychange', () => { if (document.hidden && Game.active) Game.pause(); });
 
 function makeEnv(def) {

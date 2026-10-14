@@ -37,7 +37,7 @@ GAMES.push({
       const old = TS; TS = clamp(Math.floor(Math.min(env.H / ROWS, env.W / 10)), 24, 56); const k = TS / old;
       if (world && k !== 1) { p.x *= k; p.y *= k; p.w *= k; p.h *= k; cam *= k; for (const e of enemies) { e.x *= k; e.y *= k; e.w *= k; e.h *= k; } }
     }
-    function startLevel(L) { level = L; world = gen(L); spawn(TS); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; }
+    function startLevel(L) { level = L; world = gen(L); spawn(TS * 5); cam = 0; msg = 'Niveau ' + (L + 1); msgT = 2; }
     function solid(cx, cy) { if (cy >= ROWS) return false; if (cx < 0 || cx >= world.cols) return true; if (cy < 0) return false; return world.g[cy][cx] === 1; }
     function tileAt(cx, cy) { return (cy < 0 || cy >= ROWS || cx < 0 || cx >= world.cols) ? 0 : world.g[cy][cx]; }
     function hit(reason) {
