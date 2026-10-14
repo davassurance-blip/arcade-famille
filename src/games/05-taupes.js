@@ -28,12 +28,12 @@ GAMES.push({
     }
     function popOne() {
       const free = holes.filter(h => !h.up); if (!free.length) return;
-      const st = pick(free); st.up = true; st.bomb = tier > 0 && Math.random() < .2; st.timer = [1.4, 1.0, .75][tier] * rnd(.8, 1.2);
+      const st = pick(free); st.up = true; st.bomb = tier > 0 && Math.random() < .2; st.timer = [2.4, 1.7, 1.25][tier] * rnd(.85, 1.2);
       st.el.classList.remove('hit'); st.el.innerHTML = st.bomb ? BOMB_SVG : MOLE_SVG; void st.el.offsetWidth; st.el.classList.add('up');
     }
     function update(dt) {
       if (done) return; left -= dt; next -= dt;
-      if (next <= 0) { popOne(); if (tier > 1 && Math.random() < .3) popOne(); next = [.9, .65, .5][tier] * rnd(.7, 1.2) * (1 - (DUR - left) / DUR * .35); }
+      if (next <= 0) { popOne(); if (tier > 1 && Math.random() < .3) popOne(); next = [1.4, 1.0, .75][tier] * rnd(.8, 1.2) * (1 - (DUR - left) / DUR * .25); }
       for (const h of holes) if (h.up) { h.timer -= dt; if (h.timer <= 0) { h.up = false; h.el.classList.remove('up'); } }
       if (Math.ceil(left) !== Math.ceil(left + dt)) env.hud(Math.ceil(left) + ' s');
       if (left <= 0) { done = true; env.gameOver(score, { win: score > 0, text: score + ' taupe' + (score > 1 ? 's' : '') + ' attrapée' + (score > 1 ? 's' : '') }); }

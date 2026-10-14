@@ -188,6 +188,21 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .hole svg{position:absolute;left:12%;width:76%;bottom:-80%;transition:bottom .12s cubic-bezier(.2,1.4,.4,1)}
 .hole.up svg{bottom:4%}
 .hole.hit svg{bottom:-80%;transition:bottom .08s}
+
+/* Échecs */
+.chess-wrap{gap:10px;justify-content:center}
+.chess-bar{display:flex;align-items:center;gap:10px;width:100%;max-width:560px}
+.chess-status{flex:1;text-align:center;font-family:var(--font-display);font-size:17px;color:var(--sun);min-width:0}
+.chess{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:100%}
+.sq{position:relative;display:grid;place-items:center;font-size:min(9vmin,52px);line-height:1;font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Apple Symbols","DejaVu Sans",sans-serif}
+.sq.light{background:#f3ead8}.sq.dark{background:#8a7bd6}
+.sq.w{color:#fff;text-shadow:0 0 2px #000,0 0 2px #000,0 2px 0 #333}.sq.b{color:#1b1540;text-shadow:0 0 2px #fff}
+.sq.last{box-shadow:inset 0 0 0 100px rgba(255,210,63,.35)}
+.sq.sel{box-shadow:inset 0 0 0 100px rgba(157,255,92,.55)}
+.sq.hint::after{content:"";width:28%;height:28%;border-radius:50%;background:rgba(27,21,64,.35);position:absolute}
+.sq.cap::after{content:"";position:absolute;inset:6%;border-radius:50%;border:4px solid rgba(255,79,154,.8)}
+.sq.check{box-shadow:inset 0 0 0 100px rgba(255,79,79,.6)}
+
 /* Paysage sur téléphone : barre compacte, manette par-dessus le jeu */
 @media (max-height:480px) and (orientation:landscape){
   .gamebar{padding:4px 10px}.gamebar .ttl,.gamebar .hud{font-size:15px}.backbtn{padding:5px 10px 5px 6px;font-size:14px}

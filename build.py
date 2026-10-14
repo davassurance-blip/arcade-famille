@@ -13,6 +13,8 @@ def read(p):
 head = read(os.path.join(SRC, 'head.html'))
 markup = read(os.path.join(SRC, 'markup.html'))
 js = read(os.path.join(SRC, 'core.js'))
+for v in sorted(glob.glob(os.path.join(SRC, 'vendor', '*.js'))):
+    js += '\n/* ===== bibliothèque tierce : ' + os.path.basename(v) + ' ===== */\n' + read(v)
 for g in sorted(glob.glob(os.path.join(SRC, 'games', '*.js'))):
     js += '\n' + read(g)
 js += '\n' + read(os.path.join(SRC, 'boot.js'))

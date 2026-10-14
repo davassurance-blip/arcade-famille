@@ -1,6 +1,6 @@
 # Arcade Famille
 
-Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 8 jeux, profils par âge, espace parents protégé par code.
+Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 13 jeux, profils par âge, espace parents protégé par code.
 Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 
 ## Jouer / installer
@@ -16,8 +16,13 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Mémo Formes | 4 ans | mémoire |
 | Calcul Éclair | 4 ans | calcul mental, 3 niveaux |
 | Taupes Rigolotes | 4 ans | whack-a-mole |
+| Fusée Étoiles | 4 ans | un bouton, passe entre les nuages |
 | Plateforme Pixel | 8 ans | plateforme façon Mario, 3 niveaux générés |
 | Serpent Néon | 8 ans | snake |
+| Échecs | 8 ans | contre le Robot (minimax) ou à deux, règles par chess.js |
+| Casse-Briques | 8 ans | breakout, niveaux infinis |
+| Galaxie | 8 ans | tir spatial, vagues d'envahisseurs |
+| Blocs | 8 ans | puzzle de briques qui tombent |
 | Duel Arena | 13 ans | combat 1 contre 1 contre une IA |
 
 ## Sécurité
@@ -34,3 +39,4 @@ Sources : `src/core.js` (hub, profils, espace parents, moteur), `src/games/*.js`
 
 ## Licence
 MIT — libre d'utilisation, de modification et de partage.
+Les règles des échecs viennent de [chess.js](https://github.com/jhlywa/chess.js) (Jeff Hlywa, licence BSD-2, copie dans `src/vendor/`).

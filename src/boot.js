@@ -1,4 +1,5 @@
 /* ---------- Démarrage ---------- */
+GAMES.sort((a, b) => a.minAge - b.minAge); // les jeux des petits d'abord
 load(); renderProfiles();
 current = S.profiles.find(p => p.id === S.lastProfile) || null;
 if (current) { renderHome(); show('home'); } else show('profiles');
