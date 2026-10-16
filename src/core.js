@@ -210,7 +210,7 @@ function renderHome() {
 
 /* ---------- Entrées (clavier, tactile, manette à l'écran) ---------- */
 const Input = {
-  held: { left: 0, right: 0, up: 0, down: 0, a: 0, b: 0 },
+  held: { left: 0, right: 0, up: 0, down: 0, a: 0, b: 0, c: 0 },
   pressed: {}, // touches "juste appuyées" ce frame
   pointer: { x: 0, y: 0, down: false, justDown: false, justUp: false },
   tap: null, swipe: null,
@@ -218,7 +218,7 @@ const Input = {
   reset() { for (const k in this.held) this.held[k] = 0; this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.down = false; },
   endFrame() { this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.justDown = false; this.pointer.justUp = false; }
 };
-const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', KeyQ: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', KeyZ: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'a', Enter: 'a', KeyK: 'a', KeyX: 'b', KeyL: 'b', ShiftLeft: 'b', ShiftRight: 'b' };
+const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', KeyQ: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', KeyZ: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'a', Enter: 'a', KeyK: 'a', KeyX: 'b', KeyL: 'b', ShiftLeft: 'b', ShiftRight: 'b', KeyC: 'c', KeyJ: 'c', ControlLeft: 'c' };
 function press(k) { if (!Input.held[k]) Input.pressed[k] = 1; Input.held[k] = 1; }
 function release(k) { Input.held[k] = 0; }
 window.addEventListener('keydown', e => {
@@ -275,7 +275,7 @@ function buildPad(spec) {
   const L = el('div', { class: spec.dpad ? 'dpad' : 'grp' });
   if (spec.dpad) { const u = mk('up', 'Haut'), l = mk('left', 'Gauche'), r = mk('right', 'Droite'), d = mk('down', 'Bas'); u.style.gridArea = '1/2'; l.style.gridArea = '2/1'; r.style.gridArea = '2/3'; d.style.gridArea = '3/2'; L.append(u, l, r, d); }
   else if (spec.left) { L.append(mk('left', 'Gauche'), mk('right', 'Droite')); }
-  const R = el('div', { class: 'grp' }); (spec.buttons || []).forEach(b => R.append(mk(b.k, b.label)));
+  const R = el('div', { class: 'grp' + ((spec.buttons || []).length >= 4 ? ' four' : '') }); (spec.buttons || []).forEach(b => R.append(mk(b.k, b.label)));
   pad.append(L); if (spec.hint) pad.append(el('div', { class: 'hint' }, spec.hint)); pad.append(R);
 }
 

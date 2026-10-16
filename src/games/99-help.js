@@ -104,9 +104,9 @@ const HELP = {
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
   duel: () => ({
-    'But du jeu': 'Gagne 2 rounds sur 3 contre le Robot en vidant sa barre de vie.',
-    'Commandes': ['◀ ▶ : bouger · SAUT : sauter', 'POING : coup rapide (8 dégâts) · PIED : coup puissant (15 dégâts) mais plus lent', 'Bas (ou S) : garde, les coups ne font presque rien'],
-    'Règle': ['60 secondes par round ; s\'il reste du temps, celui qui a le plus de vie gagne', 'Les points dépendent des dégâts, de la vie restante et du temps'],
-    'Astuce': 'Recule quand le Robot attaque, puis frappe au pied quand il se retourne.'
-  })
-};
+    'But du jeu': 'Battre les 6 adversaires (2 rounds gagnés sur 3 à chaque niveau), jusqu\'au boss Titan.',
+    'Commandes': ['◀ ▶ : bouger · SAUT : sauter · Bas : garde (les coups ne font presque rien)', 'POING : rapide ; appuie 3 fois d\'affilée pour un combo dont le 3e coup envoie valser', 'PIED : puissant mais lent · en l\'air, POING ou PIED = coup aérien', 'SPÉCIAL : quand la barre jaune est au moins à moitié (elle se remplit en donnant et en recevant des coups)'],
+    'Les combattants': ['Rex : équilibré, boule de feu à distance', 'Bruno : costaud et lent, uppercut qui envoie en l\'air', 'Kira : très rapide mais fragile, ruée qui traverse', 'Volt : robot, éclair qui tombe sur l\'adversaire'],
+    'Points': ['Chaque coup rapporte des points, multipliés par la taille du combo', 'Round gagné : bonus selon ta vie et le temps restant · PERFECT (aucun coup reçu) : +300', 'Niveau terminé : +1000 × le niveau'],
+    'Astuce': 'Garde-toi quand l\'adversaire attaque, puis riposte au pied. Saute par-dessus les boules de feu. Garde ton spécial pour finir un round.'
+  })};
