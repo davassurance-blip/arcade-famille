@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '2.1';
+const VERSION = '2.2';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));

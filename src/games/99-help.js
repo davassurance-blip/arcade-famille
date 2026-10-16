@@ -104,10 +104,12 @@ const HELP = {
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
   tennis: () => ({
-    'But du jeu': 'Gagner le tournoi : 4 adversaires, chaque match se joue en 3 jeux gagnés.',
-    'Commandes': ['◀ ▶ ou glisse le doigt : te déplacer le long de ta ligne', 'FRAPPE : servir ; pendant l\'échange, appuie juste quand la balle arrive pour un coup puissant', 'Si tu es bien placé, la balle est renvoyée toute seule même sans appuyer', 'Maintiens ◀ ou ▶ au moment de frapper pour viser de ce côté'],
-    'Les points': ['0, 15, 30, 40 puis jeu ; à 40-40 il faut 2 points d\'écart (avantage)', 'Faute : balle hors du court · Filet : balle dans le filet · 2 rebonds : point perdu', 'Chaque point rapporte 50 + 10 par échange, un jeu 300, un match 1000 × le numéro du match'],
-    'Astuce': 'Vise loin de l\'adversaire : il court moins vite que la balle. Les coups puissants sont plus tendus et plus risqués.'
+    'But du jeu': 'Gagner le tournoi : 4 adversaires, chaque match en 3 jeux gagnés.',
+    'Se déplacer': ['Croix directionnelle (ou glisse le doigt) : tu bouges sur toute ta moitié de court, vers le filet aussi', 'Bien placé, tu renvoies la balle même sans appuyer (renvoi mou, facile à punir)'],
+    'Les coups': ['LIFTÉ (A) : la balle rebondit haut et vite, idéal pour pousser l\'adversaire au fond', 'SLICE (B) : balle basse et lente qui glisse, difficile à attaquer', 'Haut + coup : LOB, haute cloche par-dessus un adversaire monté au filet', 'Bas + coup : AMORTI, balle courte juste derrière le filet contre un adversaire resté au fond', 'Balle haute près de toi : SMASH automatique, très rapide', 'Maintiens le bouton pour CHARGER : tu ralentis mais le coup est plus fort (barre sous ton joueur)', 'Appuie pile quand la balle arrive sur toi : PARFAIT, coup plus fort', 'Maintiens ◀ ou ▶ en frappant pour viser de ce côté'],
+    'Coup droit / revers': 'Balle à ta droite = coup droit, à ta gauche = revers (un peu moins fort sauf si tu charges).',
+    'Les points': ['0, 15, 30, 40 puis jeu ; à 40-40 il faut 2 points d\'écart', 'Faute : hors du court · Filet · 2 rebonds : point perdu'],
+    'Astuce': 'Observe où est l\'adversaire : lob s\'il monte, amorti s\'il recule, et vise toujours loin de lui.'
   }),
   duel: () => ({
     'But du jeu': 'Battre les 6 adversaires (2 rounds gagnés sur 3 à chaque niveau), jusqu\'au boss Titan.',
