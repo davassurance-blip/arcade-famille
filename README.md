@@ -1,6 +1,6 @@
 # Arcade Famille
 
-Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 18 jeux, profils par âge, espace parents protégé par code.
+Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 19 jeux, profils par âge, espace parents protégé par code.
 Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 
 ## Jouer / installer
@@ -27,8 +27,9 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Blocs | 8 ans | puzzle de briques qui tombent |
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
 | Glouton | 8 ans | labyrinthe, 4 fantômes aux tactiques différentes |
+| Tennis Pop | 8 ans | court en perspective, vrais points, tournoi de 4 adversaires, 4 joueurs au choix |
 | Tour de Défense | 10 ans | poser des tours, 20 à 25 vagues, boss |
-| Duel Arena | 13 ans | combat 1 contre 1 contre une IA |
+| Duel Arena | 13 ans | jeu de combat : 4 combattants, combos, spéciaux, 6 niveaux, boss |
 
 Chaque jeu a une ampoule d'aide (but, commandes, astuces selon l'âge). Les étoiles gagnées débloquent des avatars et des couleurs ; 17 badges à collectionner.
 

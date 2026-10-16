@@ -103,6 +103,12 @@ const HELP = {
     'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
+  tennis: () => ({
+    'But du jeu': 'Gagner le tournoi : 4 adversaires, chaque match se joue en 3 jeux gagnés.',
+    'Commandes': ['◀ ▶ ou glisse le doigt : te déplacer le long de ta ligne', 'FRAPPE : servir ; pendant l\'échange, appuie juste quand la balle arrive pour un coup puissant', 'Si tu es bien placé, la balle est renvoyée toute seule même sans appuyer', 'Maintiens ◀ ou ▶ au moment de frapper pour viser de ce côté'],
+    'Les points': ['0, 15, 30, 40 puis jeu ; à 40-40 il faut 2 points d\'écart (avantage)', 'Faute : balle hors du court · Filet : balle dans le filet · 2 rebonds : point perdu', 'Chaque point rapporte 50 + 10 par échange, un jeu 300, un match 1000 × le numéro du match'],
+    'Astuce': 'Vise loin de l\'adversaire : il court moins vite que la balle. Les coups puissants sont plus tendus et plus risqués.'
+  }),
   duel: () => ({
     'But du jeu': 'Battre les 6 adversaires (2 rounds gagnés sur 3 à chaque niveau), jusqu\'au boss Titan.',
     'Commandes': ['◀ ▶ : bouger · SAUT : sauter · Bas : garde (les coups ne font presque rien)', 'POING : rapide ; appuie 3 fois d\'affilée pour un combo dont le 3e coup envoie valser', 'PIED : puissant mais lent · en l\'air, POING ou PIED = coup aérien', 'SPÉCIAL : quand la barre jaune est au moins à moitié (elle se remplit en donnant et en recevant des coups)'],
