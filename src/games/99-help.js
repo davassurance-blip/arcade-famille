@@ -105,8 +105,8 @@ const HELP = {
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
-    'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt) : tourner', 'FREIN : ralentir avant un virage serré', 'OBJET : utiliser l\'objet affiché en haut au milieu'],
-    'Les caisses « ? »': ['TURBO : gros coup de vitesse', 'MISSILE : part devant toi et fait tourner la première voiture touchée', 'HUILE : tu la lâches derrière toi', 'BOUCLIER : 8 secondes protégé, et tu roules vite même dans l\'herbe', 'ÉCLAIR : ralentit tous les autres pendant 3 secondes', 'Plus tu es loin derrière, meilleurs sont les objets'],
+    'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt) : tourner', 'FREIN : ralentir avant un virage serré', 'Pour lancer ton objet : tape sur ta voiture (ou sur la case en haut, ou le bouton OBJET)'],
+    'Les caisses « ? »': ['TURBO : gros coup de vitesse', 'MISSILE : part devant toi et fait tourner la première voiture touchée', 'HUILE : tu la lâches derrière toi', 'BOUCLIER : 8 secondes protégé, et tu roules vite même dans l\'herbe', 'ÉCLAIR : ralentit tous les autres pendant 3 secondes', 'TRIPLE MISSILE : trois missiles, un par tape', 'ÉTOILE : 6 secondes invincible et plus rapide, tu bouscules tout le monde', 'AIMANT : attire les pièces autour de toi', 'BOMBE : lancée devant, elle explose et fait tourner tous ceux qui sont près', 'GLAÇON : gèle la voiture juste devant toi', 'Plus tu es loin derrière, meilleurs sont les objets'],
     'Sur la piste': ['Pièces : chacune te rend un peu plus rapide (jusqu\'à 10)', 'Flèches jaunes : accélération gratuite', 'Flaques d\'huile : tête-à-queue', 'Dans l\'herbe tu roules deux fois moins vite'],
     'Astuce': t === 0 ? 'La voiture t\'aide à suivre la route : vise les pièces et les caisses.' : 'Garde un bouclier quand tu es en tête : les autres te visent avec leurs missiles.'
   })
