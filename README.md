@@ -27,7 +27,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Blocs | 8 ans | puzzle de briques qui tombent |
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
 | Glouton | 8 ans | labyrinthe, 4 fantômes aux tactiques différentes |
-| Kart Grand Prix | 4 ans | course vue de dessus, coupe de 3 circuits, turbos, graphismes Kenney (CC0) |
+| Kart Grand Prix | 4 ans | course en vue 3D, choix du circuit et de la voiture, caisses à objets, pièces, coupe de 3 circuits, graphismes Kenney (CC0) |
 | Tour de Défense | 10 ans | poser des tours, 20 à 25 vagues, boss |
 
 Chaque jeu a une ampoule d'aide (but, commandes, astuces selon l'âge). Les étoiles gagnées débloquent des avatars et des couleurs ; 17 badges à collectionner.

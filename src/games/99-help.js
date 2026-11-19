@@ -104,9 +104,10 @@ const HELP = {
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
   kart: t => ({
-    'But du jeu': 'Gagner la coupe : 3 circuits de 3 tours contre 3 adversaires. 1er = 10 points, 2e = 6, 3e = 4, 4e = 2.',
-    'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt à gauche / à droite) : tourner', 'FREIN : ralentir avant un virage serré', 'TURBO : gros coup de vitesse, tu en as 2 par course'],
-    'Sur la piste': ['Flèches jaunes : accélération gratuite', 'Flaques d\'huile : tête-à-queue', 'Cônes : ils te ralentissent', 'Dans l\'herbe tu roules deux fois moins vite'],
-    'Astuce': t === 0 ? 'La voiture t\'aide à suivre la route : concentre-toi sur les flèches jaunes.' : 'Garde les turbos pour les lignes droites, et regarde la mini-carte pour anticiper les virages.'
+    'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
+    'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt) : tourner', 'FREIN : ralentir avant un virage serré', 'OBJET : utiliser l\'objet affiché en haut au milieu'],
+    'Les caisses « ? »': ['TURBO : gros coup de vitesse', 'MISSILE : part devant toi et fait tourner la première voiture touchée', 'HUILE : tu la lâches derrière toi', 'BOUCLIER : 8 secondes protégé, et tu roules vite même dans l\'herbe', 'ÉCLAIR : ralentit tous les autres pendant 3 secondes', 'Plus tu es loin derrière, meilleurs sont les objets'],
+    'Sur la piste': ['Pièces : chacune te rend un peu plus rapide (jusqu\'à 10)', 'Flèches jaunes : accélération gratuite', 'Flaques d\'huile : tête-à-queue', 'Dans l\'herbe tu roules deux fois moins vite'],
+    'Astuce': t === 0 ? 'La voiture t\'aide à suivre la route : vise les pièces et les caisses.' : 'Garde un bouclier quand tu es en tête : les autres te visent avec leurs missiles.'
   })
 };
