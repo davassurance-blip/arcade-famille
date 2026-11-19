@@ -26,7 +26,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Galaxie | 8 ans | shoot'em up : armes, vagues, éclaireurs, boss d'étape |
 | Blocs | 8 ans | puzzle de briques qui tombent |
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
-| Glouton | 8 ans | labyrinthe, 4 fantômes aux tactiques différentes |
+| Glouton | 8 ans | labyrinthe à pastilles : 12 niveaux progressifs (1 fantôme au début, 4 à la fin), 4 labyrinthes, vies et cœurs à gagner |
 | Kart Grand Prix | 4 ans | course en vue 3D, choix du circuit et de la voiture, 10 objets (missiles, bombe, étoile, glaçon, aimant…), pièces, coupe de 3 circuits, graphismes Kenney (CC0) |
 | Ping-Pong | 4 ans | championnat de 3 coupes et 9 adversaires aux styles différents ; lift, coupé, effet, smash |
 | Mots Mystères | 5 ans | 12 grilles par thème ; dès le niveau 3-4 grilles pleines (15 à 30 mots, liste qui défile) et mot mystère formé par les lettres restantes |

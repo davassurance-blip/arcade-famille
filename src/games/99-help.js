@@ -80,11 +80,13 @@ const HELP = {
     'Astuce': 'Choisis un coin, garde ta plus grosse tuile dedans, et ne glisse presque jamais dans la direction opposée.'
   }),
   glouton: t => ({
-    'But du jeu': 'Manger toutes les pastilles du labyrinthe sans te faire attraper.',
-    'Commandes': ['Croix directionnelle, ou glisse le doigt', 'Le Glouton continue tout seul ; ta direction s\'applique au prochain croisement', 'Les tunnels sur les côtés ressortent de l\'autre côté'],
-    'Les fantômes': ['Rouge : te suit à la trace', 'Rose : vise devant toi pour te couper la route', 'Bleu : imprévisible', 'Orange : fonce puis se dégonfle quand il est près'],
-    'Super-pastilles': ['Les 4 grosses pastilles rendent les fantômes bleus pendant ' + (t === 2 ? '5' : '7') + ' secondes : mange-les ! 200, 400, 800 puis 1600 points', 'Quand ils clignotent, ils vont redevenir dangereux'],
-    'Bonus': 'Une cerise apparaît deux fois par niveau au milieu : 100 points × le niveau.'
+    'But du jeu': 'Manger toutes les pastilles du labyrinthe sans te faire attraper. Il y a 12 niveaux et 4 labyrinthes : le Jardin, le Manoir, le Temple et le Château.',
+    'Commandes': ['Croix directionnelle, ou glisse le doigt', 'Le Glouton continue tout seul ; ta direction s\'applique au prochain croisement, et tu peux faire demi-tour à tout moment', 'Les tunnels sur les côtés ressortent de l\'autre côté'],
+    'Les niveaux': ['Niveau 1 : un seul fantôme, lent et distrait', 'Les autres fantômes arrivent un par un : ' + (t === 2 ? '2 au niveau 2, 3 au niveau 4, 4 au niveau 6' : '2 au niveau 3, 3 au niveau 5, 4 au niveau 7'), 'À chaque niveau, ils vont un peu plus vite et les super-pastilles durent un peu moins longtemps'],
+    'Les fantômes': ['Rouge : te suit à la trace', 'Orange : fonce puis se dégonfle quand il est près', 'Rose : vise devant toi pour te couper la route', 'Bleu : essaie de te prendre à revers'],
+    'Super-pastilles': ['Les 4 grosses pastilles rendent les fantômes bleus (' + (t === 2 ? '8' : '10') + ' secondes au niveau 1, moins ensuite) : croque-les ! 200, 400, 800 puis 1600 points', 'La petite jauge sous le labyrinthe montre le temps qui reste ; quand ils clignotent, ils vont redevenir dangereux'],
+    'Gagner des vies': ['Une vie bonus tous les ' + (t === 2 ? '4000' : '3000') + ' points', 'Un cœur à attraper apparaît dans les niveaux pairs, et aussi quand il ne te reste qu\'une vie', '+1 vie en finissant les niveaux 3, 6 et 9', '5 vies au maximum : au-delà, tu gagnes 300 points'],
+    'Bonus': 'Un fruit apparaît deux fois par niveau au point de départ : cerise 100, fraise 200, orange 300, pomme 500, raisin 700, étoile 1000 points.'
   }),
   simon: () => ({
     'But du jeu': 'Répéter la suite de couleurs le plus longtemps possible.',
