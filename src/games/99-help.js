@@ -34,11 +34,12 @@ const HELP = {
     'Vies': 'Tu as 5 cœurs. Toucher un nuage en enlève un ; le sol te fait juste rebondir.'
   }),
   platform: t => ({
-    'But du jeu': 'Rejoins le drapeau rouge à la fin de chacun des 5 niveaux.',
-    'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter', 'Maintiens SAUT pour sauter plus haut, appui bref pour un petit saut'],
-    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Gros robots bleus : lents · Petits robots : plus rapides · Cubes jaunes : ils bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
-    'Objets': ['Bloc jaune « ! » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rouge : ton héros devient jaune et encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Levier au milieu du niveau = checkpoint'],
-    'Astuce': 'Tomber dans un trou coûte un cœur mais tu reprends au dernier checkpoint.'
+    'But du jeu': 'Rejoins le drapeau rouge à la fin de chacun des 5 mondes (herbe, forêt, désert, neige, nuit).',
+    'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter ; maintiens pour sauter plus haut', 'TIR : lance un cristal bleu (il faut en avoir ramassé)'],
+    'Pour monter': ['Une marche trop haute ? Cherche le ressort rouge, l\'ascenseur ou la balançoire', 'Ressort : saute dessus, il t\'envoie très haut', 'Balançoire et plateformes qui bougent : saute dessus, elles te portent de l\'autre côté du trou', 'Les étages : monte de plateforme en plateforme, le trésor est tout en haut'],
+    'Les bestioles': ['Petit robot bleu, gros robot (2 coups), sauteur orange : saute sur leur tête', 'Monstre rouge à pique : ne saute PAS dessus, lance-lui un cristal', 'Cracheur jaune sur ses caisses : évite ses boules, saute-lui dessus ou tire', 'Boule grise qui tourne : passe au bon moment'].concat(t === 2 ? ['Chauves-souris : elles volent en vague'] : []),
+    'Objets': ['Bloc jaune « ! » : tape-le par en dessous (pièce, champignon, cristaux, étoile ou cœur)', 'Champignon : tu grandis et tu encaisses un coup', 'Cristaux bleus : +3 tirs', 'Étoile : 8 secondes invincible et plus rapide, tu renverses tout', 'Cœur : +1 vie · 50 pièces = +1 vie', 'Levier = checkpoint (2 par monde)'],
+    'Astuce': 'Garde tes cristaux pour les monstres à pique et les cracheurs.'
   }),
   snake: t => ({
     'But du jeu': 'Mange les points roses pour grandir sans te cogner.',

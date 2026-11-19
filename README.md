@@ -19,7 +19,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Fusée Étoiles | 4 ans | un bouton, passe entre les nuages |
 | Jacques a dit | 4 ans | mémoire des couleurs et des sons |
 | Route Folle | 4 ans | voiture vue de dessus, trafic et essence |
-| Plateforme Pixel | 8 ans | plateforme façon Mario, 5 niveaux progressifs, blocs ?, champignon |
+| Plateforme Pixel | 8 ans | 5 mondes générés par morceaux : escaliers, étages, balançoires, ascenseurs, ressorts, piliers ; 5 héros au choix, 7 ennemis, cristaux à lancer, étoile, champignon |
 | Serpent Néon | 8 ans | snake (croix, balayage, tape près de la tête) |
 | Échecs | 8 ans | contre le Robot (3 forces) ou à deux, indice, règles par chess.js, pièces rhosgfx |
 | Casse-Briques | 8 ans | breakout : capsules, niveaux dessinés, briques spéciales, boss |
