@@ -103,4 +103,10 @@ const HELP = {
     'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
+  kart: t => ({
+    'But du jeu': 'Gagner la coupe : 3 circuits de 3 tours contre 3 adversaires. 1er = 10 points, 2e = 6, 3e = 4, 4e = 2.',
+    'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt à gauche / à droite) : tourner', 'FREIN : ralentir avant un virage serré', 'TURBO : gros coup de vitesse, tu en as 2 par course'],
+    'Sur la piste': ['Flèches jaunes : accélération gratuite', 'Flaques d\'huile : tête-à-queue', 'Cônes : ils te ralentissent', 'Dans l\'herbe tu roules deux fois moins vite'],
+    'Astuce': t === 0 ? 'La voiture t\'aide à suivre la route : concentre-toi sur les flèches jaunes.' : 'Garde les turbos pour les lignes droites, et regarde la mini-carte pour anticiper les virages.'
+  })
 };
