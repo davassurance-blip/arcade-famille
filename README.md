@@ -1,6 +1,6 @@
 # Arcade Famille
 
-Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 18 jeux, profils par âge, espace parents protégé par code.
+Petite arcade **hors ligne** pour enfants de 5 à 13 ans : 20 jeux, profils par âge, espace parents protégé par code.
 Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 
 ## Jouer / installer
@@ -27,7 +27,9 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Blocs | 8 ans | puzzle de briques qui tombent |
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
 | Glouton | 8 ans | labyrinthe, 4 fantômes aux tactiques différentes |
-| Kart Grand Prix | 4 ans | course en vue 3D, choix du circuit et de la voiture, caisses à objets, pièces, coupe de 3 circuits, graphismes Kenney (CC0) |
+| Kart Grand Prix | 4 ans | course en vue 3D, choix du circuit et de la voiture, 10 objets (missiles, bombe, étoile, glaçon, aimant…), pièces, coupe de 3 circuits, graphismes Kenney (CC0) |
+| Ping-Pong | 4 ans | table en perspective, la raquette suit le doigt, effets et smashs, 6 adversaires |
+| Mots Mystères | 5 ans | grilles générées par thème ; elles grandissent, puis diagonales et mots à l'envers, chrono |
 | Tour de Défense | 10 ans | poser des tours, 20 à 25 vagues, boss |
 
 Chaque jeu a une ampoule d'aide (but, commandes, astuces selon l'âge). Les étoiles gagnées débloquent des avatars et des couleurs ; 17 badges à collectionner.
@@ -46,4 +48,4 @@ Sources : `src/core.js` (hub, profils, espace parents, moteur), `src/games/*.js`
 
 ## Licence
 MIT — libre d'utilisation, de modification et de partage.
-Les règles des échecs viennent de [chess.js](https://github.com/jhlywa/chess.js) (Jeff Hlywa, licence BSD-2) et les pièces du jeu « rhosgfx » de RhosGFX (CC0, via Lichess) ; copies dans `src/vendor/`. Les graphismes du Kart viennent du « Racing Pack » de [Kenney](https://kenney.nl) (CC0). 2048 reprend les règles du jeu de [Gabriele Cirulli](https://github.com/gabrielecirulli/2048) (MIT).
+Les règles des échecs viennent de [chess.js](https://github.com/jhlywa/chess.js) (Jeff Hlywa, licence BSD-2) et les pièces du jeu « rhosgfx » de RhosGFX (CC0, via Lichess) ; copies dans `src/vendor/`. Les graphismes du Kart viennent du « Racing Pack » de [Kenney](https://kenney.nl) (CC0), ceux de Plateforme Pixel du « Pixel Platformer » de Kenney (CC0). 2048 reprend les règles du jeu de [Gabriele Cirulli](https://github.com/gabrielecirulli/2048) (MIT).

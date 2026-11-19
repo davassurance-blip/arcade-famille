@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; manifest-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 18 jeux, profils par âge, espace parents protégé.">
+<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 20 jeux, profils par âge, espace parents protégé.">
 <meta name="theme-color" content="#17123a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -423,7 +423,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 <script>
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '2.6';
+const VERSION = '2.7';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -3012,6 +3012,14 @@ const KART_ART = {
   grass: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAABGdBTUEAALGPC/xhBQAAAJlQTFRFKrZkLbpoLLtnKLBiK7dlK7pnK7poKrdlL8BrJ7BgKLNjK7lnL79rKLJjKbRjLbtoKrdmKbVkLb1pLr1qLLpnLr5rL8FsLb1qL8BsLr9rKbJiLr5qJ7BhKrVkLbxpLbtpKLJiK7hnLLtoJ69gLLpoKLFhJ69hLLlnK7hmKbRkKrRkKrVlKbJjKLBhK7dmKrZlKbNjKLFiJ65gTwkwgQAAAsRJREFUeNrtmotyojAUht1LL2tXq+3KYpU2bSQKCCG8/8MtAXVBki5Oy39mdvLNKDDePoUcjn8YFRWivPHiRGP1HGF/qPMyfnj2e+88KohxAk7gPxR49vakArnvb0kFvt/erkgFNsvlklEKPKxWqxtCAfFQ8pVQgD1rUjqB+F4T0AnMNppXOoFtjT7t8z3DC4hdDSvCqFykcAGV1cikWgi4AJNN5shdIHKlzwRJkwlSIC7JVdxCIAVyA9BhmO47fMPWAdaBYwV+hOegK+H6DI4WKHgb15Y7ASfgBJyAE3ACwwnsfEkqEHjeklIgXfi+nxIK6AzmohDmkwXkQpOTCYSrCokUiJpf9/p3RQIUSMrMJ2ONDU2GFHjRbKR2UC8HkALi7cDdXF2d1pHHQJ07nYEUYFsD0GE4e+2SIgWmOwM3Qa4ESEBkNnKMQBFJC3OQgEosTEACRWwBdjJSkRGFERAhy81AhqHaW1EIAaHsYAqR/fPXoErIUwu4UiyMuL9mTsAJOAEn8M8+zt/QCiw9L6AUSMscZZESCjz9LPlCKJDrJGcp6QRkHaWEZAJJHaVcN3+UCCmQHbKUY5jDssYGROAYpujelclNtY4UuDuGKVdqfloXQAFTrDJDHgOmWIUBBVJDqjIDDUMR5oE0hSpTjMDemqcIjMDcFqdEoEo4scUpClWKL4tTBhC4LE4ZYhha8hQWCpDARaHKIIXonVRF9BL4aPrSvabJfnGTSSD1vA9OSNhCFd7vGNj5/uMHdwI30ncUvJXdJC9AGATWuplkhALxY0lCKLD73Hm5ywWq9nFLJzCp+0c6gdGvCoUXYNs4/dtN5ngB3ccFKjw0cAFeIGk1cBIvMG63cBwusA5arMvJiukUOgraLdR4rO8FUkANNC/VW4A/dQixhajbQXGsAO/RwQxbigeaFyIJqZyAE3ACTqAvfwDPOEEpuiDOOQAAAABJRU5ErkJggg==',
 };
 
+/* ===== bibliothèque tierce : plat-art.js ===== */
+/* Kenney « Pixel Platformer » 1.2 — CC0 (domaine public), www.kenney.nl. Planches d'origine, non modifiées. */
+const PLAT_ART = {
+  tiles: 'data:image/png;base64,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',
+  chars: 'data:image/png;base64,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',
+  bgs: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAABIBAMAAABSEeeBAAAABGdBTUEAALGPC/xhBQAAABtQTFRFNuN39Kxm+8l7f/Cly4FeLrCC////3/b1wuPoPFAu6wAAAZlJREFUWMPtlNuJwzAQRQXBBTiogaSCQCoQqAD/qAVHFSQdBJW985SdXWtjQ7JLYO7XtfHcM6OH3W2jjg2dG3IGMIABDGAAAxjAAJ8EuI6XmvDEU9qh39dk8ZR2cruaLN5x7ViTnnnO7CtBPWe6SlBPgBElQc88hvYoAainblG6NOLdDfqi4iuUr/BH6JdCDxA782fol0JPEDvz7oplrMsaf8A41n7uTxjH2s29Gzeqb8i19K2+lPJWQAbA/SMAXRreC0gptQG5BSkvApTWTr8bkHGwDQBmLBzTFwG6RBu9sAz/A8hyCf8G4EMNjuJ/3oM2YPGYwqsJEKPm+z54AXSPI7g2YMwL14CuB1AoNcZpBHAhEKBbBuTZgoj/DRBpAB4hMsB7GALz0rRA6PkZy5SgfgGQ8T1+Br17BAQcJPAEkO8xUwniO/odlVIJWT0A5vtAnWc5ANB7jDwCzwEsAMSUhDBIPhyjATemVILml5LvecJOH5CNquBpDoZ5BSQ3aD5uQZcqYK1iQ6khAxjAAAYwgAEMYAADsL4Ay2H2+fZv0pMAAAAASUVORK5CYII=',
+};
+
 /* ===== Attrape-Fruits (dès 4 ans) ===== */
 GAMES.push({
   id: 'fruits', title: 'Attrape-Fruits', tagline: 'Panier, fruits, pas de bombes !', minAge: 4, color: '#ff9f1c',
@@ -3303,10 +3311,11 @@ GAMES.push({
 /* ===== Plateforme Pixel (dès 8 ans) — 5 niveaux générés, difficulté progressive =====
    Feel du saut : coyote time, saut mis en mémoire (jump buffer), hauteur minimale garantie,
    saut variable (maintenir = plus haut). Tuiles : 1 sol, 3 pièce, 4 piques, 5 drapeau, 6 bloc ?, 7 bloc vide, 8 checkpoint. */
+let PLAT_IMG = null;
 GAMES.push({
   id: 'platform', landscape: true, title: 'Plateforme Pixel', tagline: 'Cours, saute, attrape les pièces', minAge: 8, color: '#5ad1ff',
   icon: '<svg viewBox="0 0 64 64"><rect x="4" y="46" width="56" height="14" fill="#b5642a"/><rect x="4" y="46" width="56" height="4" fill="#3fbf4f"/><rect x="34" y="26" width="22" height="8" fill="#b5642a"/><rect x="34" y="26" width="22" height="3" fill="#3fbf4f"/><circle cx="45" cy="16" r="5" fill="#ffd23f"/><rect x="14" y="22" width="12" height="12" rx="3" fill="#ffb27a"/><rect x="13" y="18" width="14" height="6" rx="2" fill="#ff4f4f"/><rect x="15" y="34" width="10" height="10" rx="2" fill="#38e0d6"/><circle cx="18" cy="27" r="1.5" fill="#1b1540"/><circle cx="23" cy="27" r="1.5" fill="#1b1540"/></svg>',
-  howto: ['', 'Flèches pour courir, SAUT pour sauter : maintiens le bouton pour sauter plus haut ! Écrase les blobs, tape les blocs « ? » par en dessous, attrape le champignon. 5 niveaux de plus en plus durs.', 'Mode difficile : trous plus larges, piques, blobs rapides et chauves-souris. 5 niveaux.'],
+  howto: ['', 'Flèches pour courir, SAUT pour sauter : maintiens le bouton pour sauter plus haut ! Saute sur les petits robots, tape les blocs jaunes par en dessous, attrape le champignon. 5 niveaux de plus en plus durs.', 'Mode difficile : trous plus larges, piques, robots rapides et chauves-souris. 5 niveaux.'],
   pad: { left: true, buttons: [{ k: 'a', label: 'SAUT' }], big: true, hint: 'ou tape l\'écran' },
   stars: s => s >= 1500 ? 3 : s >= 800 ? 2 : s >= 300 ? 1 : 0,
   create(env, saved) {
@@ -3430,7 +3439,7 @@ GAMES.push({
         else { const ex = Math.floor((e.vx > 0 ? e.x + e.w : e.x) / TS), ey = Math.floor((e.y + e.h / 2) / TS), by = Math.floor((e.y + e.h + 2) / TS); if (solid(ex, ey) || !solid(ex, by)) { e.vx *= -1; e.x += e.vx * dt * 2; } }
         if (p.x < e.x + e.w && p.x + p.w > e.x && p.y < e.y + e.h && p.y + p.h > e.y) {
           if (p.vy > 0 && p.y + p.h < e.y + e.h * .7) { e.dead = 99; p.vy = (jumpHeld ? -520 : -400) * K; score += 50; sfx.pop(); env.vibe(40); pr.burst(e.x + e.w / 2, e.y + e.h / 2, e.k === 'bat' ? '#c084fc' : e.k === 'snail' ? '#ffd23f' : '#9dff5c', 12); }
-          else hit(e.k === 'bat' ? 'Une chauve-souris !' : e.k === 'snail' ? 'Un escargot t\'a touché !' : e.k === 'hopper' ? 'Une sauterelle !' : 'Un blob t\'a touché !');
+          else hit(e.k === 'bat' ? 'Une chauve-souris !' : e.k === 'snail' ? 'Un gros robot t\'a touché !' : e.k === 'hopper' ? 'Le cube sauteur !' : 'Un robot t\'a touché !');
         }
       }
       for (let i = pops.length - 1; i >= 0; i--) { pops[i].t -= dt; if (pops[i].t <= 0) pops.splice(i, 1); }
@@ -3438,49 +3447,60 @@ GAMES.push({
       pr.update(dt);
       env.setScore(score); env.hud('Niv. ' + (level + 1) + '/' + LEVELS + ' · ' + coins + ' pièces');
     }
+    // --- graphismes : planches « Pixel Platformer » de Kenney (CC0). Chaque tuile est agrandie une fois, sans lissage, puis réutilisée.
+    if (!PLAT_IMG) { PLAT_IMG = {}; for (const k in PLAT_ART) { const i = new Image(); i.src = PLAT_ART[k]; PLAT_IMG[k] = i; } }
+    const IMG = PLAT_IMG; let cache = {}, cacheTS = 0;
+    function spr(sheet, id, size, sx0, sy0, sw, sh) { // renvoie un canvas de la tuile à la taille demandée
+      const im = IMG[sheet]; if (!im.complete || !im.width) return null; if (cacheTS !== TS) { cache = {}; cacheTS = TS; }
+      const key = sheet + id + '_' + size + '_' + (sx0 || 0) + (sy0 || 0) + (sw || 0) + (sh || 0); let cv = cache[key]; if (cv) return cv;
+      const u = sheet === 'tiles' ? 18 : 24, cols = im.width / u; cv = document.createElement('canvas'); cv.width = cv.height = Math.max(1, Math.round(size)); const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
+      x.drawImage(im, (id % cols) * u + (sx0 || 0), Math.floor(id / cols) * u + (sy0 || 0), sw || u, sh || u, 0, 0, cv.width, cv.height); cache[key] = cv; return cv;
+    }
+    const tile = (c, id, x, y, sx0, sy0, sw, sh) => { const cv = spr('tiles', id, TS, sx0, sy0, sw, sh); if (cv) c.drawImage(cv, Math.round(x), Math.round(y)); };
+    function chr(c, id, cx, bottom, size, flip, squash) { const cv = spr('chars', id, size); if (!cv) return; c.save(); c.translate(Math.round(cx), Math.round(bottom)); c.scale(flip ? -1 : 1, 1); if (squash) c.scale(1 / squash, squash); c.drawImage(cv, -cv.width / 2, -cv.height); c.restore(); }
+    // thèmes par niveau : rangée de sol, décor de fond (colonne de départ, largeur), couleurs du ciel et du bas, petites plantes
+    const THEMES = [{ row: 0, bg: 0, bw: 4, sky: '#dff6f5', low: '#c2e3e8', deco: [124, 125, 129] }, { row: 0, bg: 6, bw: 2, sky: '#7ff0a5', low: '#2eb082', deco: [124, 125, 129, 125] }, { row: 2, bg: 4, bw: 2, sky: '#fbc97b', low: '#cb815e', deco: [127, 125] }, { row: 4, bg: 0, bw: 4, sky: '#dff6f5', low: '#c2e3e8', deco: [145, 144] }, { row: 0, bg: 0, bw: 4, sky: '#dff6f5', low: '#c2e3e8', deco: [124, 129] }];
     function draw(c) {
-      const W = env.W, H = env.H, worldH = ROWS * TS, offY = Math.max(0, (H - worldH) / 2), night = level === 4;
-      const sky = SKIES[level]; const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, sky[0]); g.addColorStop(1, sky[1]); c.fillStyle = g; c.fillRect(0, 0, W, H);
-      if (night) { c.fillStyle = '#fff'; for (let i = 0; i < 30; i++) { c.fillRect((i * 97 + 13) % W, (i * 53 + 7) % (H * .6), 2, 2); } }
-      c.fillStyle = night ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.4)'; for (let i = 0; i < 6; i++) { const x = ((i * 260 - cam * .2) % (W + 300) + W + 300) % (W + 300) - 150; c.beginPath(); c.arc(x, offY + worldH * .72, 130, Math.PI, 0); c.fill(); }
-      c.fillStyle = night ? 'rgba(120,100,200,.25)' : 'rgba(80,170,90,.35)'; for (let i = 0; i < 8; i++) { const x = ((i * 200 - cam * .45) % (W + 260) + W + 260) % (W + 260) - 130; c.beginPath(); c.arc(x, offY + worldH * .9, 90, Math.PI, 0); c.fill(); }
-      c.save(); c.translate(-Math.floor(cam), offY);
-      const cx0 = Math.max(0, Math.floor(cam / TS)), cx1 = Math.min(world.cols - 1, Math.ceil((cam + W) / TS));
-      const ground = night ? '#5b4a8a' : '#b5642a', grass = night ? '#8a7bd6' : '#3fbf4f';
+      const W = env.W, H = env.H, worldH = ROWS * TS, offY = Math.max(0, (H - worldH) / 2), night = level === 4, th = THEMES[level]; c.imageSmoothingEnabled = false;
+      // fond : ciel uni, bande d'horizon illustrée qui défile lentement, bas uni
+      const bs = Math.round(TS * 3.4), hy = Math.round(offY + worldH * .34); c.fillStyle = th.sky; c.fillRect(0, 0, W, H); c.fillStyle = th.low; c.fillRect(0, hy + bs - 1, W, H - hy - bs + 1);
+      const bgi = IMG.bgs; if (bgi.complete && bgi.width) { const off = Math.floor(cam * .22) % (bs * th.bw); for (let i = -1; i * bs - off < W; i++) { const k = ((i % th.bw) + th.bw) % th.bw; c.drawImage(bgi, (th.bg + k) * 24, 24, 24, 24, i * bs - off, hy, bs + 1, bs); } }
+      for (let i = 0; i < 5; i++) { const x = ((i * 310 - cam * .1 - t * 6) % (W + 300) + W + 300) % (W + 300) - 150, y = offY + worldH * (.08 + (i % 3) * .07); for (let k = 0; k < 3; k++) { const cv = spr('tiles', 153 + k, TS); if (cv) c.drawImage(cv, Math.round(x) + k * TS, Math.round(y)); } }
+      if (night) { c.fillStyle = 'rgba(22,16,74,.72)'; c.fillRect(0, 0, W, H); c.fillStyle = '#fff'; for (let i = 0; i < 40; i++) c.fillRect((i * 97 + 13) % W, (i * 53 + 7) % (H * .6), 2 + (i % 3 === 0), 2 + (i % 3 === 0)); c.fillStyle = '#fff6c8'; c.beginPath(); c.arc(W * .8, offY + worldH * .16, TS * .7, 0, 7); c.fill(); }
+      c.save(); c.translate(-Math.floor(cam), Math.round(offY));
+      const cx0 = Math.max(0, Math.floor(cam / TS)), cx1 = Math.min(world.cols - 1, Math.ceil((cam + W) / TS)), g0 = th.row * 20;
+      const isG = (x, y) => y >= 0 && y < ROWS && x >= 0 && x < world.cols && world.g[y][x] === 1;
       for (let cy = 0; cy < ROWS; cy++) for (let cx = cx0; cx <= cx1; cx++) {
-        const tl = world.g[cy][cx]; if (!tl) continue; const x = cx * TS, y = cy * TS;
-        if (tl === 1) { c.fillStyle = ground; c.fillRect(x, y, TS, TS); c.fillStyle = 'rgba(0,0,0,.15)'; c.fillRect(x, y + TS / 2, TS / 2, 1); c.fillRect(x + TS / 2, y, 1, TS / 2); c.fillRect(x, y + TS - 1, TS, 1); if (!solid(cx, cy - 1)) { c.fillStyle = grass; c.fillRect(x, y, TS, TS * .22); } }
-        else if (tl === 3) { const s = Math.abs(Math.sin(t * 5 + cx)); c.fillStyle = '#ffd23f'; c.beginPath(); c.ellipse(x + TS / 2, y + TS / 2, TS * .3 * (.3 + .7 * s), TS * .3, 0, 0, 7); c.fill(); c.fillStyle = '#ff9f1c'; c.beginPath(); c.ellipse(x + TS / 2, y + TS / 2, TS * .15 * (.3 + .7 * s), TS * .15, 0, 0, 7); c.fill(); }
-        else if (tl === 4) { c.fillStyle = '#6b6b8f'; for (let i = 0; i < 3; i++) { c.beginPath(); c.moveTo(x + i * TS / 3, y + TS); c.lineTo(x + (i + .5) * TS / 3, y + TS * .25); c.lineTo(x + (i + 1) * TS / 3, y + TS); c.fill(); } }
-        else if (tl === 5) { c.fillStyle = '#e8e8f0'; c.fillRect(x + TS * .45, y - TS * 1.5, TS * .1, TS * 2.5); c.fillStyle = '#ff4f9a'; c.beginPath(); c.moveTo(x + TS * .55, y - TS * 1.4); c.lineTo(x + TS * 1.3 + Math.sin(t * 6) * 3, y - TS); c.lineTo(x + TS * .55, y - TS * .6); c.fill(); }
-        else if (tl === 8) { const on = checkpoint === cx; c.fillStyle = '#e8e8f0'; c.fillRect(x + TS * .45, y - TS * .8, TS * .1, TS * 1.8); c.fillStyle = on ? '#9dff5c' : '#b9b0e6'; c.fillRect(x + TS * .55, y - TS * .75, TS * .6, TS * .4); }
-        else if (tl === 6 || tl === 7) { c.fillStyle = tl === 6 ? '#ffb020' : '#8a6a4a'; Draw.rr(c, x + 1, y + 1, TS - 2, TS - 2, 4); c.fill(); c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(x + 3, y + 3, TS - 6, 3); if (tl === 6) Draw.text(c, '?', x + TS / 2, y + TS / 2 + 1, TS * .6, '#fff'); }
+        const tl = world.g[cy][cx], x = cx * TS, y = cy * TS;
+        if (!tl) { if (cy < ROWS - 1 && world.g[cy + 1][cx] === 1 && (cx * 7 + world.L * 3) % 5 === 0 && !(cy > 0 && world.g[cy - 1][cx])) tile(c, th.deco[(cx * 13) % th.deco.length], x, y + TS * .12); continue; }
+        if (tl === 1) { const L = isG(cx - 1, cy) || cx === 0, R = isG(cx + 1, cy) || cx === world.cols - 1, top = !isG(cx, cy - 1); // bords gauche / droit / haut : on rogne la marge transparente des tuiles
+          const col = L && R ? 2 : L ? 3 : R ? 1 : 0, sx0 = col === 1 || col === 0 ? 2 : 0, sw = col === 0 ? 14 : col === 2 ? 18 : 16;
+          if (top) { if (isG(cx, cy + 1)) tile(c, g0 + 20 + col, x, y, sx0, 2, sw, 16); else tile(c, g0 + col, x, y, sx0, 2, sw, 14); } else tile(c, 120 + col, x, y, sx0, 0, sw, 18); }
+        else if (tl === 3) { const f = Math.floor(t * 6 + cx) % 4; const cv = spr('tiles', f === 1 || f === 3 ? 152 : 151, TS); if (cv) c.drawImage(cv, Math.round(x), Math.round(y + Math.sin(t * 4 + cx) * TS * .06)); }
+        else if (tl === 4) tile(c, 68, x, y)
+        else if (tl === 5) { tile(c, 131, x, y); tile(c, 131, x, y - TS); tile(c, Math.floor(t * 5) % 2 ? 112 : 111, x, y - TS * 2); }
+        else if (tl === 8) tile(c, checkpoint === cx ? 66 : 64, x, y);
+        else if (tl === 6) tile(c, 10, x, y); else if (tl === 7) tile(c, 29, x, y);
       }
-      for (const pp of pops) { const k = 1 - pp.t / .5; c.fillStyle = '#ffd23f'; c.beginPath(); c.ellipse(pp.x, pp.y - TS * .6 - k * TS * 1.2, TS * .22, TS * .28, 0, 0, 7); c.fill(); }
-      for (const it of items) { c.fillStyle = '#ff4f9a'; c.beginPath(); c.arc(it.x + it.w / 2, it.y + it.h * .45, it.w / 2, Math.PI, 0); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(it.x + it.w * .3, it.y + it.h * .3, it.w * .12, 0, 7); c.arc(it.x + it.w * .7, it.y + it.h * .25, it.w * .1, 0, 7); c.fill(); c.fillStyle = '#ffe3c0'; c.fillRect(it.x + it.w * .25, it.y + it.h * .45, it.w * .5, it.h * .5); }
+      for (const pp of pops) { const k = 1 - pp.t / .5; const cv = spr('tiles', 151, TS); if (cv) c.drawImage(cv, Math.round(pp.x - TS / 2), Math.round(pp.y - TS - k * TS * 1.2)); }
+      for (const it of items) { const cv = spr('tiles', 128, TS); if (cv) c.drawImage(cv, Math.round(it.x + it.w / 2 - TS / 2), Math.round(it.y + it.h - TS)); }
       for (const e of enemies) {
-        if (e.dead > 0 || e.x < cam - TS || e.x > cam + W + TS) continue;
-        if (e.k === 'bat') { c.fillStyle = '#c084fc'; const fl = Math.sin(t * 14 + e.ph) * e.h * .5; c.beginPath(); c.moveTo(e.x + e.w / 2, e.y + e.h / 2); c.lineTo(e.x, e.y + fl); c.lineTo(e.x + e.w * .2, e.y + e.h / 2); c.closePath(); c.fill(); c.beginPath(); c.moveTo(e.x + e.w / 2, e.y + e.h / 2); c.lineTo(e.x + e.w, e.y + fl); c.lineTo(e.x + e.w * .8, e.y + e.h / 2); c.closePath(); c.fill(); c.beginPath(); c.arc(e.x + e.w / 2, e.y + e.h / 2, e.h * .4, 0, 7); c.fill(); c.fillStyle = '#ff4f4f'; c.beginPath(); c.arc(e.x + e.w / 2 - 3, e.y + e.h / 2 - 2, 2, 0, 7); c.arc(e.x + e.w / 2 + 3, e.y + e.h / 2 - 2, 2, 0, 7); c.fill(); }
-        else if (e.k === 'snail') { const dir = Math.sign(e.vx) || 1; c.fillStyle = '#ffd23f'; c.beginPath(); c.ellipse(e.x + e.w * .5, e.y + e.h, e.w * .5, e.h * .35, 0, Math.PI, 0); c.fill(); c.fillStyle = '#ff9f1c'; c.beginPath(); c.arc(e.x + e.w * .45, e.y + e.h * .55, e.h * .42, 0, 7); c.fill(); c.strokeStyle = '#b5642a'; c.lineWidth = 2; c.beginPath(); c.arc(e.x + e.w * .45, e.y + e.h * .55, e.h * .22, 0, 5); c.stroke(); c.fillStyle = '#ffd23f'; c.beginPath(); c.arc(e.x + e.w * (dir > 0 ? .9 : .1), e.y + e.h * .7, e.h * .22, 0, 7); c.fill(); c.strokeStyle = '#ffd23f'; c.beginPath(); c.moveTo(e.x + e.w * (dir > 0 ? .95 : .05), e.y + e.h * .6); c.lineTo(e.x + e.w * (dir > 0 ? 1.05 : -.05), e.y + e.h * .3); c.stroke(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(e.x + e.w * (dir > 0 ? 1.05 : -.05), e.y + e.h * .3, 2, 0, 7); c.fill(); }
-        else if (e.k === 'hopper') { const dir = p.x > e.x ? 1 : -1, air = e.vy !== 0; c.fillStyle = '#3fbf4f'; c.beginPath(); c.ellipse(e.x + e.w / 2, e.y + e.h * .6, e.w * .45, e.h * (air ? .5 : .38), 0, 0, 7); c.fill(); c.strokeStyle = '#2f9a3f'; c.lineWidth = 3; c.beginPath(); c.moveTo(e.x + e.w * .3, e.y + e.h * .8); c.lineTo(e.x + e.w * .1, e.y + e.h * (air ? 1.2 : .95)); c.moveTo(e.x + e.w * .7, e.y + e.h * .8); c.lineTo(e.x + e.w * .9, e.y + e.h * (air ? 1.2 : .95)); c.stroke(); c.fillStyle = '#fff'; c.beginPath(); c.arc(e.x + e.w * (.5 + dir * .22), e.y + e.h * .4, e.h * .16, 0, 7); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(e.x + e.w * (.5 + dir * .26), e.y + e.h * .4, e.h * .08, 0, 7); c.fill(); }
-        else { const sq = 1 + Math.sin(t * 8 + e.ph) * .08; c.fillStyle = hard ? '#ff4f9a' : '#9b7bff'; c.beginPath(); c.ellipse(e.x + e.w / 2, e.y + e.h, e.w / 2 * sq, e.h / sq, 0, Math.PI, 0); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(e.x + e.w * .35, e.y + e.h * .5, TS * .09, 0, 7); c.arc(e.x + e.w * .65, e.y + e.h * .5, TS * .09, 0, 7); c.fill(); c.fillStyle = '#1b1540'; c.beginPath(); c.arc(e.x + e.w * .35 + Math.sign(e.vx) * 2, e.y + e.h * .5, TS * .045, 0, 7); c.arc(e.x + e.w * .65 + Math.sign(e.vx) * 2, e.y + e.h * .5, TS * .045, 0, 7); c.fill(); }
+        if (e.dead > 0 || e.x < cam - TS * 2 || e.x > cam + W + TS) continue; const f = Math.floor(t * 6 + e.ph) % 2, ex = e.x + e.w / 2, eb = e.y + e.h;
+        if (e.k === 'bat') chr(c, [24, 25, 26, 25][Math.floor(t * 10 + e.ph) % 4], ex, eb + TS * .3, TS * 1.3, e.vx > 0);
+        else if (e.k === 'snail') chr(c, 21 + f, ex, eb + TS * .08, TS * 1.25, e.vx > 0);
+        else if (e.k === 'hopper') chr(c, e.vy !== 0 ? 12 : 11, ex, eb + TS * .1, TS * 1.2, p.x > e.x, e.vy < 0 ? 1.1 : 1);
+        else chr(c, 18 + f, ex, eb + TS * .08, TS * 1.2, e.vx > 0);
       }
-      // joueur
-      if (!(inv > 0 && Math.floor(inv * 14) % 2)) {
-        c.save(); c.translate(p.x + p.w / 2, p.y); c.scale(p.face, 1);
-        const run = p.g && Math.abs(p.vx) > 30 ? Math.sin(p.anim * 2) : 0; const sq = !p.g ? (p.vy < 0 ? 1.08 : .94) : 1; c.scale(1 / sq, sq);
-        c.fillStyle = p.big ? '#ff4f9a' : '#38e0d6'; Draw.rr(c, -p.w * .4, p.h * .5, p.w * .8, p.h * .5, 4); c.fill();
-        c.fillStyle = '#1b1540'; c.fillRect(-p.w * .35, p.h * .85 + run * 3, p.w * .3, p.h * .15); c.fillRect(p.w * .05, p.h * .85 - run * 3, p.w * .3, p.h * .15);
-        c.fillStyle = '#ffb27a'; Draw.rr(c, -p.w * .45, p.h * .12, p.w * .9, p.h * .45, 5); c.fill();
-        c.fillStyle = p.big ? '#ff4f9a' : '#ff4f4f'; Draw.rr(c, -p.w * .5, 0, p.w, p.h * .2, 4); c.fill(); c.fillRect(0, p.h * .1, p.w * .7, p.h * .1);
-        c.fillStyle = '#1b1540'; c.fillRect(p.w * .05, p.h * .28, p.w * .12, p.h * .12); c.fillRect(p.w * .28, p.h * .28, p.w * .12, p.h * .12);
-        c.restore();
+      if (!(inv > 0 && Math.floor(inv * 14) % 2)) { // joueur : deux images de marche, étiré en saut
+        const moving = p.g && Math.abs(p.vx) > 30, id = (p.big ? 6 : 0) + (moving ? Math.floor(p.anim * 1.2) % 2 : (!p.g ? 1 : 0));
+        chr(c, id, p.x + p.w / 2, p.y + p.h + TS * .1, TS * 1.32, p.face > 0, !p.g ? (p.vy < 0 ? 1.08 : .95) : 1);
       }
       pr.draw(c);
       c.restore();
-      Draw.lives(c, lives, Math.max(4, lives), 22, 14);
-      if (p.big) { c.fillStyle = '#ff4f9a'; c.beginPath(); c.arc(22 + Math.max(4, lives) * 26 + 6, 24, 7, Math.PI, 0); c.fill(); }
+      const hs = 26; for (let i = 0; i < Math.max(4, lives); i++) { const cv = spr('tiles', i < lives ? 44 : 46, hs); if (cv) c.drawImage(cv, 10 + i * (hs + 2), 8); }
+      if (p.big) { const cv = spr('tiles', 128, hs); if (cv) c.drawImage(cv, 14 + Math.max(4, lives) * (hs + 2), 6); }
       if (msgT > 0) { c.globalAlpha = Math.min(1, msgT); c.lineWidth = 6; c.strokeStyle = night ? '#1b1540' : '#fff'; const fs = W < 520 ? 17 : 26; c.font = '900 ' + fs + 'px ' + getComputedStyle(document.body).getPropertyValue('--font-display'); c.textAlign = 'center'; c.textBaseline = 'middle'; c.strokeText(msg, W / 2, H * .3); Draw.text(c, msg, W / 2, H * .3, fs, night ? '#fff' : '#1b1540'); c.globalAlpha = 1; }
+      c.imageSmoothingEnabled = true;
     }
     resize();
     if (saved && typeof saved.level === 'number') { lives = clamp(saved.lives | 0, 1, 9); score = saved.score | 0; coins = saved.coins | 0; startLevel(clamp(saved.level | 0, 0, LEVELS - 1)); p.big = !!saved.big; } else startLevel(0);
@@ -4718,6 +4738,254 @@ GAMES.push({
   }
 });
 
+/* ===== Mots mystères (dès 5 ans) — grilles générées, de plus en plus grandes et tordues au fil des niveaux ===== */
+const MOTS_THEMES = {
+  'Animaux': 'CHAT CHIEN LION OURS LOUP ZEBRE TIGRE SINGE LAPIN VACHE MOUTON CHEVAL GIRAFE RENARD DAUPHIN ELEPHANT PANDA KOALA HIBOU TORTUE ANE COQ RAT',
+  'Fruits': 'POMME POIRE FRAISE BANANE CERISE ORANGE CITRON RAISIN MELON KIWI PECHE PRUNE MANGUE ANANAS ABRICOT FIGUE DATTE NOIX',
+  'École': 'LIVRE STYLO CAHIER GOMME REGLE CRAIE TABLE CLASSE CARTABLE CRAYON DICTEE LECON TROUSSE COLLE CISEAUX MAITRE ELEVE',
+  'Espace': 'LUNE SOLEIL ETOILE FUSEE COMETE PLANETE MARS TERRE SATURNE GALAXIE ORBITE ROBOT METEORE VENUS NEPTUNE COSMOS',
+  'Sport': 'FOOT TENNIS JUDO RUGBY NATATION VELO SKI BASKET COURSE BALLON BOXE GOLF SURF HOCKEY ESCRIME DANSE KARATE',
+  'Maison': 'LIT PORTE TABLE CHAISE LAMPE CANAPE FENETRE CUISINE JARDIN TAPIS MIROIR ESCALIER TOIT MUR SALON BUREAU CLE',
+  'Nature': 'ARBRE FLEUR FORET RIVIERE MONTAGNE NUAGE PLUIE NEIGE VENT PLAGE MER LAC HERBE FEUILLE ROCHER ORAGE VOLCAN',
+  'À table': 'PAIN LAIT BEURRE FROMAGE GATEAU CREPE PIZZA PATES SOUPE SALADE POULET RIZ OEUF MIEL SUCRE CHOCOLAT TARTE',
+  'Musique': 'PIANO GUITARE VIOLON FLUTE TAMBOUR CHANSON NOTE RYTHME BATTERIE HARPE TROMPETTE CONCERT MELODIE',
+  'Voyage': 'AVION TRAIN BATEAU VALISE HOTEL CARTE MUSEE METRO TAXI VOITURE BILLET CAMPING ILE PORT ROUTE'
+};
+const MOTS_BAN = ['CUL', 'CON', 'PUTE', 'BITE', 'MERDE', 'SEXE', 'CACA', 'PIPI', 'ZIZI', 'NUL', 'MORT', 'TUE'];
+GAMES.push({
+  id: 'mots', title: 'Mots Mystères', tagline: 'Retrouve les mots cachés dans la grille', minAge: 5, color: '#7c5cff',
+  icon: '<svg viewBox="0 0 64 64"><rect x="6" y="6" width="52" height="52" rx="9" fill="#2a2166"/><rect x="10" y="24" width="44" height="14" rx="7" fill="#ffd23f"/><g font-size="11" font-weight="900" text-anchor="middle" fill="#fff"><text x="18" y="20">K</text><text x="32" y="20">A</text><text x="46" y="20">P</text><text x="18" y="52">O</text><text x="32" y="52">U</text><text x="46" y="52">R</text></g><g font-size="11" font-weight="900" text-anchor="middle" fill="#1b1540"><text x="18" y="35">M</text><text x="32" y="35">O</text><text x="46" y="35">T</text></g></svg>',
+  howto: ['Pose ton doigt sur la première lettre d\'un mot et glisse jusqu\'à la dernière. Les mots sont écrits en bas !', 'Glisse du doigt sur chaque mot de la liste. Les grilles grandissent, puis les mots se cachent en diagonale et à l\'envers. Attention au chrono !', 'Mots dans les 8 directions, grilles de plus en plus grandes, chrono serré. INDICE montre une première lettre (−20 points).'],
+  pad: null,
+  stars: s => s >= 2800 ? 3 : s >= 1200 ? 2 : s >= 400 ? 1 : 0,
+  create(env, saved) {
+    const { input, sfx } = env, tier = env.tier, pr = Particles();
+    const FONT = getComputedStyle(document.body).getPropertyValue('--font-display');
+    const COLS = ['#ffd23f', '#38e0d6', '#ff4f9a', '#9dff5c', '#ff9f1c', '#8fb4ff', '#c79bff', '#ff7a6b'];
+    const MAXLV = tier === 0 ? 6 : 15;
+    let level = 1, score = 0, over = false, t = 0, N = 5, grid = [], words = [], sel = null, timeLeft = 0, timeMax = 0, doneT = 0, hint = null, hints = 3, theme = '', lastTheme = '', shake = 0, lay = null, intro = 0;
+    if (saved && saved.level) { level = clamp(saved.level | 0, 1, MAXLV); score = Math.max(0, saved.score | 0); }
+    function dirsFor() {
+      const d = [[1, 0], [0, 1]];
+      const diag = tier === 2 || (tier === 1 && level >= 3) || (tier === 0 && level >= 5), rev = (tier === 2 && level >= 3) || (tier === 1 && level >= 6);
+      if (diag) d.push([1, 1], [1, -1]);
+      if (rev) { d.push([-1, 0], [0, -1]); if (diag) d.push([-1, -1], [-1, 1]); }
+      return d;
+    }
+    function lines(g) { // toutes les lignes de la grille, pour vérifier qu'aucun mot gênant n'apparaît par hasard
+      const out = [];
+      for (let i = 0; i < N; i++) { let a = '', b = ''; for (let j = 0; j < N; j++) { a += g[i][j]; b += g[j][i]; } out.push(a, b); }
+      for (let k = -N + 1; k < N; k++) { let a = '', b = ''; for (let i = 0; i < N; i++) { const j = i + k; if (j >= 0 && j < N) { a += g[i][j]; b += g[i][N - 1 - j]; } } out.push(a, b); }
+      return out.concat(out.map(s => s.split('').reverse().join('')));
+    }
+    function build() {
+      N = clamp([5, 7, 8][tier] + Math.floor((level - 1) / 2), 5, [7, 10, 11][tier]);
+      const want = clamp([3, 5, 6][tier] + Math.floor(level / 2), 3, [6, 10, 12][tier]);
+      const names = Object.keys(MOTS_THEMES).filter(n => n !== lastTheme && (tier > 0 || ['Animaux', 'Fruits', 'Maison', 'Nature', 'À table'].includes(n)));
+      const maxLen = tier === 0 ? Math.min(N, level < 3 ? 4 : 5) : N, minLen = tier === 2 && level > 4 ? 4 : 3;
+      let pool = []; for (let k = 0; k < 12 && pool.length < want; k++) { const th = pick(names), pl = MOTS_THEMES[th].split(' ').filter(w => w.length <= maxLen && w.length >= minLen); if (pl.length > pool.length) { pool = pl; theme = th; } }
+      lastTheme = theme;
+      for (let i = pool.length - 1; i > 0; i--) { const j = rndi(0, i);[pool[i], pool[j]] = [pool[j], pool[i]]; }
+      pool = pool.slice(0, want).sort((a, b) => b.length - a.length);
+      const dirs = dirsFor(); grid = []; for (let y = 0; y < N; y++) grid.push(new Array(N).fill(''));
+      words = [];
+      for (const w of pool) {
+        for (let k = 0; k < 300; k++) {
+          const d = pick(dirs), L = w.length, x0 = rndi(0, N - 1), y0 = rndi(0, N - 1), x1 = x0 + d[0] * (L - 1), y1 = y0 + d[1] * (L - 1);
+          if (x1 < 0 || x1 >= N || y1 < 0 || y1 >= N) continue;
+          let ok = true; for (let i = 0; i < L && ok; i++) { const c = grid[y0 + d[1] * i][x0 + d[0] * i]; if (c && c !== w[i]) ok = false; }
+          if (!ok) continue;
+          for (let i = 0; i < L; i++) grid[y0 + d[1] * i][x0 + d[0] * i] = w[i];
+          words.push({ w, x0, y0, x1, y1, found: false, col: COLS[words.length % COLS.length], pop: 0 }); break;
+        }
+      }
+      const letters = tier === 2 && level >= 5 ? words.map(o => o.w).join('') : 'EEEEAAAIIISSNNRRTTOOLLUUDCMPGBVHFQJXYZK';
+      const base = grid.map(r => r.slice());
+      for (let k = 0; k < 30; k++) {
+        for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!base[y][x]) grid[y][x] = letters[rndi(0, letters.length - 1)];
+        const ls = lines(grid); if (!MOTS_BAN.some(b => ls.some(l => l.includes(b)))) break;
+      }
+      timeMax = tier === 0 ? 0 : Math.max(40, words.length * ([0, 26, 19][tier] - Math.min(6, level * .5))); timeLeft = timeMax;
+      hints = 3; hint = null; sel = null; doneT = 0; intro = 1.6;
+      env.save({ level, score }, 'Niveau ' + level);
+    }
+    function layout() {
+      const W = env.W, H = env.H, land = W > H * 1.15;
+      if (land) { const g = Math.min(H - 20, W * .58); lay = { land, gx: 12, gy: (H - g) / 2, g, lx: g + 28, ly: 54, lw: W - g - 40, lh: H - 84 }; }
+      else { const g = Math.min(W - 16, H * .6); lay = { land, gx: (W - g) / 2, gy: 46, g, lx: 10, ly: 46 + g + 12, lw: W - 20, lh: H - g - 66 }; }
+      lay.cs = lay.g / N;
+    }
+    const cellAt = (x, y) => { const cx = Math.floor((x - lay.gx) / lay.cs), cy = Math.floor((y - lay.gy) / lay.cs); return cx >= 0 && cx < N && cy >= 0 && cy < N ? [cx, cy] : null; };
+    const hintBox = () => ({ x: lay.land ? lay.lx : env.W - 112, y: lay.land ? 10 : 6, w: 102, h: 34 });
+    function update(dt) {
+      if (over) return; t += dt; pr.update(dt); shake = Math.max(0, shake - dt); intro = Math.max(0, intro - dt); layout();
+      for (const o of words) o.pop = Math.max(0, o.pop - dt * 2);
+      if (hint) { hint.t -= dt; if (hint.t <= 0) hint = null; }
+      if (doneT > 0) { doneT -= dt; if (doneT <= 0) { if (level >= MAXLV) { over = true; env.gameOver(score, { win: true, title: 'Champion des mots !', text: 'Tu as terminé les ' + MAXLV + ' grilles.' }); return; } level++; build(); } return; }
+      if (timeMax) { timeLeft -= dt; if (timeLeft <= 0) { over = true; env.gameOver(score, { title: 'Temps écoulé !', text: 'Tu es arrivé au niveau ' + level + '.' }); return; } if (timeLeft < 10 && Math.floor(timeLeft) !== Math.floor(timeLeft + dt)) sfx.tick(); }
+      const p = input.pointer;
+      if (p.justDown) {
+        const hb = hintBox();
+        if (p.x > hb.x && p.x < hb.x + hb.w && p.y > hb.y && p.y < hb.y + hb.h) {
+          const left = words.filter(o => !o.found); if (hints > 0 && left.length) { const o = pick(left); hint = { x: o.x0, y: o.y0, t: 2.5 }; hints--; if (tier > 0) score = Math.max(0, score - 20); sfx.ok(); } else sfx.ko();
+        } else { const c = cellAt(p.x, p.y); sel = c ? { x0: c[0], y0: c[1], x1: c[0], y1: c[1] } : null; if (c) sfx.tap(); }
+      }
+      if (sel && p.down) { // on accroche le doigt à l'une des 8 directions
+        const fx = (p.x - lay.gx) / lay.cs - .5 - sel.x0, fy = (p.y - lay.gy) / lay.cs - .5 - sel.y0, len = Math.round(Math.max(Math.abs(fx), Math.abs(fy)));
+        if (len === 0) { sel.x1 = sel.x0; sel.y1 = sel.y0; }
+        else { const a = Math.round(Math.atan2(fy, fx) / (Math.PI / 4)), dx = [1, 1, 0, -1, -1, -1, 0, 1][(a + 8) % 8], dy = [0, 1, 1, 1, 0, -1, -1, -1][(a + 8) % 8]; let L = len; while (L > 0 && (sel.x0 + dx * L < 0 || sel.x0 + dx * L >= N || sel.y0 + dy * L < 0 || sel.y0 + dy * L >= N)) L--; const nx = sel.x0 + dx * L, ny = sel.y0 + dy * L; if (nx !== sel.x1 || ny !== sel.y1) { sel.x1 = nx; sel.y1 = ny; sfx.tick(); } }
+      }
+      if (sel && p.justUp) {
+        const o = words.find(o => !o.found && ((o.x0 === sel.x0 && o.y0 === sel.y0 && o.x1 === sel.x1 && o.y1 === sel.y1) || (o.x0 === sel.x1 && o.y0 === sel.y1 && o.x1 === sel.x0 && o.y1 === sel.y0)));
+        if (o) {
+          o.found = true; o.pop = 1; score += o.w.length * 10; sfx.coin(); env.vibe(25);
+          const mx = lay.gx + ((o.x0 + o.x1) / 2 + .5) * lay.cs, my = lay.gy + ((o.y0 + o.y1) / 2 + .5) * lay.cs; pr.burst(mx, my, o.col, 16, 200);
+          if (words.every(q => q.found)) { const bonus = 50 + level * 20 + Math.round(timeLeft); score += bonus; doneT = 2; sfx.win(); env.vibe(80); for (let i = 0; i < 6; i++) pr.burst(rnd(40, env.W - 40), rnd(60, env.H * .6), pick(COLS), 14, 260); }
+        } else if (sel.x0 !== sel.x1 || sel.y0 !== sel.y1) { sfx.ko(); shake = .25; }
+        sel = null;
+      }
+      if (!p.down) sel = null;
+      env.setScore(score); env.hud('Niveau ' + level + (tier === 0 ? ' / ' + MAXLV : ''));
+    }
+    function capsule(c, x0, y0, x1, y1, col, alpha) { const cs = lay.cs; c.globalAlpha = alpha; c.strokeStyle = col; c.lineCap = 'round'; c.lineWidth = cs * .72; c.beginPath(); c.moveTo(lay.gx + (x0 + .5) * cs, lay.gy + (y0 + .5) * cs); c.lineTo(lay.gx + (x1 + .5) * cs + .01, lay.gy + (y1 + .5) * cs); c.stroke(); c.globalAlpha = 1; c.lineCap = 'butt'; }
+    function draw(c) {
+      const W = env.W, H = env.H; if (!lay) layout(); const cs = lay.cs;
+      const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#2b1f6b'); bg.addColorStop(1, '#17123a'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+      c.fillStyle = 'rgba(255,255,255,.04)'; for (let i = 0; i < 14; i++) { const x = (i * 97 + t * 8) % (W + 80) - 40, y = (i * 61) % H; Draw.text(c, 'ABCDEFGHIJKLMNOP'[i], x, y, 46, 'rgba(255,255,255,.045)'); }
+      // bandeau : thème + chrono
+      Draw.text(c, theme.toUpperCase(), lay.land ? lay.lx + 112 : 12, lay.land ? 27 : 23, 16, '#ffd23f', 'left');
+      if (timeMax) { const bw = lay.land ? lay.lw : W - 250, bx = lay.land ? lay.lx : 120, by = lay.land ? H - 14 : 18, f = clamp(timeLeft / timeMax, 0, 1); if (bw > 40) { c.fillStyle = 'rgba(255,255,255,.14)'; Draw.rr(c, bx, by, bw, 10, 5); c.fill(); c.fillStyle = f < .25 ? '#ff4f4f' : f < .5 ? '#ff9f1c' : '#9dff5c'; if (f > .02) { Draw.rr(c, bx, by, bw * f, 10, 5); c.fill(); } } }
+      const hb = hintBox(); c.fillStyle = hints > 0 ? '#ffd23f' : 'rgba(255,255,255,.18)'; Draw.rr(c, hb.x, hb.y, hb.w, hb.h, 17); c.fill(); Draw.text(c, 'INDICE ' + '●'.repeat(hints), hb.x + hb.w / 2, hb.y + hb.h / 2 + 1, 13, hints > 0 ? '#1b1540' : 'rgba(255,255,255,.5)');
+      // grille
+      const sx = shake > 0 ? Math.sin(t * 70) * 5 * (shake / .25) : 0; c.save(); c.translate(sx, 0);
+      c.fillStyle = '#fff8ec'; Draw.rr(c, lay.gx - 4, lay.gy - 4, lay.g + 8, lay.g + 8, 16); c.fill();
+      c.fillStyle = 'rgba(27,21,64,.05)'; for (let y = 0; y < N; y++) for (let x = (y % 2); x < N; x += 2) c.fillRect(lay.gx + x * cs, lay.gy + y * cs, cs, cs);
+      for (const o of words) if (o.found) capsule(c, o.x0, o.y0, o.x1, o.y1, o.col, .62);
+      if (sel) capsule(c, sel.x0, sel.y0, sel.x1, sel.y1, '#7c5cff', .5);
+      if (hint) { c.strokeStyle = '#ff4f9a'; c.lineWidth = 4; c.beginPath(); c.arc(lay.gx + (hint.x + .5) * cs, lay.gy + (hint.y + .5) * cs, cs * (.42 + Math.sin(t * 10) * .06), 0, 7); c.stroke(); }
+      c.font = '900 ' + Math.round(cs * .56) + 'px ' + FONT; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#1b1540';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) c.fillText(grid[y][x], lay.gx + (x + .5) * cs, lay.gy + (y + .54) * cs);
+      c.restore();
+      // liste des mots
+      const cols = lay.land ? (words.length > 7 ? 2 : 1) : (lay.lw > 520 ? 4 : words.length > 8 ? 3 : 2), rows = Math.ceil(words.length / cols), rh = Math.min(46, lay.lh / rows), cw = lay.lw / cols;
+      words.forEach((o, i) => {
+        const x = lay.lx + (i % cols) * cw, y = lay.ly + Math.floor(i / cols) * rh, fs = Math.min(rh * .56, cw / (Math.max(6, o.w.length) * .68)) * (1 + o.pop * .25);
+        c.fillStyle = o.found ? o.col : 'rgba(255,255,255,.1)'; Draw.rr(c, x + 3, y + 3, cw - 6, rh - 6, Math.min(12, rh * .3)); c.fill();
+        Draw.text(c, o.w, x + cw / 2, y + rh / 2 + 1, fs, o.found ? '#1b1540' : '#fff');
+        if (o.found) { const tw = c.measureText(o.w).width; c.strokeStyle = '#1b1540'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(x + cw / 2 - tw / 2 - 4, y + rh / 2); c.lineTo(x + cw / 2 + tw / 2 + 4, y + rh / 2); c.stroke(); }
+      });
+      pr.draw(c);
+      const banner = (txt, sub) => { c.fillStyle = 'rgba(23,18,58,.82)'; c.fillRect(0, lay.gy + lay.g / 2 - 46, W, 92); Draw.text(c, txt, W / 2, lay.gy + lay.g / 2 - (sub ? 12 : 0), Math.min(34, W / 12), '#ffd23f'); if (sub) Draw.text(c, sub, W / 2, lay.gy + lay.g / 2 + 22, 15, '#fff', 'center', 700); };
+      if (doneT > 0) banner(level >= MAXLV ? 'Bravo !' : 'Niveau ' + level + ' réussi !', level >= MAXLV ? '' : 'Grille suivante…');
+      else if (intro > 0) { c.globalAlpha = Math.min(1, intro * 2); const d = dirsFor().length; banner('Niveau ' + level, d <= 2 ? 'Mots vers la droite et vers le bas' : d <= 4 ? 'Attention : mots en diagonale !' : 'Dans tous les sens, même à l\'envers !'); c.globalAlpha = 1; }
+    }
+    build();
+    return { update, draw, dbg: () => ({ words, grid, N, lay, level, score }) };
+  }
+});
+
+/* ===== Ping-Pong (dès 4 ans) — table vue en perspective, la raquette suit le doigt ===== */
+const PING_FOES = [['Pipo', '#ffb347', '#e8452c'], ['Lila', '#f6c9a0', '#7c5cff'], ['Max', '#d9a066', '#3fbf4f'], ['Zoé', '#f6c9a0', '#ff4f9a'], ['Kenji', '#eac086', '#38a0e0'], ['Maître Ping', '#e0c9a6', '#ffd23f']];
+GAMES.push({
+  id: 'ping', title: 'Ping-Pong', tagline: 'Renvoie la balle et bats 6 adversaires', minAge: 4, color: '#2bb673',
+  icon: '<svg viewBox="0 0 64 64"><rect x="4" y="34" width="56" height="20" rx="4" fill="#1f8f5a"/><path d="M4 44h56M32 34v20" stroke="#fff" stroke-width="2"/><circle cx="24" cy="22" r="14" fill="#e8452c" stroke="#1b1540" stroke-width="3"/><rect x="32" y="30" width="7" height="16" rx="3" transform="rotate(-40 35 32)" fill="#d9a066" stroke="#1b1540" stroke-width="2.5"/><circle cx="49" cy="16" r="6" fill="#fff" stroke="#1b1540" stroke-width="2.5"/></svg>',
+  howto: ['Glisse ton doigt : la raquette le suit. Mets-la devant la balle, elle repart toute seule !', 'La raquette suit ton doigt. Touche la balle avec le bord de la raquette pour l\'envoyer sur le côté. Bouge vite au moment de frapper : SMASH !', 'Vise les coins avec le bord de la raquette et smashe en bougeant vite. 6 adversaires de plus en plus rapides.'],
+  pad: { left: true, hint: 'ou glisse le doigt' },
+  stars: s => s >= 800 ? 3 : s >= 400 ? 2 : s >= 150 ? 1 : 0,
+  create(env, saved) {
+    const { input, sfx } = env, tier = env.tier, pr = Particles();
+    const FONT = getComputedStyle(document.body).getPropertyValue('--font-display');
+    const HW = [.36, .27, .23][tier], HWC = .24, GOAL = tier === 0 ? 5 : 7, UB = .72;
+    let level = 1, score = 0, over = false, t = 0, me = 0, foe = 0, px = 0, pv = 0, cx = 0, cTarget = 0, ball = null, wait = 1.2, server = 0, rally = 0, msg = '', msgT = 0, swingP = 0, swingC = 0, matchT = 0, lastPx = 0, trail = [], foeMood = 0, best = 0;
+    if (saved && saved.level) { level = clamp(saved.level | 0, 1, 6); score = Math.max(0, saved.score | 0); }
+    const G = {}; // géométrie de l'écran
+    function geo() { const W = env.W, H = env.H, land = W > H; G.wn = land ? Math.min(W * .34, H * .62) : Math.min(W * .47, H * .4); G.land = land; G.yn = H * (land ? .8 : .82); G.yf = H * (land ? .4 : .36); G.D = 1.15; const sf = 1 / (1 + G.D); G.yh = (G.yf - sf * G.yn) / (1 - sf); }
+    const P = (x, y, h) => { const s = 1 / (1 + (1 - y) * G.D); return { x: env.W / 2 + x * G.wn * s, y: G.yh + (G.yn - G.yh) * s - (h || 0) * G.wn * 1.5 * s, s }; };
+    const say = (m, d) => { msg = m; msgT = d || 1.2; };
+    function shoot(fromMe, x0, x1, T, smash) { ball = { fromMe, x0, y0: fromMe ? 1.03 : -.03, x1, y1: fromMe ? -.03 : 1.03, T, u: 0, smash, bounced: false, dead: 0 }; if (fromMe) { const e = [.5, .42, .36][tier] * Math.max(.6, 1.1 - level * .1) * (smash ? 1.8 : 1); cTarget = x1 + rnd(-e, e); } }
+    function serve() { rally = 0; const T = [1.7, 1.35, 1.15][tier]; if (server === 0) shoot(true, px, clamp(px * .3 + rnd(-.3, .3), -.7, .7), T); else shoot(false, cx, clamp(rnd(-.5, .5), -.8, .8), T); sfx.pop(); if (server === 0) swingP = .2; else swingC = .2; }
+    function point(mine) {
+      if (mine) { me++; score += 10 + Math.min(20, rally * 2); sfx.coin(); foeMood = -1.5; say(rally >= 6 ? 'Quel échange !' : pick(['Point !', 'Bien joué !', 'Bravo !'])); } else { foe++; sfx.ko(); env.vibe(80); foeMood = 1.5; say('Point pour ' + PING_FOES[level - 1][0]); }
+      best = Math.max(best, rally); ball = null; wait = 1.3; if ((me + foe) % 2 === 0) server = 1 - server;
+      if (me >= GOAL || foe >= GOAL) matchT = 2.2;
+    }
+    function update(dt) {
+      if (over) return; t += dt; geo(); pr.update(dt); msgT = Math.max(0, msgT - dt); swingP = Math.max(0, swingP - dt); swingC = Math.max(0, swingC - dt); foeMood -= Math.sign(foeMood) * Math.min(Math.abs(foeMood), dt);
+      // raquette du joueur : le doigt, ou les flèches
+      const k = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0);
+      if (k) px += k * 2.6 * dt; else if (input.pointer.down) px = (input.pointer.x - env.W / 2) / G.wn;
+      px = clamp(px, -1.25, 1.25); pv = pv * .6 + ((px - lastPx) / Math.max(dt, .001)) * .4; lastPx = px;
+      if (matchT > 0) { matchT -= dt; if (matchT <= 0) { if (me >= GOAL) { score += 100 * level; if (level >= 6) { over = true; env.gameOver(score, { win: true, title: 'Champion !', text: 'Tu as battu les 6 adversaires.' }); return; } level++; me = 0; foe = 0; server = 0; wait = 1.6; say('Adversaire suivant : ' + PING_FOES[level - 1][0], 1.6); env.save({ level, score }, 'Adversaire ' + level); } else { over = true; env.gameOver(score, { title: 'Match perdu', text: PING_FOES[level - 1][0] + ' gagne ' + foe + ' à ' + me + '.' }); return; } } }
+      else if (!ball) { wait -= dt; if (server === 1) cx += clamp(0 - cx, -1, 1) * dt * 2; if (wait <= 0) serve(); }
+      // adversaire
+      const vc = [1, 1.35, 1.6][tier] + level * .12;
+      if (ball && ball.fromMe && !ball.dead) cx += clamp(cTarget - cx, -vc * dt, vc * dt); else if (ball && !ball.dead) cx += clamp(0 - cx, -vc * .4 * dt, vc * .4 * dt);
+      if (ball) {
+        const b = ball, pu = b.u; b.u += dt / b.T; b.x = b.x0 + (b.x1 - b.x0) * b.u; b.y = b.y0 + (b.y1 - b.y0) * b.u;
+        const u = Math.min(b.u, 1.6); b.h = u < UB ? .12 * (1 - u / UB) + 4 * .2 * (u / UB) * (1 - u / UB) : Math.max(0, 4 * .15 * ((u - UB) / (1 - UB)) * (1.25 - (u - UB) / (1 - UB)));
+        trail.push({ x: b.x, y: b.y, h: b.h }); if (trail.length > 7) trail.shift();
+        if (pu < UB && b.u >= UB) { sfx.tick(); const q = P(b.x, b.y, 0); pr.burst(q.x, q.y, '#ffffff', 4, 60); }
+        if (b.dead) { b.dead -= dt; if (b.dead <= 0) point(b.fromMe); }
+        else if (b.u >= 1) {
+          if (b.fromMe) { // à l'adversaire de renvoyer
+            if (Math.abs(cx - b.x1) < HWC) { rally++; swingC = .2; sfx.pop(); const spread = Math.min(.9, (tier === 0 ? .35 : .5) + level * .07); shoot(false, b.x1, clamp(rnd(-spread, spread), -.9, .9), Math.max(.6, [1.6, 1.25, 1.05][tier] - level * .05 - rally * .012)); }
+            else b.dead = .45;
+          } else if (Math.abs(px - b.x1) < HW + .04) { // à moi
+            rally++; swingP = .2; const off = clamp((b.x1 - px) / HW, -1, 1), smash = tier > 0 && Math.abs(pv) > 2.2;
+            const x1 = clamp(b.x1 * .25 + off * (tier === 0 ? .55 : .85) + clamp(pv * .12, -.3, .3), -.92, .92);
+            shoot(true, b.x1, x1, Math.max(.5, [1.5, 1.15, .98][tier] - rally * .015) / (smash ? 1.4 : 1), smash);
+            if (smash) { sfx.punch(); say('SMASH !', .7); env.vibe(40); const q = P(b.x1, 1, .1); pr.burst(q.x, q.y, '#ffd23f', 12, 240); } else { sfx.pop(); env.vibe(12); }
+          } else b.dead = .45;
+        }
+      }
+      env.setScore(score); env.hud('Adversaire ' + level + '/6 · ' + me + ' – ' + foe);
+    }
+    function paddle(c, q, r, col, up, swing) { c.save(); c.translate(q.x, q.y); c.rotate((up ? 1 : -1) * swing * 2.5); c.fillStyle = '#d9a066'; c.strokeStyle = '#1b1540'; c.lineWidth = Math.max(1.5, r * .09); Draw.rr(c, -r * .17, up ? r * .7 : -r * 1.9, r * .34, r * 1.2, r * .12); c.fill(); c.stroke(); c.fillStyle = col; c.beginPath(); c.ellipse(0, 0, r, r * (up ? .98 : .8), 0, 0, 7); c.fill(); c.stroke(); c.fillStyle = 'rgba(255,255,255,.22)'; c.beginPath(); c.ellipse(-r * .3, -r * .3, r * .35, r * .22, -.6, 0, 7); c.fill(); c.restore(); }
+    function drawBall(c) { const b = ball; if (!b) return; const sh = P(b.x, b.y, 0), q = P(b.x, b.y, b.h), r = Math.max(4, G.wn * .05 * q.s); if (b.y > -.05 && b.y < 1.05 && Math.abs(b.x) < 1.05) { c.fillStyle = 'rgba(0,0,0,.3)'; c.beginPath(); c.ellipse(sh.x, sh.y, r * 1.1, r * .45, 0, 0, 7); c.fill(); }
+      trail.forEach((p, i) => { const w = P(p.x, p.y, p.h); c.fillStyle = b.smash ? 'rgba(255,160,30,' + i * .07 + ')' : 'rgba(255,255,255,' + i * .045 + ')'; c.beginPath(); c.arc(w.x, w.y, r * (.4 + i * .08), 0, 7); c.fill(); });
+      c.fillStyle = b.smash ? '#ffd23f' : '#fff'; c.strokeStyle = '#1b1540'; c.lineWidth = Math.max(1.5, r * .22); c.beginPath(); c.arc(q.x, q.y, r, 0, 7); c.fill(); c.stroke(); }
+    function draw(c) {
+      const W = env.W, H = env.H; if (!G.wn) geo(); const foeD = PING_FOES[level - 1];
+      // salle
+      const wall = c.createLinearGradient(0, 0, 0, G.yf); wall.addColorStop(0, '#3a2a8a'); wall.addColorStop(1, '#5b46c9'); c.fillStyle = wall; c.fillRect(0, 0, W, H);
+      const fy = G.yf - (G.yn - G.yf) * .12; for (let i = 0; i < 7; i++) { const x = W * (i + .5) / 7; c.fillStyle = 'rgba(255,255,255,.05)'; c.fillRect(x - W / 30, 0, W / 15, fy); }
+      c.fillStyle = '#ffd23f'; for (let i = 0; i < 9; i++) { const x = W * i / 8, y = 18 + Math.sin(i * 1.3) * 6; c.beginPath(); c.moveTo(x - 12, y - 18); c.lineTo(x + 12, y - 18); c.lineTo(x, y + 2); c.closePath(); c.fillStyle = ['#ffd23f', '#ff4f9a', '#38e0d6'][i % 3]; c.fill(); }
+      const fl = c.createLinearGradient(0, fy, 0, H); fl.addColorStop(0, '#b9773f'); fl.addColorStop(1, '#e0a05c'); c.fillStyle = fl; c.fillRect(0, fy, W, H - fy);
+      c.strokeStyle = 'rgba(0,0,0,.08)'; c.lineWidth = 2; for (let i = -8; i <= 8; i++) { c.beginPath(); c.moveTo(W / 2 + i * W * .05, fy); c.lineTo(W / 2 + i * W * .2, H); c.stroke(); }
+      // adversaire (derrière la table)
+      const fq = P(cx, -.1, 0), fr = G.wn * .2, bob = Math.sin(t * 6) * 2; c.fillStyle = 'rgba(0,0,0,.2)'; c.beginPath(); c.ellipse(fq.x, fq.y + 4, fr * 1.1, fr * .25, 0, 0, 7); c.fill();
+      c.fillStyle = foeD[2]; c.strokeStyle = '#1b1540'; c.lineWidth = 3; Draw.rr(c, fq.x - fr * .75, fq.y - fr * 1.5 + bob, fr * 1.5, fr * 1.5, fr * .4); c.fill(); c.stroke();
+      const hy = fq.y - fr * 2.05 + bob; c.fillStyle = foeD[1]; c.beginPath(); c.arc(fq.x, hy, fr * .72, 0, 7); c.fill(); c.stroke(); c.fillStyle = foeD[2]; c.fillRect(fq.x - fr * .72, hy - fr * .5, fr * 1.44, fr * .22);
+      const look = ball ? clamp((ball.x - cx) * .12, -.12, .12) * fr * 4 : 0; c.fillStyle = '#1b1540'; for (const d of [-1, 1]) { c.beginPath(); c.arc(fq.x + d * fr * .27 + look, hy + fr * .02, fr * .09, 0, 7); c.fill(); }
+      c.lineWidth = 2.5; c.beginPath(); if (foeMood > .2) c.arc(fq.x, hy + fr * .22, fr * .22, .15, Math.PI - .15); else if (foeMood < -.2) c.arc(fq.x, hy + fr * .45, fr * .2, Math.PI + .3, -.3); else { c.moveTo(fq.x - fr * .15, hy + fr * .32); c.lineTo(fq.x + fr * .15, hy + fr * .32); } c.stroke();
+      // table
+      const A = P(-1, 0), B = P(1, 0), C = P(1, 1), D = P(-1, 1), th = G.wn * .09;
+      c.fillStyle = 'rgba(0,0,0,.25)'; c.beginPath(); c.ellipse(W / 2, G.yn + th * 2.6, G.wn * 1.05, th * 1.2, 0, 0, 7); c.fill();
+      c.fillStyle = '#2a2166'; c.fillRect(D.x + G.wn * .12, D.y, G.wn * .1, th * 2.6); c.fillRect(C.x - G.wn * .22, C.y, G.wn * .1, th * 2.6);
+      c.fillStyle = '#145c3b'; c.beginPath(); c.moveTo(D.x, D.y); c.lineTo(C.x, C.y); c.lineTo(C.x, C.y + th); c.lineTo(D.x, D.y + th); c.closePath(); c.fill();
+      const tg = c.createLinearGradient(0, A.y, 0, D.y); tg.addColorStop(0, '#1f8f5a'); tg.addColorStop(1, '#2bb673'); c.fillStyle = tg; c.beginPath(); c.moveTo(A.x, A.y); c.lineTo(B.x, B.y); c.lineTo(C.x, C.y); c.lineTo(D.x, D.y); c.closePath(); c.fill();
+      c.strokeStyle = '#fff'; c.lineWidth = 3; c.stroke(); const m0 = P(0, 0), m1 = P(0, 1); c.lineWidth = 2; c.beginPath(); c.moveTo(m0.x, m0.y); c.lineTo(m1.x, m1.y); c.stroke();
+      paddle(c, P(cx, -.03, .1), G.wn * HWC * .5, foeD[2], false, swingC);
+      if (ball && ball.y < .5) drawBall(c);
+      const n0 = P(-1.08, .5), n1 = P(1.08, .5), nh = G.wn * .085; c.fillStyle = 'rgba(255,255,255,.28)'; c.fillRect(n0.x, n0.y - nh, n1.x - n0.x, nh); c.strokeStyle = 'rgba(27,21,64,.25)'; c.lineWidth = 1; for (let x = n0.x; x < n1.x; x += 7) { c.beginPath(); c.moveTo(x, n0.y - nh); c.lineTo(x, n0.y); c.stroke(); } c.fillStyle = '#fff'; c.fillRect(n0.x, n0.y - nh - 3, n1.x - n0.x, 4); c.fillStyle = '#1b1540'; c.fillRect(n0.x - 3, n0.y - nh - 4, 5, nh + 8); c.fillRect(n1.x - 2, n0.y - nh - 4, 5, nh + 8);
+      if (ball && ball.y >= .5) drawBall(c);
+      c.globalAlpha = .93; paddle(c, P(px, 1.04, .07), G.wn * HW * .98, '#e8452c', true, swingP); c.globalAlpha = 1;
+      pr.draw(c);
+      // tableau de score
+      const sw = Math.min(230, W - 24), sx = G.land ? 12 : W / 2 - sw / 2, sy = G.land ? 10 : 34, scx = sx + sw / 2; c.fillStyle = 'rgba(23,18,58,.85)'; Draw.rr(c, sx, sy, sw, 44, 12); c.fill();
+      Draw.text(c, env.profile.name, sx + 12, sy + 22, 13, '#fff', 'left'); Draw.text(c, foeD[0], sx + sw - 12, sy + 22, 13, '#fff', 'right'); Draw.text(c, me + ' – ' + foe, scx, sy + 23, 26, '#ffd23f');
+      for (let i = 0; i < GOAL; i++) { c.fillStyle = i < me ? '#9dff5c' : 'rgba(255,255,255,.2)'; c.fillRect(sx + 8 + i * 9, sy + 36, 7, 4); c.fillStyle = i < foe ? '#ff4f9a' : 'rgba(255,255,255,.2)'; c.fillRect(sx + sw - 15 - i * 9, sy + 36, 7, 4); }
+      if (rally >= 3 && ball) Draw.text(c, 'Échange × ' + rally, scx, sy + 58, 14, '#fff');
+      const big = (txt, y, fs, col) => { c.lineWidth = 6; c.strokeStyle = '#1b1540'; c.font = '900 ' + fs + 'px ' + FONT; c.textAlign = 'center'; c.textBaseline = 'middle'; c.strokeText(txt, W / 2, y); c.fillStyle = col; c.fillText(txt, W / 2, y); };
+      if (matchT > 0) big(me >= GOAL ? 'MATCH GAGNÉ !' : 'Match perdu…', H * .5, Math.min(40, W / 10), me >= GOAL ? '#9dff5c' : '#ff4f9a');
+      else if (msgT > 0) { c.globalAlpha = Math.min(1, msgT * 3); big(msg, H * .5, Math.min(30, W / (msg.length * .6)), '#ffd23f'); c.globalAlpha = 1; }
+      else if (!ball && wait > 0) big(server === 0 ? 'À toi de servir' : 'Service de ' + foeD[0], H * .5, Math.min(22, W / 16), '#fff');
+    }
+    env.save({ level, score }, 'Adversaire ' + level);
+    return { update, draw, dbg: () => ({ ball, px, cx, me, foe, level, G, set: v => { px = v; } }) };
+  }
+});
+
 /* ===== Fiches d'aide (ampoule) — par jeu, adaptées à l'âge (tier 0 petits, 1 moyens, 2 grands) ===== */
 const HELP = {
   fruits: t => ({
@@ -4754,10 +5022,10 @@ const HELP = {
     'Vies': 'Tu as 5 cœurs. Toucher un nuage en enlève un ; le sol te fait juste rebondir.'
   }),
   platform: t => ({
-    'But du jeu': 'Rejoins le drapeau rose à la fin de chacun des 5 niveaux.',
+    'But du jeu': 'Rejoins le drapeau rouge à la fin de chacun des 5 niveaux.',
     'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter', 'Maintiens SAUT pour sauter plus haut, appui bref pour un petit saut'],
-    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Escargots : lents · Blobs : moyens · Sauterelles : elles bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
-    'Objets': ['Bloc « ? » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rose : il encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Drapeau vert au milieu du niveau = checkpoint'],
+    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Gros robots bleus : lents · Petits robots : plus rapides · Cubes jaunes : ils bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
+    'Objets': ['Bloc jaune « ! » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rouge : ton héros devient jaune et encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Levier au milieu du niveau = checkpoint'],
     'Astuce': 'Tomber dans un trou coûte un cœur mais tu reprends au dernier checkpoint.'
   }),
   snake: t => ({
@@ -4822,6 +5090,18 @@ const HELP = {
     'Les tours': ['Arc : tire vite, pas cher', 'Canon : gros dégâts de zone, lent', 'Glace : ralentit les ennemis de moitié'],
     'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
+  }),
+  mots: t => ({
+    'But du jeu': 'Retrouver dans la grille tous les mots de la liste.',
+    'Commandes': ['Pose le doigt sur la première lettre du mot', 'Glisse jusqu\'à la dernière lettre, puis lâche', 'Tu peux tracer le mot dans un sens ou dans l\'autre', 'INDICE : entoure la première lettre d\'un mot (3 par grille' + (t === 0 ? ')' : ', −20 points)')],
+    'Les niveaux': t === 0 ? ['6 grilles, de plus en plus grandes', 'Mots vers la droite et vers le bas', 'À partir de la grille 5 : des mots en diagonale', 'Pas de chrono : prends ton temps'] : ['Les grilles grandissent et il y a de plus en plus de mots', 'D\'abord vers la droite et vers le bas, puis en diagonale, puis à l\'envers', 'Le chrono est de plus en plus serré', 'Le temps qui reste donne des points bonus'],
+    'Astuce': 'Cherche d\'abord la première lettre du mot, surtout les lettres rares comme K, Z, X ou Y.'
+  }),
+  ping: t => ({
+    'But du jeu': 'Gagner le match (' + (t === 0 ? 5 : 7) + ' points) contre 6 adversaires, l\'un après l\'autre.',
+    'Commandes': ['Glisse le doigt : la raquette le suit (ou ◀ ▶)', 'Place la raquette devant la balle : elle repart toute seule'],
+    'Les coups': t === 0 ? ['Si la balle touche le côté de ta raquette, elle part sur le côté'] : ['Touche la balle avec le bord de la raquette pour viser un coin', 'Bouge vite au moment de frapper : SMASH, la balle part plus fort', 'Plus l\'échange dure, plus la balle va vite et plus le point rapporte'],
+    'Astuce': 'Envoie la balle du côté opposé à l\'adversaire : il n\'a pas le temps de traverser.'
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',

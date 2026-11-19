@@ -34,10 +34,10 @@ const HELP = {
     'Vies': 'Tu as 5 cœurs. Toucher un nuage en enlève un ; le sol te fait juste rebondir.'
   }),
   platform: t => ({
-    'But du jeu': 'Rejoins le drapeau rose à la fin de chacun des 5 niveaux.',
+    'But du jeu': 'Rejoins le drapeau rouge à la fin de chacun des 5 niveaux.',
     'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter', 'Maintiens SAUT pour sauter plus haut, appui bref pour un petit saut'],
-    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Escargots : lents · Blobs : moyens · Sauterelles : elles bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
-    'Objets': ['Bloc « ? » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rose : il encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Drapeau vert au milieu du niveau = checkpoint'],
+    'Les bestioles': ['Saute sur leur tête pour les écraser (50 points)', 'Les toucher sur le côté fait perdre un cœur', 'Gros robots bleus : lents · Petits robots : plus rapides · Cubes jaunes : ils bondissent vers toi' + (t === 2 ? ' · Chauves-souris : elles volent' : '')],
+    'Objets': ['Bloc jaune « ! » : saute dessous pour le frapper (pièce ou champignon)', 'Champignon rouge : ton héros devient jaune et encaisse un coup à ta place', '50 pièces = 1 vie en plus', 'Levier au milieu du niveau = checkpoint'],
     'Astuce': 'Tomber dans un trou coûte un cœur mais tu reprends au dernier checkpoint.'
   }),
   snake: t => ({
@@ -102,6 +102,18 @@ const HELP = {
     'Les tours': ['Arc : tire vite, pas cher', 'Canon : gros dégâts de zone, lent', 'Glace : ralentit les ennemis de moitié'],
     'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
+  }),
+  mots: t => ({
+    'But du jeu': 'Retrouver dans la grille tous les mots de la liste.',
+    'Commandes': ['Pose le doigt sur la première lettre du mot', 'Glisse jusqu\'à la dernière lettre, puis lâche', 'Tu peux tracer le mot dans un sens ou dans l\'autre', 'INDICE : entoure la première lettre d\'un mot (3 par grille' + (t === 0 ? ')' : ', −20 points)')],
+    'Les niveaux': t === 0 ? ['6 grilles, de plus en plus grandes', 'Mots vers la droite et vers le bas', 'À partir de la grille 5 : des mots en diagonale', 'Pas de chrono : prends ton temps'] : ['Les grilles grandissent et il y a de plus en plus de mots', 'D\'abord vers la droite et vers le bas, puis en diagonale, puis à l\'envers', 'Le chrono est de plus en plus serré', 'Le temps qui reste donne des points bonus'],
+    'Astuce': 'Cherche d\'abord la première lettre du mot, surtout les lettres rares comme K, Z, X ou Y.'
+  }),
+  ping: t => ({
+    'But du jeu': 'Gagner le match (' + (t === 0 ? 5 : 7) + ' points) contre 6 adversaires, l\'un après l\'autre.',
+    'Commandes': ['Glisse le doigt : la raquette le suit (ou ◀ ▶)', 'Place la raquette devant la balle : elle repart toute seule'],
+    'Les coups': t === 0 ? ['Si la balle touche le côté de ta raquette, elle part sur le côté'] : ['Touche la balle avec le bord de la raquette pour viser un coin', 'Bouge vite au moment de frapper : SMASH, la balle part plus fort', 'Plus l\'échange dure, plus la balle va vite et plus le point rapporte'],
+    'Astuce': 'Envoie la balle du côté opposé à l\'adversaire : il n\'a pas le temps de traverser.'
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
