@@ -7,18 +7,19 @@ GAMES.push({
   stars: s => s >= 300 ? 3 : s >= 150 ? 2 : s >= 50 ? 1 : 0,
   create(env) {
     const { input, sfx } = env; const tier = env.tier;
-    let y, vy, gates = [], stars = [], t = 0, dist = 0, score = 0, passed = 0, caught = 0, lives = [3, 2, 1][tier], inv = 0, over = false, nextGate = 1.2, started = false;
+    let y, vy, gates = [], stars = [], t = 0, dist = 0, score = 0, passed = 0, caught = 0, lives = 5, inv = 0, over = false, nextGate = 1.2, started = false;
     const pr = Particles();
-    const speed = [150, 210, 270][tier], gap = [250, 185, 150][tier], G = [900, 1300, 1500][tier], JUMP = [-320, -400, -430][tier];
+    const speed = [130, 165, 205][tier], gap0 = [290, 245, 215][tier], G = [800, 1000, 1150][tier], JUMP = [-300, -350, -380][tier];
+    let gap = gap0; // les passages se resserrent très doucement avec la distance
     const RX = 90;
     function update(dt) {
-      if (over) return; t += dt; const W = env.W, H = env.H; inv = Math.max(0, inv - dt); if (y == null) y = H / 2;
+      if (over) return; t += dt; const W = env.W, H = env.H; gap = Math.min(gap0, H * .58); inv = Math.max(0, inv - dt); if (y == null) y = H / 2;
       const tap = input.pressed.a || input.pressed.up || input.tap || input.pointer.justDown;
       if (tap) { started = true; vy = JUMP; sfx.jump(); pr.burst(RX - 14, y + 14, '#ff9f1c', 4, 80); }
       if (!started) { y = H / 2 + Math.sin(t * 2) * 10; return; }
       vy = (vy || 0) + G * dt; y += vy * dt; dist += speed * dt;
-      if (y < 20) { y = 20; vy = 0; } if (y > H - 30) { y = H - 30; hit(); }
-      nextGate -= dt; if (nextGate <= 0) { const gy = rnd(80 + gap / 2, H - 60 - gap / 2); gates.push({ x: W + 60, y: gy, w: 60, ok: false }); if (Math.random() < .7) stars.push({ x: W + 60 + rnd(80, 160), y: rnd(60, H - 60), ph: rnd(0, 6) }); nextGate = [2.1, 1.7, 1.45][tier]; }
+      if (y < 20) { y = 20; vy = 0; } if (y > H - 30) { y = H - 30; vy = JUMP * .7; } // le sol fait rebondir, sans perdre de vie
+      nextGate -= dt; if (nextGate <= 0) { const gy = rnd(80 + gap / 2, H - 60 - gap / 2); gates.push({ x: W + 60, y: gy, w: 60, ok: false }); if (Math.random() < .7) stars.push({ x: W + 60 + rnd(80, 160), y: rnd(60, H - 60), ph: rnd(0, 6) }); nextGate = [2.7, 2.3, 2.0][tier]; }
       for (let i = gates.length - 1; i >= 0; i--) {
         const g = gates[i]; g.x -= speed * dt; if (g.x + g.w < -20) { gates.splice(i, 1); continue; }
         if (!g.ok && g.x + g.w < RX) { g.ok = true; passed++; sfx.ok(); }
@@ -27,7 +28,7 @@ GAMES.push({
       for (let i = stars.length - 1; i >= 0; i--) { const s = stars[i]; s.x -= speed * dt; if (s.x < -20) { stars.splice(i, 1); continue; } if (Math.hypot(s.x - RX, s.y - y) < 28) { stars.splice(i, 1); caught++; sfx.coin(); pr.burst(s.x, s.y, '#ffd23f', 10); } }
       score = passed * 10 + caught * 5; pr.update(dt); env.setScore(score); env.hud('Étoiles ' + caught);
     }
-    function hit() { if (inv > 0 || over) return; lives--; inv = 1.5; sfx.hit(); env.vibe(150); pr.burst(RX, y, '#ff6a55', 16, 220); if (lives <= 0) { over = true; env.gameOver(score, { text: passed + ' passages · ' + caught + ' étoiles' }); } else { vy = JUMP * .6; } }
+    function hit() { if (inv > 0 || over) return; lives--; inv = 2.2; sfx.hit(); env.vibe(150); pr.burst(RX, y, '#ff6a55', 16, 220); if (lives <= 0) { over = true; env.gameOver(score, { text: passed + ' passages · ' + caught + ' étoiles' }); } else { vy = JUMP * .6; } }
     function draw(c) {
       const W = env.W, H = env.H; const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#1b1540'); g.addColorStop(1, '#5b3fa0'); c.fillStyle = g; c.fillRect(0, 0, W, H);
       c.fillStyle = '#fff'; for (let i = 0; i < 50; i++) { const sx = ((i * 97) - dist * (.2 + i % 3 * .15)) % (W + 20); c.globalAlpha = .3 + (i % 3) * .25; c.fillRect((sx + W + 20) % (W + 20), (i * 61) % H, 2, 2); } c.globalAlpha = 1;
@@ -42,7 +43,7 @@ GAMES.push({
         c.fillStyle = '#38e0d6'; c.beginPath(); c.arc(4, 0, 5, 0, 7); c.fill();
         c.restore();
       }
-      pr.draw(c); Draw.lives(c, lives, [3, 2, 1][tier], 22, 10);
+      pr.draw(c); Draw.lives(c, lives, 5, 22, 10);
       if (!started) Draw.text(c, 'Tape pour décoller !', W / 2, H * .3, 24, '#ffd23f');
     }
     return { update, draw };

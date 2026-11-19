@@ -226,6 +226,8 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .spad{border-radius:22px;background:color-mix(in srgb,var(--c) 45%,#1b1540);box-shadow:inset 0 -8px 0 rgba(0,0,0,.25);transition:background .08s,transform .08s,box-shadow .08s;touch-action:none}
 .spad.on{background:var(--c);transform:scale(1.04);box-shadow:0 0 30px var(--c),inset 0 -8px 0 rgba(0,0,0,.15)}
 .simon.lock .spad{pointer-events:none}
+/* État hors ligne */
+.offstate{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:999px;font-weight:800;font-size:12.5px}.offstate:empty{display:none}.offstate.ok{background:var(--lime);color:var(--ink)}.offstate.wait{background:var(--sun);color:var(--ink)}
 /* Récompenses */
 .stars{cursor:pointer}
 .card.rewards{text-align:left;max-width:460px;max-height:92%;overflow:auto}.card.rewards h2{text-align:center}.card.rewards h3{font-size:15px;margin:16px 0 8px;color:var(--sun);letter-spacing:.06em;text-transform:uppercase}

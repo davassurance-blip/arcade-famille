@@ -37,7 +37,13 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     if (!had) return; // première installation : rien à recharger
     if (window.Game && Game.active) { window.__pendingReload = apply; try { toast('Nouvelle version prête'); } catch (e) { } } else apply();
   });
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(r => { r.update().catch(() => {}); setInterval(() => r.update().catch(() => {}), 3600000); }).catch(() => {}));
+  // Témoin visible : l'appli est-elle réellement en mémoire sur cet appareil ?
+  const state = async () => { const el = document.getElementById('offline-state'); if (!el) return; let ok = false; try { ok = !!(await caches.match('./index.html')) && !!navigator.serviceWorker.controller; } catch (e) { } el.className = 'offstate ' + (ok ? 'ok' : 'wait'); el.textContent = ok ? 'Prêt hors ligne ✓' : 'Préparation du mode hors ligne… reste connecté quelques secondes'; return ok; };
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(r => { r.update().catch(() => {}); setInterval(() => r.update().catch(() => {}), 3600000); }).catch(() => {});
+    state(); navigator.serviceWorker.ready.then(() => { let n = 0; const iv = setInterval(async () => { if (await state() || ++n > 30) clearInterval(iv); }, 1000); });
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { } // demande au navigateur de ne jamais effacer l'appli
+  });
 }
 </script>"""
 reset = "<style>html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>"
@@ -48,7 +54,7 @@ page = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 19 jeux, profils par âge, espace parents protégé.">
+<meta name="description" content="Petite arcade hors ligne pour enfants de 5 à 13 ans : 17 jeux, profils par âge, espace parents protégé.">
 <meta name="theme-color" content="#17123a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -92,7 +98,7 @@ for n in (192, 512):
 manifest = {
     "name": "Arcade Famille", "short_name": "Arcade", "lang": "fr", "start_url": "./index.html", "scope": "./",
     "display": "fullscreen", "orientation": "any", "background_color": "#17123a", "theme_color": "#17123a",
-    "description": "19 jeux hors ligne pour enfants de 5 à 13 ans.",
+    "description": "17 jeux hors ligne pour enfants de 5 à 13 ans.",
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]
 }

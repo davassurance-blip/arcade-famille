@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '2.2';
+const VERSION = '2.3';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -95,7 +95,6 @@ const BADGES = [
   { id: 'pro3', n: 'Triple pro', d: '3 étoiles d\'un coup dans 3 jeux différents', t: r => r.pros >= 3 },
   { id: 'platform', n: 'Héros de la plateforme', d: 'Finir les 5 niveaux de Plateforme Pixel', t: r => r.wins.platform },
   { id: 'chess', n: 'Champion d\'échecs', d: 'Battre le Robot aux échecs', t: r => r.wins.chess },
-  { id: 'duel', n: 'Maître du Duel', d: 'Battre le Robot en Duel Arena', t: r => r.wins.duel },
   { id: 'g2048', n: '2048 !', d: 'Atteindre la tuile 2048', t: r => r.wins.g2048 },
   { id: 'defense', n: 'Général', d: 'Tenir toutes les vagues de Tour de Défense', t: r => r.wins.defense },
   { id: 'galaxy', n: 'As de l\'espace', d: '1 800 points dans Galaxie', t: r => (r.scores.galaxy || 0) >= 1800 },

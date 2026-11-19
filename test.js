@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 const path = require('path');
 (async () => {
-  const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(() => chromium.launch());
+  const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1243/chrome-linux64/chrome' }).catch(() => chromium.launch());
   const ctx = await browser.newContext({ viewport: { width: 390, height: 780 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   const page = await ctx.newPage();
   const errors = [];
@@ -59,7 +59,7 @@ const path = require('path');
   await page.click('#i-go'); await page.keyboard.down('ArrowRight'); await page.waitForTimeout(900); await page.keyboard.press('Space'); await page.waitForTimeout(600); await page.keyboard.up('ArrowRight');
   await page.screenshot({ path: 'dist/shot-tablet-platform.png' });
   await page.evaluate(() => quitGame());
-  await page.evaluate(() => launch(GAMES.find(x => x.id === 'duel')));
+  await page.evaluate(() => launch(GAMES.find(x => x.id === 'galaxy')));
   await page.click('#i-go'); await page.keyboard.down('ArrowRight'); await page.waitForTimeout(700); await page.keyboard.up('ArrowRight'); await page.keyboard.press('KeyX'); await page.waitForTimeout(250);
   await page.screenshot({ path: 'dist/shot-tablet-duel.png' });
   console.log('ERRORS:', errors.length ? errors.join('\n') : 'none');

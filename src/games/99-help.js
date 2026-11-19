@@ -31,7 +31,7 @@ const HELP = {
     'But du jeu': 'Fais voler la fusée entre les nuages le plus longtemps possible.',
     'Commandes': ['Tape sur l\'écran (ou HOP) : la fusée monte', 'Ne touche à rien : elle redescend'],
     'Points': ['Chaque passage entre deux nuages = 10 points', 'Chaque étoile attrapée = 5 points'],
-    'Vies': t === 0 ? 'Tu as 3 cœurs.' : t === 1 ? 'Tu as 2 cœurs.' : 'Une seule vie : sois précis !'
+    'Vies': 'Tu as 5 cœurs. Toucher un nuage en enlève un ; le sol te fait juste rebondir.'
   }),
   platform: t => ({
     'But du jeu': 'Rejoins le drapeau rose à la fin de chacun des 5 niveaux.',
@@ -103,18 +103,4 @@ const HELP = {
     'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
-  tennis: () => ({
-    'But du jeu': 'Gagner le tournoi : 4 adversaires, chaque match en 3 jeux gagnés.',
-    'Se déplacer': ['Croix directionnelle (ou glisse le doigt) : tu bouges sur toute ta moitié de court, vers le filet aussi', 'Bien placé, tu renvoies la balle même sans appuyer (renvoi mou, facile à punir)'],
-    'Les coups': ['LIFTÉ (A) : la balle rebondit haut et vite, idéal pour pousser l\'adversaire au fond', 'SLICE (B) : balle basse et lente qui glisse, difficile à attaquer', 'Haut + coup : LOB, haute cloche par-dessus un adversaire monté au filet', 'Bas + coup : AMORTI, balle courte juste derrière le filet contre un adversaire resté au fond', 'Balle haute près de toi : SMASH automatique, très rapide', 'Maintiens le bouton pour CHARGER : tu ralentis mais le coup est plus fort (barre sous ton joueur)', 'Appuie pile quand la balle arrive sur toi : PARFAIT, coup plus fort', 'Maintiens ◀ ou ▶ en frappant pour viser de ce côté'],
-    'Coup droit / revers': 'Balle à ta droite = coup droit, à ta gauche = revers (un peu moins fort sauf si tu charges).',
-    'Les points': ['0, 15, 30, 40 puis jeu ; à 40-40 il faut 2 points d\'écart', 'Faute : hors du court · Filet · 2 rebonds : point perdu'],
-    'Astuce': 'Observe où est l\'adversaire : lob s\'il monte, amorti s\'il recule, et vise toujours loin de lui.'
-  }),
-  duel: () => ({
-    'But du jeu': 'Battre les 6 adversaires (2 rounds gagnés sur 3 à chaque niveau), jusqu\'au boss Titan.',
-    'Commandes': ['◀ ▶ : bouger · SAUT : sauter · Bas : garde (les coups ne font presque rien)', 'POING : rapide ; appuie 3 fois d\'affilée pour un combo dont le 3e coup envoie valser', 'PIED : puissant mais lent · en l\'air, POING ou PIED = coup aérien', 'SPÉCIAL : quand la barre jaune est au moins à moitié (elle se remplit en donnant et en recevant des coups)'],
-    'Les combattants': ['Rex : équilibré, boule de feu à distance', 'Bruno : costaud et lent, uppercut qui envoie en l\'air', 'Kira : très rapide mais fragile, ruée qui traverse', 'Volt : robot, éclair qui tombe sur l\'adversaire'],
-    'Points': ['Chaque coup rapporte des points, multipliés par la taille du combo', 'Round gagné : bonus selon ta vie et le temps restant · PERFECT (aucun coup reçu) : +300', 'Niveau terminé : +1000 × le niveau'],
-    'Astuce': 'Garde-toi quand l\'adversaire attaque, puis riposte au pied. Saute par-dessus les boules de feu. Garde ton spécial pour finir un round.'
-  })};
+};
