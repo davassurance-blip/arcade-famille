@@ -34,12 +34,14 @@ const HELP = {
     'Vies': 'Tu as 5 cœurs. Toucher un nuage en enlève un ; le sol te fait juste rebondir.'
   }),
   platform: t => ({
-    'But du jeu': 'Rejoins le drapeau rouge à la fin de chacun des 5 mondes (herbe, forêt, désert, neige, nuit).',
-    'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter ; maintiens pour sauter plus haut', 'TIR : lance un cristal bleu (il faut en avoir ramassé)'],
-    'Pour monter': ['Une marche trop haute ? Cherche le ressort rouge, l\'ascenseur ou la balançoire', 'Ressort : saute dessus, il t\'envoie très haut', 'Balançoire et plateformes qui bougent : saute dessus, elles te portent de l\'autre côté du trou', 'Les étages : monte de plateforme en plateforme, le trésor est tout en haut'],
-    'Les bestioles': ['Petit robot bleu, gros robot (2 coups), sauteur orange : saute sur leur tête', 'Monstre rouge à pique : ne saute PAS dessus, lance-lui un cristal', 'Cracheur jaune sur ses caisses : évite ses boules, saute-lui dessus ou tire', 'Boule grise qui tourne : passe au bon moment'].concat(t === 2 ? ['Chauves-souris : elles volent en vague'] : []),
-    'Objets': ['Bloc jaune « ! » : tape-le par en dessous (pièce, champignon, cristaux, étoile ou cœur)', 'Champignon : tu grandis et tu encaisses un coup', 'Cristaux bleus : +3 tirs', 'Étoile : 8 secondes invincible et plus rapide, tu renverses tout', 'Cœur : +1 vie · 50 pièces = +1 vie', 'Levier = checkpoint (2 par monde)'],
-    'Astuce': 'Garde tes cristaux pour les monstres à pique et les cracheurs.'
+    'But du jeu': 'Traverse les 8 mondes. Au bout de chacun, un boss garde le drapeau : bats-le !',
+    'Commandes': ['◀ ▶ pour courir', 'SAUT (ou tape l\'écran) pour sauter ; maintiens pour sauter plus haut', 'TIR : tu tires autant que tu veux (tu peux laisser le doigt dessus)', 'TIR vise tout seul les bêtes qui volent'],
+    'Les armes': ['Tu commences avec des cailloux', 'Chaque boss battu laisse une arme plus forte : boules de feu (elles rebondissent), double feu, éclairs (ils traversent), triple éclair', 'Cristaux bleus : +4 super tirs, deux fois plus forts', 'Les bêtes deviennent plus résistantes tous les deux mondes : garde tes super tirs pour les costaudes'],
+    'Les boss': ['Gros Robot : il saute, passe dessous ou saute-lui sur la tête', 'Roi Cube : il crache en éventail puis bondit', 'Reine Chauve-souris : elle plonge sur toi, tire quand elle vole', 'Pique Géant : il fonce, ne lui saute PAS dessus, tire', 'Du monde 5 au monde 8, ils reviennent en plus forts', 'Si tu perds une vie, le boss garde ses blessures'],
+    'Pour monter': ['Une marche trop haute ? Cherche le ressort rouge, l\'ascenseur ou la balançoire', 'Balançoire et plateformes qui bougent : saute dessus, elles te portent de l\'autre côté du trou'],
+    'Les bestioles': ['Petit robot, gros robot, sauteur orange : saute sur leur tête ou tire', 'Monstre rouge à pique : ne saute PAS dessus, tire', 'Cracheur jaune sur ses caisses : évite ses boules', 'Boule grise qui tourne : passe au bon moment', 'Chauves-souris : tire, ça vise tout seul'],
+    'Objets': ['Bloc jaune « ! » : tape-le par en dessous (pièce, champignon, cristaux, étoile ou cœur)', 'Champignon : tu grandis et tu encaisses un coup', 'Étoile : 8 secondes invincible et plus rapide', 'Cœur : +1 vie · 50 pièces = +1 vie', 'Levier = checkpoint (il y en a un juste avant chaque boss)'],
+    'Astuce': 'Contre un boss, reste à distance et tire en sautant par-dessus ses boules.'
   }),
   snake: t => ({
     'But du jeu': 'Mange les points roses pour grandir sans te cogner.',
@@ -99,12 +101,13 @@ const HELP = {
     'Règle': ['La jauge d\'essence baisse : attrape les bidons verts « E »', 'Les étoiles valent 50 points', t === 0 ? 'Tu as 3 cœurs : un accident en enlève un' : 'Un seul accident et c\'est fini !'],
     'Astuce': 'Regarde loin devant : les voitures lentes se voient venir de loin.'
   }),
-  defense: () => ({
-    'But du jeu': 'Empêcher les ennemis d\'atteindre la SORTIE pendant 20 vagues.',
-    'Comment jouer': ['Choisis un type de tour en bas, puis tape une case verte pour la poser (ça coûte de l\'or)', 'Tape une tour posée pour voir sa portée, puis « Améliorer » (3 niveaux)', '« Lancer » démarre la vague tout de suite (sinon elle part toute seule au bout du compte à rebours)'],
-    'Les tours': ['Arc : tire vite, pas cher', 'Canon : gros dégâts de zone, lent', 'Glace : ralentit les ennemis de moitié'],
-    'Les ennemis': ['Violets : normaux · Jaunes : rapides · Rouges : costauds', 'Un BOSS toutes les 5 vagues : il enlève 3 vies s\'il sort', 'Chaque ennemi vaincu rapporte de l\'or, et chaque vague finie un bonus'],
-    'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
+  defense: t => ({
+    'But du jeu': 'Protéger le château de la reine : aucun ennemi ne doit arriver au bout du chemin. 5 royaumes à sauver, de plus en plus grands.',
+    'Comment jouer': ['Choisis une tour, puis tape une case d\'herbe libre pour la poser (ça coûte de l\'or)', 'Tape « Lancer la vague » quand tu es prêt (sinon elle part à la fin du compte à rebours ; en avance, tu gagnes un bonus)', 'Tape une tour posée : tu vois sa portée, tu peux l\'améliorer (3 niveaux) ou la vendre (70 % de l\'or rendu)', '×2 accélère le jeu', 'Pluie de flèches : la reine blesse tous les ennemis d\'un coup (se recharge en 45 secondes)'],
+    'Les tours': ['Archer (50) : tire vite, touche tout le monde', 'Canon (90) : explosion qui touche plusieurs ennemis, mais pas ceux qui volent', 'Glace (70) : ralentit les ennemis', 'Mage (120) : éclair qui rebondit d\'un ennemi à l\'autre'],
+    'Les ennemis': ['Gobelin vert : normal · Filou jaune : très rapide', 'Chauve-souris : vole tout droit vers le château, sans suivre le chemin', 'Blindé rouge casqué : les flèches lui font peu de mal, utilise Canon ou Mage', 'Sorcier au chapeau : soigne ses voisins, vise-le vite', 'Chef à couronne : très costaud, il arrive à la dernière vague de chaque carte'],
+    'Le château': ['Il a ' + (t === 2 ? 15 : 20) + ' points de vie ; chaque ennemi qui entre en enlève 1 (Blindé 2, Chef 5)', 'À chaque nouvelle carte il est réparé, mais tes tours sont à replacer', 'Si tu perds, tu peux reprendre à la carte où tu es tombé (le score repart de zéro)'],
+    'Astuce': 'Pose tes tours dans les virages : les ennemis y passent plus longtemps. Une Glace à côté d\'un Canon, c\'est redoutable. Garde des Archers ou des Mages près du château pour les chauves-souris.'
   }),
   mots: t => ({
     'But du jeu': 'Retrouver dans la grille tous les mots de la liste' + (t === 0 ? '.' : ', puis le mot mystère.'),

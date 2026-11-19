@@ -19,7 +19,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Fusée Étoiles | 4 ans | un bouton, passe entre les nuages |
 | Jacques a dit | 4 ans | mémoire des couleurs et des sons |
 | Route Folle | 4 ans | voiture vue de dessus, trafic et essence |
-| Plateforme Pixel | 8 ans | 5 mondes générés par morceaux : escaliers, étages, balançoires, ascenseurs, ressorts, piliers ; 5 héros au choix, 7 ennemis, cristaux à lancer, étoile, champignon |
+| Plateforme Pixel | 8 ans | 8 mondes générés par morceaux (balançoires, ascenseurs, ressorts…), un boss par monde, 5 armes à gagner, 5 héros, 7 ennemis |
 | Serpent Néon | 8 ans | snake (croix, balayage, tape près de la tête) |
 | Échecs | 8 ans | contre le Robot (3 forces) ou à deux, indice, règles par chess.js, pièces rhosgfx |
 | Casse-Briques | 8 ans | breakout : capsules, niveaux dessinés, briques spéciales, boss |
@@ -31,7 +31,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Ping-Pong | 4 ans | championnat de 3 coupes et 9 adversaires aux styles différents ; lift, coupé, effet, smash |
 | Mots Mystères | 5 ans | 12 grilles par thème ; dès le niveau 3-4 grilles pleines (15 à 30 mots, liste qui défile) et mot mystère formé par les lettres restantes |
 | Sortie de Parking | 5 ans | casse-tête de voitures à glisser, 30 niveaux par âge (1 à 38 coups), indice, annuler, étoiles gardées |
-| Tour de Défense | 10 ans | poser des tours, 20 à 25 vagues, boss |
+| Tour de Défense | 10 ans | défendre le château de la reine : 5 cartes de plus en plus grandes, 21 vagues, 4 tours à améliorer ou vendre, 6 ennemis, chefs, pluie de flèches |
 
 Chaque jeu a une ampoule d'aide (but, commandes, astuces selon l'âge). Les étoiles gagnées débloquent des avatars et des couleurs ; 17 badges à collectionner.
 

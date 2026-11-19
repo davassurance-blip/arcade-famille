@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '2.10';
+const VERSION = '3.0';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -96,7 +96,7 @@ const BADGES = [
   { id: 'platform', n: 'Héros de la plateforme', d: 'Finir les 5 niveaux de Plateforme Pixel', t: r => r.wins.platform },
   { id: 'chess', n: 'Champion d\'échecs', d: 'Battre le Robot aux échecs', t: r => r.wins.chess },
   { id: 'g2048', n: '2048 !', d: 'Atteindre la tuile 2048', t: r => r.wins.g2048 },
-  { id: 'defense', n: 'Général', d: 'Tenir toutes les vagues de Tour de Défense', t: r => r.wins.defense },
+  { id: 'defense', n: 'Général', d: 'Sauver les 5 royaumes de Tour de Défense', t: r => r.wins.defense },
   { id: 'galaxy', n: 'As de l\'espace', d: '1 800 points dans Galaxie', t: r => (r.scores.galaxy || 0) >= 1800 },
   { id: 'bricks', n: 'Démolisseur', d: '1 800 points au Casse-Briques', t: r => (r.scores.bricks || 0) >= 1800 },
   { id: 'calc', n: 'Tête à calculs', d: '200 points en Calcul Éclair', t: r => (r.scores.calc || 0) >= 200 },
