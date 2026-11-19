@@ -104,16 +104,25 @@ const HELP = {
     'Astuce': 'Place les tours dans les coins du chemin : les ennemis y passent deux fois. Une tour de glace devant un canon, c\'est redoutable.'
   }),
   mots: t => ({
-    'But du jeu': 'Retrouver dans la grille tous les mots de la liste.',
-    'Commandes': ['Pose le doigt sur la première lettre du mot', 'Glisse jusqu\'à la dernière lettre, puis lâche', 'Tu peux tracer le mot dans un sens ou dans l\'autre', 'INDICE : entoure la première lettre d\'un mot (3 par grille' + (t === 0 ? ')' : ', −20 points)')],
-    'Les niveaux': t === 0 ? ['6 grilles, de plus en plus grandes', 'Mots vers la droite et vers le bas', 'À partir de la grille 5 : des mots en diagonale', 'Pas de chrono : prends ton temps'] : ['Les grilles grandissent et il y a de plus en plus de mots', 'D\'abord vers la droite et vers le bas, puis en diagonale, puis à l\'envers', 'Le chrono est de plus en plus serré', 'Le temps qui reste donne des points bonus'],
+    'But du jeu': 'Retrouver dans la grille tous les mots de la liste' + (t === 0 ? '.' : ', puis le mot mystère.'),
+    'Commandes': ['Pose le doigt sur la première lettre du mot', 'Glisse jusqu\'à la dernière lettre, puis lâche', 'Tu peux tracer le mot dans un sens ou dans l\'autre', 'La liste est longue ? Glisse-la vers le haut pour voir la suite', 'INDICE : entoure la première lettre d\'un mot (3 par grille' + (t === 0 ? ')' : ', −20 points)')],
+    'Les niveaux': t === 0 ? ['6 grilles, de plus en plus grandes', 'Mots vers la droite et vers le bas', 'À partir de la grille 5 : des mots en diagonale', 'Pas de chrono : prends ton temps'] : ['12 grilles, de ' + (t === 1 ? '7×7 à 11×11' : '8×8 à 12×12'), 'D\'abord quelques mots, puis en diagonale, puis à l\'envers', 'À partir du niveau ' + (t === 1 ? 4 : 3) + ' : grille pleine, 15 à 30 mots, la liste défile', 'Le chrono est de plus en plus serré'],
+    'Le mot mystère': t === 0 ? ['Pour les plus grands'] : ['Dans une grille pleine, presque toutes les lettres servent à un mot', 'Quand tous les mots sont trouvés, il reste quelques lettres', 'Touche-les : dans l\'ordre de lecture, elles forment le mot mystère (gros bonus)'],
     'Astuce': 'Cherche d\'abord la première lettre du mot, surtout les lettres rares comme K, Z, X ou Y.'
   }),
   ping: t => ({
-    'But du jeu': 'Gagner le match (' + (t === 0 ? 5 : 7) + ' points) contre 6 adversaires, l\'un après l\'autre.',
-    'Commandes': ['Glisse le doigt : la raquette le suit (ou ◀ ▶)', 'Place la raquette devant la balle : elle repart toute seule'],
-    'Les coups': t === 0 ? ['Si la balle touche le côté de ta raquette, elle part sur le côté'] : ['Touche la balle avec le bord de la raquette pour viser un coin', 'Bouge vite au moment de frapper : SMASH, la balle part plus fort', 'Plus l\'échange dure, plus la balle va vite et plus le point rapporte'],
-    'Astuce': 'Envoie la balle du côté opposé à l\'adversaire : il n\'a pas le temps de traverser.'
+    'But du jeu': 'Gagner le championnat : 3 coupes (Bronze, Argent, Or), chacune avec un quart, une demi et une finale. Match en ' + (t === 0 ? '4 points' : '5 points (Bronze) ou 7 points (Argent, Or)') + '.',
+    'Commandes': ['Glisse le doigt : la raquette le suit (ou ◀ ▶)', 'Place la raquette devant la balle : elle repart toute seule', 'Le bord de la raquette envoie la balle sur le côté'],
+    'Les coups': ['LIFT : glisse vers le haut en frappant (ou bouton LIFT). Balle rapide qui accélère après le rebond', 'COUPÉ : glisse vers le bas (ou bouton COUPÉ). Balle lente et basse : l\'adversaire renvoie souvent une balle haute', 'SMASH : sur une balle haute, glisse vers le haut' + (t === 0 ? ' (pour toi, il part tout seul)' : ''), 'EFFET : bouge vite sur le côté en frappant, la balle tourne'].concat(t === 0 ? [] : ['Attention : trop sur le côté, la balle sort (« Dehors ! »)']),
+    'Les adversaires': ['Ils sont de plus en plus rapides et précis, et chacun a son style (lifteur, coupeur, smasheur, effets)', 'Tu as 3 cœurs : un match perdu coûte un cœur et tu le rejoues', 'Ton championnat est gardé : tu reprends au même match, même après avoir quitté'],
+    'Astuce': 'Coupe la balle, attends la balle haute, puis smashe dans le coin vide.'
+  }),
+  parking: t => ({
+    'But du jeu': 'Faire sortir la voiture jaune par la sortie verte, à droite.',
+    'Commandes': ['Pose le doigt sur un véhicule et glisse-le', 'Une voiture ne roule que dans son sens : en avant ou en arrière', 'Camions et bus prennent 3 cases, les voitures 2'],
+    'Les boutons': ['ANNULER : reprend le dernier coup', 'REFAIRE : recommence le niveau', 'INDICE : montre le prochain bon coup' + (t === 0 ? '' : ' (plus de 2 indices : 2 étoiles au maximum)'), 'NIVEAUX : choisir un autre niveau déjà ouvert'],
+    'Les niveaux': ['30 niveaux, du plus simple au plus dur (' + (t === 0 ? '1 à 10' : t === 1 ? '3 à 24' : '6 à 38') + ' coups)', '3 étoiles si tu réussis avec le nombre de coups de l\'objectif' + (t === 0 ? ' (ou presque)' : ''), 'Tes étoiles sont gardées : tu reprends où tu t\'es arrêté', 'TERMINER (sur l\'écran des niveaux) valide tes points'],
+    'Astuce': 'Regarde ce qui bloque la voiture jaune, puis ce qui bloque ce véhicule-là, et ainsi de suite.'
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
