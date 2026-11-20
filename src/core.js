@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '3.1';
+const VERSION = '3.2';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -261,7 +261,7 @@ const ICONS = {
 function buildPad(spec) {
   const pad = $('#g-pad'); pad.textContent = '';
   if (!spec) { pad.hidden = true; return; }
-  pad.hidden = false; pad.classList.toggle('big', !!spec.big);
+  pad.hidden = false; pad.classList.toggle('big', !!spec.big); pad.classList.toggle('xl', !!spec.xl);
   const mk = (k, label) => {
     const b = el('button', { class: k, 'aria-label': label, html: ICONS[k] || '' });
     if (!ICONS[k]) b.textContent = label;

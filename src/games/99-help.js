@@ -131,10 +131,12 @@ const HELP = {
     'Astuce': 'Regarde ce qui bloque la voiture jaune, puis ce qui bloque ce véhicule-là, et ainsi de suite.'
   }),
   kart3d: t => ({
-    'But du jeu': 'Finir premier après 3 tours de circuit, contre 3 adversaires. C\'est une version d\'essai en vraie 3D : un seul circuit pour l\'instant.',
-    'Commandes': ['Le kart accélère tout seul', '◀ ▶ pour tourner', 'FREIN avant les virages serrés', 'Bouton jaune VUE (en haut à gauche) : derrière le kart, de haut, ou au volant'],
-    'Sur la piste': ['Reste sur la route : dans l\'herbe, tu roules deux fois moins vite', 'Flèches orange sur la route : turbo', 'Les panneaux jaunes à flèches annoncent un virage', 'La petite carte montre où tu es (point jaune) et où sont les autres'],
-    'Astuce': 'Commence à tourner un peu avant le virage, et freine si tu vois les piles de pneus arriver vite.'
+    'But du jeu': 'Finir premier après 3 tours du Circuit du Grand Saut, contre 3 adversaires.',
+    'Commandes': ['Le kart accélère tout seul', 'Glisse ton doigt sur l\'écran : à droite pour tourner à droite, à gauche pour tourner à gauche (ou les gros boutons ◀ ▶)', 'FREIN avant les virages serrés', 'Tape l\'écran (ou OBJET) pour lancer ton objet', 'Bouton jaune VUE : derrière le kart, de haut, ou au volant'],
+    'Le circuit': ['Blocs de pierre : ils montent puis s\'écrasent. Passe sous un bloc levé, sinon tu es aplati', 'Tremplin rayé : tu décolles', 'Tunnel vert : dedans tu peux rouler sur les murs et au plafond', 'À la sortie du tunnel : le grand saut ! Prends les flèches orange juste avant', 'Tonneaux qui roulent et flaques d\'huile : évite-les'],
+    'À ramasser': ['Pièces : chaque pièce te rend un peu plus rapide (jusqu\'à 10) et rapporte des points', 'Caisses « ? » : un objet au hasard', 'Flèches orange : turbo'],
+    'Les objets': ['TURBO : accélération', 'MISSILE : part vers le kart devant toi', 'HUILE : flaque laissée derrière toi', 'ÉTOILE : 6 secondes invincible et plus rapide', 'ÉCLAIR : ralentit tous les autres'],
+    'Astuce': 'Commence à tourner un peu avant le virage. Devant les blocs de pierre, vise celui qui vient de remonter.'
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
