@@ -131,12 +131,12 @@ const HELP = {
     'Astuce': 'Regarde ce qui bloque la voiture jaune, puis ce qui bloque ce véhicule-là, et ainsi de suite.'
   }),
   kart3d: t => ({
-    'But du jeu': 'Finir premier après 3 tours du Circuit du Grand Saut, contre 3 adversaires.',
+    'But du jeu': 'Finir premier après 3 tours, contre 3 adversaires. Choisis ton pilote (ours, lapin, renard, grenouille, panda) et ton circuit.',
     'Commandes': ['Le kart accélère tout seul', 'Glisse ton doigt sur l\'écran : à droite pour tourner à droite, à gauche pour tourner à gauche (ou les gros boutons ◀ ▶)', 'FREIN avant les virages serrés', 'Tape l\'écran (ou OBJET) pour lancer ton objet', 'Bouton jaune VUE : derrière le kart, de haut, ou au volant'],
-    'Le circuit': ['Blocs de pierre : ils montent puis s\'écrasent. Passe sous un bloc levé, sinon tu es aplati', 'Tremplin rayé : tu décolles', 'Tunnel vert : dedans tu peux rouler sur les murs et au plafond', 'À la sortie du tunnel : le grand saut ! Prends les flèches orange juste avant', 'Tonneaux qui roulent et flaques d\'huile : évite-les'],
+    'Les 5 circuits': ['Circuit du Grand Saut ★ : blocs de pierre, tunnel où l\'on roule au plafond, grand saut', 'Plage des Crabes ★★ : des crabes traversent, deux tremplins, saut au-dessus de la plage ; dans l\'eau on roule lentement', 'Mont Glaçon ★★★ : plaques de glace bleue (le volant répond en retard), pingouins, boules de neige, tunnel de glace', 'Château de Lave ★★★★ : barres de feu qui tournent, boules de feu, blocs écraseurs' + (t === 0 ? '' : ' ; si tu sors trop loin, tu tombes dans la lave'), 'Route Arc-en-ciel ★★★★★ : une route dans l\'espace, long tunnel, comètes' + (t === 0 ? '' : ' ; pas de bord : si tu sors, tu tombes et on te repose sur la route')],
     'À ramasser': ['Pièces : chaque pièce te rend un peu plus rapide (jusqu\'à 10) et rapporte des points', 'Caisses « ? » : un objet au hasard', 'Flèches orange : turbo'],
     'Les objets': ['TURBO : accélération', 'MISSILE : part vers le kart devant toi', 'HUILE : flaque laissée derrière toi', 'ÉTOILE : 6 secondes invincible et plus rapide', 'ÉCLAIR : ralentit tous les autres'],
-    'Astuce': 'Commence à tourner un peu avant le virage. Devant les blocs de pierre, vise celui qui vient de remonter.'
+    'Astuce': 'Les boules de feu et les comètes passent en cloche : au milieu de la route, elles sont au-dessus de toi. Devant les blocs de pierre, vise celui qui vient de remonter.'
   }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',

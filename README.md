@@ -28,7 +28,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
 | Glouton | 8 ans | labyrinthe à pastilles : 12 niveaux progressifs (1 fantôme au début, 4 à la fin), 4 labyrinthes, vies et cœurs à gagner |
 | Kart Grand Prix | 4 ans | course en vue 3D, choix du circuit et de la voiture, 10 objets (missiles, bombe, étoile, glaçon, aimant…), pièces, coupe de 3 circuits, graphismes Kenney (CC0) |
-| Kart 3D | 4 ans | vraie 3D (WebGL) : circuit vallonné, tunnel où l'on roule à 360°, tremplins et grand saut, blocs qui écrasent, tonneaux, pièces, 5 objets, 3 vues ; Three.js embarqué, karts Kenney Car Kit |
+| Kart 3D | 4 ans | vraie 3D (WebGL) : 5 circuits (prairie, plage, glace, lave, espace) avec leurs pièges, tunnel où l'on roule à 360°, tremplins, 5 pilotes, 5 objets, 3 vues ; Three.js embarqué, karts Kenney Car Kit |
 | Ping-Pong | 4 ans | championnat de 3 coupes et 9 adversaires aux styles différents ; lift, coupé, effet, smash |
 | Mots Mystères | 5 ans | 12 grilles par thème ; dès le niveau 3-4 grilles pleines (15 à 30 mots, liste qui défile) et mot mystère formé par les lettres restantes |
 | Sortie de Parking | 5 ans | casse-tête de voitures à glisser, 30 niveaux par âge (1 à 38 coups), indice, annuler, étoiles gardées |
