@@ -130,6 +130,12 @@ const HELP = {
     'Les niveaux': ['30 niveaux, du plus simple au plus dur (' + (t === 0 ? '1 à 10' : t === 1 ? '3 à 24' : '6 à 38') + ' coups)', '3 étoiles si tu réussis avec le nombre de coups de l\'objectif' + (t === 0 ? ' (ou presque)' : ''), 'Tes étoiles sont gardées : tu reprends où tu t\'es arrêté', 'TERMINER (sur l\'écran des niveaux) valide tes points'],
     'Astuce': 'Regarde ce qui bloque la voiture jaune, puis ce qui bloque ce véhicule-là, et ainsi de suite.'
   }),
+  kart3d: t => ({
+    'But du jeu': 'Finir premier après 3 tours de circuit, contre 3 adversaires. C\'est une version d\'essai en vraie 3D : un seul circuit pour l\'instant.',
+    'Commandes': ['Le kart accélère tout seul', '◀ ▶ pour tourner', 'FREIN avant les virages serrés', 'Bouton jaune VUE (en haut à gauche) : derrière le kart, de haut, ou au volant'],
+    'Sur la piste': ['Reste sur la route : dans l\'herbe, tu roules deux fois moins vite', 'Flèches orange sur la route : turbo', 'Les panneaux jaunes à flèches annoncent un virage', 'La petite carte montre où tu es (point jaune) et où sont les autres'],
+    'Astuce': 'Commence à tourner un peu avant le virage, et freine si tu vois les piles de pneus arriver vite.'
+  }),
   kart: t => ({
     'But du jeu': 'Finir premier. Choisis une course simple sur un circuit, ou la COUPE : 3 circuits, 10 / 6 / 4 / 2 points selon ta place.',
     'Commandes': ['La voiture accélère toute seule', '◀ ▶ (ou glisse le doigt) : tourner', 'FREIN : ralentir avant un virage serré', 'Pour lancer ton objet : tape sur ta voiture (ou sur la case en haut, ou le bouton OBJET)'],

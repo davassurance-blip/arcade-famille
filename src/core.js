@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '3.0';
+const VERSION = '3.1';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -136,6 +136,7 @@ const Sfx = (() => {
     o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime + t);
   }
   const lib = {
+    ctx: () => (S.sound ? ensure() : null), // contexte audio pour les jeux qui fabriquent un son continu (moteur du kart)
     tap: () => tone(600, .06, 'square', .06),
     coin: () => { tone(880, .08, 'square', .1); setTimeout(() => tone(1320, .12, 'square', .1), 60); },
     jump: () => tone(300, .15, 'square', .08, 300),
