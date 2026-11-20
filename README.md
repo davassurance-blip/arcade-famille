@@ -23,7 +23,7 @@ Un seul fichier HTML, zéro dépendance, zéro connexion réseau.
 | Serpent Néon | 8 ans | snake (croix, balayage, tape près de la tête) |
 | Échecs | 8 ans | contre le Robot (3 forces) ou à deux, indice, règles par chess.js, pièces rhosgfx |
 | Casse-Briques | 8 ans | breakout : capsules, niveaux dessinés, briques spéciales, boss |
-| Galaxie | 8 ans | shoot'em up : armes, vagues, éclaireurs, boss d'étape |
+| Galaxie | 8 ans | shoot'em up vertical : 5 mondes qui défilent (Océan, Désert, Ville de nuit, Orage, Espace), avion libre dans tout l'écran, tir automatique, armes à niveaux (laser, missiles, tir de côté), ailiers, bombe, étoiles et multiplicateur, ennemis au sol (bateaux, chars, tourelles), mini-boss et boss à phases, reprise par monde |
 | Blocs | 8 ans | puzzle de briques qui tombent |
 | 2048 | 8 ans | règles du jeu de Gabriele Cirulli (MIT) |
 | Glouton | 8 ans | labyrinthe à pastilles : 12 niveaux progressifs (1 fantôme au début, 4 à la fin), 4 labyrinthes, vies et cœurs à gagner |

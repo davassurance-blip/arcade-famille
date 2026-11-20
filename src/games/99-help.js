@@ -64,11 +64,12 @@ const HELP = {
     'Astuce': 'La balle part dans la direction du bord de la raquette qu\'elle touche. Enchaîne les briques sans toucher la raquette pour le combo.'
   }),
   galaxy: t => ({
-    'But du jeu': 'Détruis les vagues d\'envahisseurs et le boss de chaque étape.',
-    'Commandes': ['Glisse le doigt (ou ◀ ▶) pour piloter', 'Le vaisseau tire tout seul'],
-    'Les capsules': ['ARME : tir double, triple puis quadruple', 'RAPIDE : cadence doublée 10 s · LASER : rayon continu 7 s', 'BOUCLIER : absorbe un coup · VIE : un cœur de plus'],
-    'Étape': ['5 vagues, puis le BOSS avec sa jauge en haut', 'Les petits chasseurs orange traversent l\'écran : faciles à abattre, mais ils foncent sur toi'],
-    'Attention': 'Se faire toucher fait perdre un niveau d\'arme.' + (t === 2 ? ' Les envahisseurs ripostent et des astéroïdes tombent.' : '')
+    'But du jeu': 'Traverse 5 mondes (Océan, Désert, Ville de nuit, Orage, Espace) et détruis le boss qui garde chacun.',
+    'Commandes': ['Glisse le doigt partout sur l\'écran : l\'avion le suit, juste au-dessus du doigt', 'Ou la croix (flèches du clavier) : haut, bas, gauche, droite', 'L\'avion tire tout seul', 'BOMBE (Espace) : efface tous les tirs ennemis et frappe tout l\'écran'],
+    'Les capsules': ['P : ton tir monte de niveau (simple, double, triple, éventail, maximum)', 'L laser · M missiles chercheurs · S tir de côté : une arme secondaire à la fois, 3 niveaux en reprenant la même lettre', 'B : une bombe · bouclier : absorbe un coup · cœur : une vie · petit avion : un ailier qui tire avec toi (2 maximum)'],
+    'Les points': ['Ramasse les étoiles dorées : elles viennent vers toi quand tu es près', 'Enchaîne les ennemis sans temps mort : le multiplicateur monte jusqu\'à ×8', 'Détruis une formation entière : bonus, et parfois une capsule', 'Fin de monde : bonus pour les ennemis détruits, les étoiles, les vies et les bombes gardées'],
+    'Les boss': ['Un mini-boss au milieu de chaque monde, un gros boss à la fin (barre de vie en haut)', 'Vise d\'abord les tourelles et les moteurs cerclés de jaune : le cœur rose est blindé tant qu\'il en reste', 'Le sous-marin ne peut être touché que lorsqu\'il fait surface'],
+    'Attention': 'Les tirs ennemis sont orange ou roses. Une colonne rouge qui clignote annonce un rayon ou un éclair : sors-en vite ! Un triangle rouge en bas annonce des ennemis qui arrivent par derrière. Être touché coûte une vie et un niveau de tir.' + (t === 2 ? ' Chez les grands : moins de vies, tirs plus rapides, et la bombe ne part pas toute seule.' : ' S\'il te reste une bombe quand tu es touché, elle part toute seule et te sauve la vie.')
   }),
   blocks: () => ({
     'But du jeu': 'Empile les pièces pour remplir des lignes complètes, qui disparaissent.',
