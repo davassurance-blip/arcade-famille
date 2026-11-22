@@ -1,6 +1,6 @@
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '3.4';
+const VERSION = '3.5';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -218,6 +218,7 @@ const Input = {
   reset() { for (const k in this.held) this.held[k] = 0; this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.down = false; },
   endFrame() { this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.justDown = false; this.pointer.justUp = false; }
 };
+const KB_HINT = typeof matchMedia === 'function' && matchMedia('(hover: hover) and (pointer: fine)').matches, KB_KEYS = { a: 'Espace', b: 'X', c: 'C' };
 const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', KeyQ: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', KeyZ: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'a', Enter: 'a', KeyK: 'a', KeyX: 'b', KeyL: 'b', ShiftLeft: 'b', ShiftRight: 'b', KeyC: 'c', KeyJ: 'c', ControlLeft: 'c' };
 function press(k) { if (!Input.held[k]) Input.pressed[k] = 1; Input.held[k] = 1; }
 function release(k) { Input.held[k] = 0; }
@@ -265,6 +266,7 @@ function buildPad(spec) {
   const mk = (k, label) => {
     const b = el('button', { class: k, 'aria-label': label, html: ICONS[k] || '' });
     if (!ICONS[k]) b.textContent = label;
+    if (KB_HINT && KB_KEYS[k]) b.append(el('span', { class: 'kb' }, KB_KEYS[k])); /* sur ordinateur : la touche du clavier sous le bouton */
     const on = e => { e.preventDefault(); b.classList.add('on'); press(k); try { b.setPointerCapture(e.pointerId); } catch (err) { } };
     const off = e => { e.preventDefault(); b.classList.remove('on'); release(k); };
     b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off);

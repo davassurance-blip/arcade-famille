@@ -133,6 +133,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 .pad button.a{background:var(--pink)}.pad button.c{background:var(--sun);color:var(--ink)}.pad .grp.four{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pad .grp.four button{width:60px;height:60px;font-size:12px}.pad button.b{background:var(--aqua);color:var(--ink)}.pad button.up{background:var(--lime);color:var(--ink)}
 .pad.big button.a{width:88px;height:88px;font-size:17px}
 .pad.xl button{width:92px;height:92px;font-size:17px}.pad.xl button svg{width:40px;height:40px}.pad.xl .grp{gap:16px}
+.pad button{position:relative}.pad .kb{position:absolute;left:50%;top:-9px;transform:translateX(-50%);background:#fff;color:#1b1540;font:800 11px/1.5 system-ui,sans-serif;border-radius:7px;padding:0 7px;white-space:nowrap;box-shadow:0 2px 0 rgba(0,0,0,.35);pointer-events:none}
 .pad .hint{font-size:12px;color:var(--muted);font-weight:700;align-self:center;text-align:center}
 .pad .hint:only-child{margin:0 auto}
 
@@ -425,7 +426,7 @@ h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:
 <script>
 'use strict';
 /* ========= Arcade Famille — socle ========= */
-const VERSION = '3.4';
+const VERSION = '3.5';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -643,6 +644,7 @@ const Input = {
   reset() { for (const k in this.held) this.held[k] = 0; this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.down = false; },
   endFrame() { this.pressed = {}; this.tap = null; this.swipe = null; this.pointer.justDown = false; this.pointer.justUp = false; }
 };
+const KB_HINT = typeof matchMedia === 'function' && matchMedia('(hover: hover) and (pointer: fine)').matches, KB_KEYS = { a: 'Espace', b: 'X', c: 'C' };
 const KEYMAP = { ArrowLeft: 'left', KeyA: 'left', KeyQ: 'left', ArrowRight: 'right', KeyD: 'right', ArrowUp: 'up', KeyW: 'up', KeyZ: 'up', ArrowDown: 'down', KeyS: 'down', Space: 'a', Enter: 'a', KeyK: 'a', KeyX: 'b', KeyL: 'b', ShiftLeft: 'b', ShiftRight: 'b', KeyC: 'c', KeyJ: 'c', ControlLeft: 'c' };
 function press(k) { if (!Input.held[k]) Input.pressed[k] = 1; Input.held[k] = 1; }
 function release(k) { Input.held[k] = 0; }
@@ -690,6 +692,7 @@ function buildPad(spec) {
   const mk = (k, label) => {
     const b = el('button', { class: k, 'aria-label': label, html: ICONS[k] || '' });
     if (!ICONS[k]) b.textContent = label;
+    if (KB_HINT && KB_KEYS[k]) b.append(el('span', { class: 'kb' }, KB_KEYS[k])); /* sur ordinateur : la touche du clavier sous le bouton */
     const on = e => { e.preventDefault(); b.classList.add('on'); press(k); try { b.setPointerCapture(e.pointerId); } catch (err) { } };
     const off = e => { e.preventDefault(); b.classList.remove('on'); release(k); };
     b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off);
@@ -7326,7 +7329,8 @@ const K3D_THEMES = {
   lava: { sky: 0x2a0f16, fogC: 0x4a1418, fog: [70, 330], hemi: [0xffb090, 0x501010, 1.5], sun: 1.1, bl: [4, 12], trees: 'spike', mount: 0x3a1a1c, cap: 0xff7a1a, clouds: 0, lava: 0xff5a1a, fall: 8 },
   space: { sky: 0x05061a, fogC: 0x05061a, fog: [200, 700], hemi: [0xffffff, 0x8888ff, 1.8], sun: 1.6, bl: [9, 30], trees: 'none', mount: 0, cap: 0, clouds: 0, stars: 1, void: 1, fall: 1.2 }
 };
-const K3D_ITEMS = { turbo: ['TURBO', '#ff9f1c'], missile: ['MISSILE', '#ff4f4f'], oil: ['HUILE', '#3a3466'], star: ['ÉTOILE', '#ffe14d'], bolt: ['ÉCLAIR', '#8fe3ff'] };
+const K3D_ITEMS = { turbo: ['TURBO', '#ff9f1c', 'un gros coup d\'accélérateur'], missile: ['MISSILE', '#ff4f4f', 'fonce sur le kart devant toi'], oil: ['HUILE', '#3a3466', 'une flaque glissante derrière toi'], star: ['ÉTOILE', '#ffe14d', 'invincible et plus rapide'], bolt: ['ÉCLAIR', '#8fe3ff', 'ralentit tous les autres'] };
+const K3D_KB = typeof matchMedia === 'function' && matchMedia('(hover: hover) and (pointer: fine)').matches; /* ordinateur : on affiche les touches */
 const K3D_ANIMALS = [['Ours', 0x9a6238, 0xc98d5a], ['Lapin', 0xf2f2f2, 0xffc2d6], ['Renard', 0xf07a22, 0xffffff], ['Grenouille', 0x43b84c, 0xd8f5a2], ['Panda', 0xf5f5f5, 0x22222a]];
 const K3D_MOVERS = { barrel: { amp: .85, sp: 1.25, hit: 1.9, why: 'Un tonneau !' }, crab: { amp: .8, sp: .8, hit: 1.5, why: 'Pincé par un crabe !' }, snowball: { amp: .85, sp: 1.1, hit: 2.3, why: 'Une boule de neige !' }, penguin: { amp: .7, sp: .6, hit: 1.4, why: 'Un pingouin !' }, fireball: { amp: 1.25, sp: 1.5, hit: 1.8, why: 'Une boule de feu !' }, comet: { amp: 1.3, sp: 1.6, hit: 1.8, why: 'Une comète !' } };
 let K3D_GEO = null; // géométries des karts, décodées une seule fois
@@ -7334,7 +7338,7 @@ GAMES.push({
   id: 'kart3d', title: 'Kart 3D', tagline: '5 circuits : prairie, plage, glace, lave, espace', minAge: 4, color: '#ff5a3c',
   icon: '<svg viewBox="0 0 64 64"><path d="M4 50 L26 22 L38 22 L60 50 Z" fill="#5c6270"/><path d="M30 50 L31.5 22 L32.5 22 L34 50 Z" fill="#fff"/><rect x="20" y="34" width="24" height="14" rx="5" fill="#e8452c" stroke="#1b1540" stroke-width="2.5"/><rect x="16" y="40" width="7" height="11" rx="2.5" fill="#1b1540"/><rect x="41" y="40" width="7" height="11" rx="2.5" fill="#1b1540"/><circle cx="32" cy="30" r="7" fill="#ffd23f" stroke="#1b1540" stroke-width="2.5"/></svg>',
   howto: ['Choisis ton pilote et ton circuit. Ton kart avance tout seul ! Glisse ton doigt à gauche ou à droite de l\'écran pour tourner (ou ◀ ▶). Tape l\'écran pour lancer ton objet.', 'Choisis ton pilote et ton circuit. Glisse le doigt sur l\'écran pour tourner (ou ◀ ▶), FREIN avant les virages. Chaque circuit a ses pièges : blocs de pierre, crabes, glace, lave, vide… Tape l\'écran ou OBJET pour lancer ton objet.', 'Cinq circuits de plus en plus durs. Sur la glace ça glisse, dans la lave et dans l\'espace on tombe si on sort de la route. Caisses « ? » = objets (tape l\'écran ou OBJET).'],
-  pad: { left: true, xl: true, buttons: [{ k: 'b', label: 'FREIN' }, { k: 'a', label: 'OBJET' }], hint: 'ou glisse le doigt sur l\'écran' },
+  pad: { left: true, xl: true, buttons: [{ k: 'b', label: 'FREIN' }, { k: 'a', label: 'OBJET' }], hint: 'pose le doigt et glisse : le kart suit les virages' },
   stars: s => s >= 1100 ? 3 : s >= 650 ? 2 : s >= 300 ? 1 : 0,
   create(env, saved) {
     const { input, sfx } = env, tier = env.tier, T3 = window.THREE;
@@ -7533,8 +7537,8 @@ GAMES.push({
       const top = VMAX * k.skill * (k.off && k.star <= 0 ? .55 : 1) * (k.boost > 0 ? 1.35 : 1) * (k.star > 0 ? 1.2 : 1) * (k.slowT > 0 ? .6 : 1) * (1 + Math.min(10, k.coins) * .006);
       if (k.crash > 0) { k.v = Math.max(0, k.v - 40 * dt); steerIn = 0; } else if (brake) k.v = Math.max(0, k.v - (p0.ice ? 14 : 30) * dt); else if (k.v < top) k.v = Math.min(top, k.v + (k.boost > 0 ? 28 : 13) * dt); else k.v = Math.max(top, k.v - 20 * dt);
       k.steer += (steerIn - k.steer) * Math.min(1, dt * (p0.ice ? 2.6 : 9)); const grip = clamp(k.v / 8, 0, 1) * (1.9 - clamp(k.v / VMAX, 0, 1) * .55) * (k.air ? .35 : 1) * (p0.ice ? .62 : 1); // sur la glace, le volant répond en retard
-      k.psi += k.steer * grip * dt;
-      let rem = k.v * Math.cos(k.psi) * dt; while (rem > 0) { const seg = path[i], left = (1 - u) * seg.len; if (rem < left) { u += rem / seg.len; rem = 0; } else { rem -= left; i = (i + 1) % N; u = 0; k.psi += wrapA(path[i].ang - seg.ang); if (i === 0) { k.lap++; if (k.lap >= LAPS && !k.done) { k.done = raceT; if (k.me) finish(); } else if (k.me && k.lap > 0) { say(k.lap === LAPS - 1 ? 'Dernier tour !' : 'Tour ' + (k.lap + 1) + ' / ' + LAPS, 1.6); sfx.ok(); } } } }
+      k.psi += k.steer * grip * dt; if (k.asst) k.psi -= k.psi * Math.min(1, dt * 2.6 * k.asst * (1 - Math.min(1, Math.abs(steerIn))));
+      let rem = k.v * Math.cos(k.psi) * dt; while (rem > 0) { const seg = path[i], left = (1 - u) * seg.len; if (rem < left) { u += rem / seg.len; rem = 0; } else { rem -= left; i = (i + 1) % N; u = 0; k.psi += wrapA(path[i].ang - seg.ang) * (1 - (k.asst || 0)); if (i === 0) { k.lap++; if (k.lap >= LAPS && !k.done) { k.done = raceT; if (k.me) finish(); } else if (k.me && k.lap > 0) { say(k.lap === LAPS - 1 ? 'Dernier tour !' : 'Tour ' + (k.lap + 1) + ' / ' + LAPS, 1.6); sfx.ok(); } } } }
       k.s = i + u; k.lat += k.v * Math.sin(k.psi) * dt; k.psi = clamp(k.psi, -1.1, 1.1);
       const p = path[i], bNow = p.b + (P(i + 1).b - p.b) * u;
       if (bNow <= 0) {
@@ -7551,7 +7555,7 @@ GAMES.push({
       const near = (o, ds, dl) => { let d = o.s - k.s; if (d > N / 2) d -= N; if (d < -N / 2) d += N; return Math.abs(d) * 4 < ds && Math.abs(o.lat - k.lat) < dl; };
       for (const pd of pads) if (k.boost < .9 && near(pd, 3.6, 2.6)) { k.boost = 1.7; if (k.me) { sfx.jump(); say('TURBO !', .8); env.vibe(40); } }
       for (const c of coins) if (c.on && near(c, 2.2, 1.7)) { c.on = false; c.t = 6; c.hold.visible = false; k.coins++; if (k.me) sfx.coin(); }
-      for (const b of boxes) if (b.off <= 0 && near(b, 2.2, 1.9)) { b.off = 4; b.hold.visible = false; if (!k.item) { const r = k.rank, pool = r === 1 ? ['oil', 'oil', 'turbo', 'star'] : r === 2 ? ['turbo', 'missile', 'oil', 'missile'] : ['missile', 'turbo', 'turbo', 'star', 'bolt', 'missile']; k.item = pick(pool); k.itemT = rnd(1.5, 4); if (k.me) { sfx.ok(); say(K3D_ITEMS[k.item][0] + ' !', 1); } } }
+      for (const b of boxes) if (b.off <= 0 && near(b, 2.2, 1.9)) { b.off = 4; b.hold.visible = false; if (!k.item) { const r = k.rank, pool = r === 1 ? ['oil', 'oil', 'turbo', 'star'] : r === 2 ? ['turbo', 'missile', 'oil', 'missile'] : ['missile', 'turbo', 'turbo', 'star', 'bolt', 'missile']; k.item = pick(pool); k.itemT = rnd(1.5, 4); if (k.me) { sfx.ok(); say(K3D_ITEMS[k.item][0] + ' : ' + K3D_ITEMS[k.item][2], 2.4); } } }
       for (const g of crushers) for (const l of g.lanes) if (l.h < 2.3 && near({ s: g.s, lat: l.lat }, 1.9, 2.9)) wreck(k, 'Écrasé !', true);
       for (const b of movers) if (b.y < .9 && near(b, b.K.hit, b.K.hit)) wreck(k, b.K.why);
       for (const b of bars) for (let j = 1; j <= 5; j++) if (near({ s: b.s + Math.sin(b.a) * j * 1.25 / 4, lat: -Math.cos(b.a) * j * 1.25 }, 1.15, 1.15)) wreck(k, 'La barre de feu !');
@@ -7595,6 +7599,7 @@ GAMES.push({
           if (best) { c.fillStyle = best === 1 ? '#ffd23f' : best === 2 ? '#e8e8f0' : best === 3 ? '#ff9f1c' : 'rgba(255,255,255,.3)'; c.beginPath(); c.arc(k.x + k.w - 34, k.y + k.h / 2, Math.min(22, k.h * .3), 0, 7); c.fill(); Draw.text(c, best + (best === 1 ? 'er' : 'e'), k.x + k.w - 34, k.y + k.h / 2 + 1, 14, '#1b1540'); } else { c.fillStyle = tr.col; c.beginPath(); c.moveTo(k.x + k.w - 44, k.y + k.h / 2 - 14); c.lineTo(k.x + k.w - 20, k.y + k.h / 2); c.lineTo(k.x + k.w - 44, k.y + k.h / 2 + 14); c.closePath(); c.fill(); } } }
     }
     function startTrack(i) { trackIdx = i; TR = K3D_TRACKS[i]; TH = K3D_THEMES[TR.th]; HALF = 8; VMAX = [25, 31, 36][tier] * TR.speed; phase = 'load'; loadN = 0; sfx.ok(); }
+    let dragX = null, dragOn = false, dragS = 0; const ASST = K3D_KB ? 0 : [.9, .78, .62][tier]; /* écran tactile : le kart suit les virages presque tout seul, le doigt choisit gauche ou droite */
     function update(dt) {
       if (over || fail) return; t += dt;
       if (phase === 'menu') { menuT += dt; menuLayout(); const tp = input.tap; if (tp && menuT > .3) { for (const p of pilots) if (Math.hypot(tp.x - p.x, tp.y - p.y) < p.r * 1.4) { prog.pilot = p.i; save(); sfx.tap(); } for (const k of cards) if (tp.x > k.x && tp.x < k.x + k.w && tp.y > k.y && tp.y < k.y + k.h) startTrack(k.i); } if (menuT > .3 && input.pressed.a) startTrack(0); env.setScore(0); env.hud('Choisis ton circuit'); return; }
@@ -7602,7 +7607,7 @@ GAMES.push({
       frames++; if (frames > 40) { if (dt > .027) slow++; else slow = Math.max(0, slow - 1); if (slow > 45 && ratio > .5) { ratio = Math.max(.5, ratio - .17); slow = 0; } } dt = Math.min(dt, .05); msgT = Math.max(0, msgT - dt); shake = Math.max(0, shake - dt); flash = Math.max(0, flash - dt); const me = karts[0], ptr = input.pointer, tp = input.tap;
       // doigt sur l'écran : on glisse pour tourner, on tape pour lancer l'objet (ou changer de vue sur le bouton jaune)
       let useNow = input.pressed.a; if (tp) { if (vbox && tp.x > vbox.x && tp.x < vbox.x + vbox.w && tp.y > vbox.y && tp.y < vbox.y + vbox.h) { view = (view + 1) % 3; prog.view = view; save(); sfx.tap(); say('Vue : ' + VIEWS[view], 1); } else useNow = true; }
-      let steer = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0); if (!steer && ptr.down && !(vbox && ptr.y < vbox.y + vbox.h + 6 && ptr.x < vbox.x + vbox.w + 6)) steer = clamp((ptr.x - env.W / 2) / (env.W * .27), -1, 1);
+      let steer = (input.held.right ? 1 : 0) - (input.held.left ? 1 : 0); if (!steer && ptr.down && !(vbox && ptr.y < vbox.y + vbox.h + 6 && ptr.x < vbox.x + vbox.w + 6)) { if (ptr.justDown || dragX == null) dragX = ptr.x; const dz = (ptr.x - dragX) / Math.min(150, env.W * .22); steer = clamp(dz, -1, 1); if (Math.abs(dz) > 1) dragX = ptr.x - Math.sign(dz) * Math.min(150, env.W * .22); dragOn = true; } /* volant sous le doigt : on pose le doigt n'importe où, puis on glisse à gauche ou à droite */ if (!ptr.down) { dragX = null; dragOn = false; } me.asst = auto ? 0 : ASST; dragS = steer;
       // ce qui bouge tout seul sur la piste
       for (const g of crushers) for (const l of g.lanes) { const h = crushH(t, l.ph); if (l.h > .2 && h <= .2 && Math.abs(g.s - me.s) < 14) { sfx.hit(); if (Math.abs(g.s - me.s) < 6) shake = .2; } l.h = h; l.m.position.y = 2.1 + h; l.shd.material.opacity = .15 + (1 - h / 5) * .3; }
       for (const b of movers) { // va-et-vient en travers de la route ; les boules de feu et les comètes passent en cloche : basses sur les bords, hautes au milieu
@@ -7651,12 +7656,13 @@ GAMES.push({
       if (me.boost > 0 || me.star > 0) { c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = 2; for (let i = 0; i < 14; i++) { const a = i * 2.4 + t * 3, r0 = Math.min(W, H) * (.34 + (i * 37 % 10) * .02), r1 = r0 + 30 + (i % 3) * 24; c.beginPath(); c.moveTo(W / 2 + Math.cos(a) * r0 * 1.5, H * .52 + Math.sin(a) * r0); c.lineTo(W / 2 + Math.cos(a) * r1 * 1.5, H * .52 + Math.sin(a) * r1); c.stroke(); } }
       // tableau de bord : rang, vue, vitesse, tour, pièces, objet, carte
       c.fillStyle = 'rgba(23,18,58,.8)'; Draw.rr(c, 10, 10, 92, 62, 14); c.fill(); Draw.text(c, me.rank + (me.rank === 1 ? 'er' : 'e'), 56, 38, 34, ['#ffd23f', '#e8e8f0', '#ff9f1c', '#fff'][me.rank - 1]); Draw.text(c, 'sur 4', 56, 62, 11, '#fff', 'center', 700);
+      if (dragOn && dragX != null) { const py = clamp(input.pointer.y, 60, H - 30), rw = Math.min(150, W * .22); c.save(); c.globalAlpha = .55; c.strokeStyle = '#fff'; c.lineWidth = 6; c.lineCap = 'round'; c.beginPath(); c.moveTo(dragX - rw, py); c.lineTo(dragX + rw, py); c.stroke(); c.globalAlpha = .95; c.fillStyle = '#ffd23f'; c.beginPath(); c.arc(dragX + dragS * rw, py, 17, 0, 7); c.fill(); c.strokeStyle = '#1b1540'; c.lineWidth = 3; c.stroke(); c.restore(); } /* le volant : une barre et un bouton jaune sous le doigt */
       vbox = { x: 10, y: 80, w: 92, h: 44 }; c.fillStyle = 'rgba(255,210,63,.95)'; Draw.rr(c, vbox.x, vbox.y, vbox.w, vbox.h, 14); c.fill(); Draw.text(c, 'VUE', 56, 94, 11, '#1b1540'); Draw.text(c, VIEWS[view], 56, 110, 13, '#1b1540');
       { const bx = 10, by = 132, bw = 92, f = clamp(me.v / (VMAX * 1.35), 0, 1); c.fillStyle = 'rgba(23,18,58,.8)'; Draw.rr(c, bx, by, bw, 34, 12); c.fill(); Draw.text(c, Math.round(me.v * 3.6) + ' km/h', bx + bw / 2, by + 12, 12, '#fff'); c.fillStyle = 'rgba(255,255,255,.18)'; Draw.rr(c, bx + 8, by + 21, bw - 16, 7, 3); c.fill(); c.fillStyle = me.boost > 0 ? '#ff9f1c' : me.off ? '#ff4f4f' : '#9dff5c'; Draw.rr(c, bx + 8, by + 21, Math.max(6, (bw - 16) * f), 7, 3); c.fill(); }
       c.fillStyle = 'rgba(23,18,58,.8)'; Draw.rr(c, W - 104, 10, 94, 40, 14); c.fill(); Draw.text(c, 'Tour ' + clamp(me.lap + 1, 1, LAPS) + '/' + LAPS, W - 57, 31, 17, '#fff');
-      { const cx = W / 2, iy = 10; c.fillStyle = 'rgba(23,18,58,.8)'; Draw.rr(c, cx - 36, iy, 72, 72, 16); c.fill(); c.strokeStyle = me.item ? '#ffd23f' : 'rgba(255,255,255,.25)'; c.lineWidth = 3; c.stroke();
-        if (me.item) { const k = me.item, col = K3D_ITEMS[k][1], cy = iy + 30; c.fillStyle = col; c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); if (k === 'missile') { c.moveTo(cx, cy - 20); c.lineTo(cx + 10, cy + 2); c.lineTo(cx + 10, cy + 16); c.lineTo(cx - 10, cy + 16); c.lineTo(cx - 10, cy + 2); c.closePath(); } else if (k === 'turbo') { c.moveTo(cx - 16, cy + 14); c.lineTo(cx, cy - 18); c.lineTo(cx + 16, cy + 14); c.lineTo(cx, cy + 4); c.closePath(); } else if (k === 'bolt') { c.moveTo(cx + 4, cy - 20); c.lineTo(cx - 12, cy + 2); c.lineTo(cx - 1, cy + 2); c.lineTo(cx - 6, cy + 18); c.lineTo(cx + 12, cy - 4); c.lineTo(cx + 1, cy - 4); c.closePath(); } else if (k === 'oil') c.ellipse(cx, cy + 4, 18, 11, 0, 0, 7); else { for (let j = 0; j < 10; j++) { const rr = j % 2 ? 9 : 20, aa = -Math.PI / 2 + j * Math.PI / 5; j ? c.lineTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr) : c.moveTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); } c.closePath(); } c.fill(); c.stroke(); Draw.text(c, K3D_ITEMS[k][0], cx, iy + 61, 10, '#fff'); if (Math.sin(t * 6) > -.3) Draw.text(c, 'Tape l\'écran !', cx, iy + 86, 13, '#ffd23f'); }
-        else Draw.text(c, '?', cx, iy + 38, 30, 'rgba(255,255,255,.25)'); }
+      { const cx = W / 2, iy = 8; c.save(); c.translate(cx, 0); c.scale(1.3, 1.3); c.translate(-cx, 0); c.fillStyle = 'rgba(23,18,58,.8)'; Draw.rr(c, cx - 36, iy, 72, 72, 16); c.fill(); c.strokeStyle = me.item ? '#ffd23f' : 'rgba(255,255,255,.25)'; c.lineWidth = 3; c.stroke();
+        if (me.item) { const k = me.item, col = K3D_ITEMS[k][1], cy = iy + 30; c.fillStyle = col; c.strokeStyle = '#fff'; c.lineWidth = 2.5; c.beginPath(); if (k === 'missile') { c.moveTo(cx, cy - 20); c.lineTo(cx + 10, cy + 2); c.lineTo(cx + 10, cy + 16); c.lineTo(cx - 10, cy + 16); c.lineTo(cx - 10, cy + 2); c.closePath(); } else if (k === 'turbo') { c.moveTo(cx - 16, cy + 14); c.lineTo(cx, cy - 18); c.lineTo(cx + 16, cy + 14); c.lineTo(cx, cy + 4); c.closePath(); } else if (k === 'bolt') { c.moveTo(cx + 4, cy - 20); c.lineTo(cx - 12, cy + 2); c.lineTo(cx - 1, cy + 2); c.lineTo(cx - 6, cy + 18); c.lineTo(cx + 12, cy - 4); c.lineTo(cx + 1, cy - 4); c.closePath(); } else if (k === 'oil') c.ellipse(cx, cy + 4, 18, 11, 0, 0, 7); else { for (let j = 0; j < 10; j++) { const rr = j % 2 ? 9 : 20, aa = -Math.PI / 2 + j * Math.PI / 5; j ? c.lineTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr) : c.moveTo(cx + Math.cos(aa) * rr, cy + Math.sin(aa) * rr); } c.closePath(); } c.fill(); c.stroke(); Draw.text(c, K3D_ITEMS[k][0], cx, iy + 61, 10, '#fff'); if (Math.sin(t * 6) > -.3) Draw.text(c, K3D_KB ? 'ESPACE pour lancer' : 'Tape l\'écran !', cx, iy + 86, 13, '#ffd23f'); }
+        else Draw.text(c, '?', cx, iy + 38, 30, 'rgba(255,255,255,.25)'); c.restore(); }
       { const mw = Math.min(104, W * .24), mx = W - mw - 10, my = 58; let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9; for (const p of TR.pts) { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); z0 = Math.min(z0, p[1]); z1 = Math.max(z1, p[1]); } const sc = (mw - 16) / Math.max(x1 - x0, z1 - z0), X = x => mx + mw / 2 - (x - (x0 + x1) / 2) * sc, Y = z => my + mw / 2 - (z - (z0 + z1) / 2) * sc;
         c.fillStyle = 'rgba(23,18,58,.6)'; Draw.rr(c, mx, my, mw, mw, 12); c.fill(); c.lineWidth = 3; for (let i = 0; i < N; i += 2) { const p = path[i], q = P(i + 2); c.strokeStyle = p.b > .5 ? '#3fdc6a' : p.ice ? '#8fe3ff' : '#fff'; c.beginPath(); c.moveTo(X(p.x), Y(p.z)); c.lineTo(X(q.x), Y(q.z)); c.stroke(); }
         for (let k = karts.length - 1; k >= 0; k--) { const q = karts[k], f = frame(q.s, 0); c.fillStyle = q.me ? '#ffd23f' : '#ff4f9a'; c.strokeStyle = '#1b1540'; c.lineWidth = 2; c.beginPath(); c.arc(X(f.pos.x), Y(f.pos.z), q.me ? 5 : 3.5, 0, 7); c.fill(); c.stroke(); }
@@ -7805,7 +7811,7 @@ const HELP = {
   }),
   kart3d: t => ({
     'But du jeu': 'Finir premier après 3 tours, contre 3 adversaires. Choisis ton pilote (ours, lapin, renard, grenouille, panda) et ton circuit.',
-    'Commandes': ['Le kart accélère tout seul', 'Glisse ton doigt sur l\'écran : à droite pour tourner à droite, à gauche pour tourner à gauche (ou les gros boutons ◀ ▶)', 'FREIN avant les virages serrés', 'Tape l\'écran (ou OBJET) pour lancer ton objet', 'Bouton jaune VUE : derrière le kart, de haut, ou au volant'],
+    'Commandes': ['Le kart accélère tout seul', 'Pose ton doigt n\'importe où et glisse-le à droite ou à gauche : un petit volant jaune apparaît sous ton doigt (ou les gros boutons ◀ ▶)', 'Sur téléphone et tablette, le kart suit les virages presque tout seul : toi, tu choisis ta place sur la route. Lâche le doigt, il se remet droit', 'FREIN avant les virages serrés', 'Ton objet s\'affiche dans la case en haut au milieu : tape l\'écran (ou OBJET) pour le lancer quand tu veux', 'Sur ordinateur : flèches ◀ ▶ pour tourner, ESPACE ou ENTRÉE pour lancer l\'objet, X pour freiner', 'Bouton jaune VUE : derrière le kart, de haut, ou au volant'],
     'Les 5 circuits': ['Circuit du Grand Saut ★ : blocs de pierre, tunnel où l\'on roule au plafond, grand saut', 'Plage des Crabes ★★ : des crabes traversent, deux tremplins, saut au-dessus de la plage ; dans l\'eau on roule lentement', 'Mont Glaçon ★★★ : plaques de glace bleue (le volant répond en retard), pingouins, boules de neige, tunnel de glace', 'Château de Lave ★★★★ : barres de feu qui tournent, boules de feu, blocs écraseurs' + (t === 0 ? '' : ' ; si tu sors trop loin, tu tombes dans la lave'), 'Route Arc-en-ciel ★★★★★ : une route dans l\'espace, long tunnel, comètes' + (t === 0 ? '' : ' ; pas de bord : si tu sors, tu tombes et on te repose sur la route')],
     'À ramasser': ['Pièces : chaque pièce te rend un peu plus rapide (jusqu\'à 10) et rapporte des points', 'Caisses « ? » : un objet au hasard', 'Flèches orange : turbo'],
     'Les objets': ['TURBO : accélération', 'MISSILE : part vers le kart devant toi', 'HUILE : flaque laissée derrière toi', 'ÉTOILE : 6 secondes invincible et plus rapide', 'ÉCLAIR : ralentit tous les autres'],
